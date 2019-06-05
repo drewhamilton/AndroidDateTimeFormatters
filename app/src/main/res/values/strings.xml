@@ -1,0 +1,8 @@
+<resources>
+  <string name="app_name">AndroidDateTimeFormatters demo</string>
+
+  <string name="java_time">java.time</string>
+  <string name="three_ten_bp">ThreeTenBP</string>
+
+  <string name="java_time_hint">Not supported</string>
+</resources>
