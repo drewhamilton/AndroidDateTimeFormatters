@@ -10,7 +10,17 @@ Jake indicated he
 directly to ThreeTenABP.
 
 ## Download
-Coming soon.
+[ ![Download](https://api.bintray.com/packages/drewhamilton/AndroidDateTimeFormatters/AndroidDateTimeFormatters-JavaTime/images/download.svg) ](https://bintray.com/drewhamilton/RxPreferences)
+
+AndroidDateTimeFormatters will be available soon in JCenter.
+
+```groovy
+// java.time formatters:
+implementation "drewhamilton.androiddatetimeformatters:androiddatetimeformatters-javatime:$version"
+
+// ThreeTenBP formatters:
+implementation "drewhamilton.androiddatetimeformatters:androiddatetimeformatters-threetenbp:$version"
+```
 
 ## License
 ```

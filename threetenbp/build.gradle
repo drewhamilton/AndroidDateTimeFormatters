@@ -29,6 +29,8 @@ android {
     }
 }
 
+apply from: 'publish.gradle'
+
 dependencies {
     api 'org.threeten:threetenbp:1.4.0:no-tzdb'
 

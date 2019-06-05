@@ -1,0 +1,22 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+ext {
+    bintrayRepo = 'AndroidDateTimeFormatters'
+
+    publishedGroupId = 'drewhamilton.androiddatetimeformatters'
+
+    siteUrl = 'https://github.com/drewhamilton/AndroidDateTimeFormatters'
+    gitUrl = 'https://github.com/drewhamilton/AndroidDateTimeFormatters'
+
+    developerId = 'drewhamilton'
+    developerName = 'Drew Hamilton'
+    developerEmail = 'drew.hamilton.0+android@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+
+    bintrayUser = project.hasProperty('personalBintrayUsername') ? personalBintrayUsername : ""
+    bintrayKey = project.hasProperty('personalBintrayApiKey') ? personalBintrayApiKey : ""
+}
