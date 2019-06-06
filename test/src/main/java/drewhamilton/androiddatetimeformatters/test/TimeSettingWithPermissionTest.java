@@ -1,5 +1,6 @@
 package drewhamilton.androiddatetimeformatters.test;
 
+import android.os.Build;
 import android.provider.Settings;
 import androidx.test.rule.ActivityTestRule;
 import org.junit.Before;
@@ -18,7 +19,7 @@ public abstract class TimeSettingWithPermissionTest extends TimeSettingTest {
     @Before
     public void getWriteSettingsPermission() {
         SystemSettingsTestActivity activity = getActivity();
-        if (!Settings.System.canWrite(activity)) {
+        if (Build.VERSION.SDK_INT >= 23 && !Settings.System.canWrite(activity)) {
             activity.requestWriteSettingsPermission();
             // TODO: Implement correct navigation
             onView(withId(android.R.id.checkbox)).perform(click());
