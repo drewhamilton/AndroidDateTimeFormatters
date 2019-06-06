@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
@@ -18,9 +20,15 @@ public class AndroidDateTimeFormatterTest extends TimeSettingTest {
     private static final int SDK_INT_NULLABLE_TIME_SETTING = 28;
 
     private static final LocalTime TIME = LocalTime.of(16, 44);
+    private static final Date LEGACY_TIME;
 
-    private static final String FORMATTED_TIME_12 = "4:44 PM";
-    private static final String FORMATTED_TIME_24 = "16:44";
+    static {
+        try {
+            LEGACY_TIME = get24HourTimeFormatInUtc().parse("16:44");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Test
     public void ofLocalizedTime_nullSystemSettingUsLocale_uses12HourFormat() {
@@ -34,7 +42,7 @@ public class AndroidDateTimeFormatterTest extends TimeSettingTest {
 
         DateTimeFormatter formatter = AndroidDateTimeFormatter.ofLocalizedTime(getTestContext());
         String formattedTime = formatter.format(TIME);
-        assertEquals(FORMATTED_TIME_12, formattedTime);
+        assertEquals(expectedFormattedTime(), formattedTime);
     }
 
     @Test
@@ -44,7 +52,7 @@ public class AndroidDateTimeFormatterTest extends TimeSettingTest {
 
         DateTimeFormatter formatter = AndroidDateTimeFormatter.ofLocalizedTime(getTestContext());
         String formattedTime = formatter.format(TIME);
-        assertEquals(FORMATTED_TIME_12, formattedTime);
+        assertEquals(expectedFormattedTime(), formattedTime);
     }
 
     @Test
@@ -54,7 +62,7 @@ public class AndroidDateTimeFormatterTest extends TimeSettingTest {
 
         DateTimeFormatter formatter = AndroidDateTimeFormatter.ofLocalizedTime(getTestContext());
         String formattedTime = formatter.format(TIME);
-        assertEquals(FORMATTED_TIME_24, formattedTime);
+        assertEquals(expectedFormattedTime(), formattedTime);
     }
 
     @Test
@@ -69,7 +77,7 @@ public class AndroidDateTimeFormatterTest extends TimeSettingTest {
 
         DateTimeFormatter formatter = AndroidDateTimeFormatter.ofLocalizedTime(getTestContext());
         String formattedTime = formatter.format(TIME);
-        assertEquals(FORMATTED_TIME_24, formattedTime);
+        assertEquals(expectedFormattedTime(), formattedTime);
     }
 
     @Test
@@ -79,7 +87,7 @@ public class AndroidDateTimeFormatterTest extends TimeSettingTest {
 
         DateTimeFormatter formatter = AndroidDateTimeFormatter.ofLocalizedTime(getTestContext());
         String formattedTime = formatter.format(TIME);
-        assertEquals(FORMATTED_TIME_12, formattedTime);
+        assertEquals(expectedFormattedTime(), formattedTime);
     }
 
     @Test
@@ -89,6 +97,10 @@ public class AndroidDateTimeFormatterTest extends TimeSettingTest {
 
         DateTimeFormatter formatter = AndroidDateTimeFormatter.ofLocalizedTime(getTestContext());
         String formattedTime = formatter.format(TIME);
-        assertEquals(FORMATTED_TIME_24, formattedTime);
+        assertEquals(expectedFormattedTime(), formattedTime);
+    }
+
+    private String expectedFormattedTime() {
+        return getAndroidTimeFormatInUtc().format(LEGACY_TIME);
     }
 }

@@ -7,7 +7,10 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.After;
 import org.junit.Before;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public abstract class TimeSettingTest {
 
@@ -33,7 +36,13 @@ public abstract class TimeSettingTest {
         return InstrumentationRegistry.getInstrumentation().getContext();
     }
 
-    protected final String getHourSetting() {
+    protected final DateFormat getAndroidTimeFormatInUtc() {
+        DateFormat format = android.text.format.DateFormat.getTimeFormat(getTestContext());
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return format;
+    }
+
+    private String getHourSetting() {
         return Settings.System.getString(getTestContext().getContentResolver(), Settings.System.TIME_12_24);
     }
 
@@ -43,5 +52,11 @@ public abstract class TimeSettingTest {
 
     protected final void setTestLocale(Locale locale) {
         getTestContext().getResources().getConfiguration().locale = locale;
+    }
+
+    protected static DateFormat get24HourTimeFormatInUtc() {
+        DateFormat format = new SimpleDateFormat("HH:mm", Locale.US);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return format;
     }
 }
