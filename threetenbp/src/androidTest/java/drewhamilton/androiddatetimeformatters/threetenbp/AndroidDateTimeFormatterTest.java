@@ -1,18 +1,16 @@
-package drewhamilton.androiddatetimeformatters.javatime;
+package drewhamilton.androiddatetimeformatters.threetenbp;
 
 import android.os.Build;
 import android.util.Log;
-import androidx.annotation.RequiresApi;
 import drewhamilton.androiddatetimeformatters.test.TimeSettingTest;
 import org.junit.Test;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 
-@RequiresApi(26)
 public class AndroidDateTimeFormatterTest extends TimeSettingTest {
 
     private static final String TAG = AndroidDateTimeFormatterTest.class.getSimpleName();
