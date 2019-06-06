@@ -12,7 +12,7 @@ directly to ThreeTenABP.
 ## Download
 [ ![Download](https://api.bintray.com/packages/drewhamilton/AndroidDateTimeFormatters/AndroidDateTimeFormatters-JavaTime/images/download.svg) ](https://bintray.com/drewhamilton/RxPreferences)
 
-AndroidDateTimeFormatters will be available soon in JCenter.
+AndroidDateTimeFormatters is available on JCenter.
 
 ```groovy
 // java.time formatters:
