@@ -21,10 +21,10 @@ import java.util.TimeZone;
  * as long as the permission is declared in the test manifest.
  * <p>
  * Know issues:
- *  - Tests fail on APIs 23-28 because {@code null} is an unsupported value by the setter, but is returned by the
+ *  - Tests fail on APIs 23-27 because {@code null} is an unsupported value by the setter, but is returned by the
  *    getter on new devices.
  *  - 12-hour format tests in e.g. Italy locale fail on API 16. For some reason the Android formatter outputs "4:44 PM"
- *    while the ThreeTenBP formatter outputs "4:44 p.".
+ *    while the ThreeTenBP formatter outputs "4:44 p.", despite an identical format patter of "h:mm a".
  */
 public abstract class TimeSettingTest {
 
