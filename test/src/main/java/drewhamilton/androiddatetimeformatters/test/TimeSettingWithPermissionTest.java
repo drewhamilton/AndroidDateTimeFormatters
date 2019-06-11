@@ -11,6 +11,13 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * A subclass of {@link TimeSettingTest} that runs in an activity and enables the
+ * {@link android.Manifest.permission#WRITE_SETTINGS} permission before continuing to tests.
+ * <p>
+ * This class is incomplete. It is seemingly unnecessary as tests appear to be granted this permission without
+ * requesting it.
+ */
 public abstract class TimeSettingWithPermissionTest extends TimeSettingTest {
 
     @Rule public final ActivityTestRule<SystemSettingsTestActivity> testActivityRule =

@@ -12,6 +12,20 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
+/**
+ * A base test class that facilitates using and changing the {@link android.provider.Settings.System#TIME_12_24} setting
+ * by caching the current setting before each test and resetting it after.
+ * <p>
+ * Currently it appears that even though changing this setting requires the
+ * {@link android.Manifest.permission#WRITE_SETTINGS} permission, tests work just fine without explicitly requesting it
+ * as long as the permission is declared in the test manifest.
+ * <p>
+ * Know issues:
+ *  - Tests fail on APIs 23-28 because {@code null} is an unsupported value by the setter, but is returned by the
+ *    getter on new devices.
+ *  - 12-hour format tests in e.g. Italy locale fail on API 16. For some reason the Android formatter outputs "4:44 PM"
+ *    while the ThreeTenBP formatter outputs "4:44 p.".
+ */
 public abstract class TimeSettingTest {
 
     private static final String TAG = TimeSettingTest.class.getSimpleName();
