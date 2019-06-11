@@ -4,11 +4,4 @@
 
   <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
-  <application>
-
-    <activity
-        android:name="drewhamilton.androiddatetimeformatters.test.SystemSettingsTestActivity" />
-
-  </application>
-
 </manifest>
