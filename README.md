@@ -1,8 +1,7 @@
 # AndroidDateTimeFormatters
 
-This library provides a `DateTimeFormatter` that respects Android's 12-/24-hour clock system setting. Separate versions
-of the library exist depending on whether you are using java.time types or
-[ThreeTenABP](https://github.com/JakeWharton/ThreeTenABP).
+This library provides a `DateTimeFormatter` that respects Android's 12-/24-hour clock system setting. Two versions of
+the library exist—one for java.time types and another for [ThreeTenABP](https://github.com/JakeWharton/ThreeTenABP).
 
 This library was created to address ThreeTenABP issue [#16](https://github.com/JakeWharton/ThreeTenABP/issues/16) after
 Jake indicated he

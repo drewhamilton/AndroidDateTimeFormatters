@@ -1,2 +1,3 @@
-include ':app', ':threetenbp', ':javatime'
+include ':javatime', ':threetenbp'
+include ':test', ':app'
 rootProject.name='AndroidDateTimeFormatters'
