@@ -24,7 +24,7 @@ public class AndroidDateTimeFormatterTest extends TimeSettingTest {
 
     static {
         try {
-            LEGACY_TIME = get24HourTimeFormatInUtc().parse("16:44");
+            LEGACY_TIME = getTimeFormat24InUtc().parse("16:44");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
