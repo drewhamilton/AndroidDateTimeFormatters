@@ -8,7 +8,8 @@ import org.junit.After
 import org.junit.Before
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.TimeZone
 
 /**
  * A base test class that facilitates using and changing the [Settings.System.TIME_12_24] setting by caching the current
@@ -61,8 +62,7 @@ abstract class TimeSettingTest {
     protected companion object {
         private val TAG = TimeSettingTest::class.java.simpleName
 
-        @JvmStatic
-        protected val timeFormat24InUtc get(): DateFormat {
+        @JvmStatic val timeFormat24InUtc get(): DateFormat {
             val format = SimpleDateFormat("HH:mm", Locale.US)
             format.timeZone = TimeZone.getTimeZone("UTC")
             return format
