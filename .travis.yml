@@ -4,6 +4,7 @@ branches:
 
 language: android
 sudo: required
+dist: trusty
 jdk: openjdk8
 
 env:
