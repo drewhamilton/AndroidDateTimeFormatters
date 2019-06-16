@@ -33,8 +33,8 @@ ext {
     minSdkVersion = 15
     compileSdkVersion = 28
 
-    keystore = project.hasProperty('personalKeystore') ? personalKeystore : ''
-    keystorePassword = project.hasProperty('personalKeystorePassword') ? personalKeystorePassword : ''
-    keyAlias = project.hasProperty('personalKeyAlias') ? personalKeyAlias : ''
-    keyPassword = project.hasProperty('personalKeyPassword') ? personalKeyPassword : ''
+    keystore = project.hasProperty('personalKeystore') ? personalKeystore : 'dummy'
+    keystorePassword = project.hasProperty('personalKeystorePassword') ? personalKeystorePassword : 'dummy'
+    keyAlias = project.hasProperty('personalKeyAlias') ? personalKeyAlias : 'dummy'
+    keyPassword = project.hasProperty('personalKeyPassword') ? personalKeyPassword : 'dummy'
 }
