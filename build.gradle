@@ -3,6 +3,7 @@ buildscript {
 
     repositories {
         google()
+        gradlePluginPortal()
         jcenter()
     }
 
@@ -10,6 +11,8 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.6.0-alpha03'
 
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        classpath 'me.champeau.gradle:japicmp-gradle-plugin:0.2.8'
 
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
@@ -29,6 +32,7 @@ task clean(type: Delete) {
 
 ext {
     libraryVersion = '0.2.0'
+    compatibleVersion = '0.2.0'
 
     minSdkVersion = 15
     compileSdkVersion = 28

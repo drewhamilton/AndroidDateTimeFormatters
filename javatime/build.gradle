@@ -37,6 +37,7 @@ android {
 }
 
 apply from: 'publish.gradle'
+apply from: 'compatibility.gradle'
 
 dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
