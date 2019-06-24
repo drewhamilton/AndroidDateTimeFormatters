@@ -1,5 +1,4 @@
 # AndroidDateTimeFormatters
-[![Build Status](https://travis-ci.org/drewhamilton/AndroidDateTimeFormatters.svg?branch=master)](https://travis-ci.org/drewhamilton/AndroidDateTimeFormatters)
 
 This library provides a `DateTimeFormatter` that respects Android's 12-/24-hour clock system setting. Two versions of
 the library exist—one for java.time types and another for [ThreeTenABP](https://github.com/JakeWharton/ThreeTenABP).
