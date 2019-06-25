@@ -1,6 +1,8 @@
 package drewhamilton.androiddatetimeformatters.test
 
 import android.content.Context
+import android.os.Build
+import android.os.LocaleList
 import android.provider.Settings
 import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
@@ -8,6 +10,7 @@ import org.junit.After
 import org.junit.Before
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -45,11 +48,18 @@ abstract class TimeSettingTest {
 
     protected val testContext get(): Context = InstrumentationRegistry.getInstrumentation().context
 
-    protected val androidTimeFormatInUtc get(): DateFormat {
-        val format = android.text.format.DateFormat.getTimeFormat(testContext)
-        format.timeZone = TimeZone.getTimeZone("UTC")
-        return format
-    }
+    protected val androidFormatTimeInUtc get(): DateFormat =
+        android.text.format.DateFormat.getTimeFormat(testContext)
+                .apply { timeZone = TimeZone.getTimeZone("UTC") }
+
+    protected val androidFormatDateShort get(): DateFormat =
+        android.text.format.DateFormat.getDateFormat(testContext)
+
+    protected val androidFormatDateMedium get(): DateFormat =
+        android.text.format.DateFormat.getMediumDateFormat(testContext)
+
+    protected val androidFormatDateLong get(): DateFormat =
+        android.text.format.DateFormat.getLongDateFormat(testContext)
 
     protected var timeSetting: String?
         get() = Settings.System.getString(testContext.contentResolver, Settings.System.TIME_12_24)
@@ -62,10 +72,8 @@ abstract class TimeSettingTest {
     protected companion object {
         private val TAG = TimeSettingTest::class.java.simpleName
 
-        @JvmStatic val timeFormat24InUtc get(): DateFormat {
-            val format = SimpleDateFormat("HH:mm", Locale.US)
-            format.timeZone = TimeZone.getTimeZone("UTC")
-            return format
-        }
+        @JvmStatic val dateTimeFormatInUtc get(): DateFormat =
+            SimpleDateFormat("yyyy-MM-dd_HH:mm", Locale.US)
+                    .apply { timeZone = TimeZone.getTimeZone("UTC") }
     }
 }
