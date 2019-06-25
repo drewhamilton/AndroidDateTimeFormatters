@@ -7,6 +7,7 @@ import drewhamilton.androiddatetimeformatters.test.TimeSettingTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.LocalTime
+import java.util.Date
 import java.util.Locale
 
 @RequiresApi(26)
@@ -23,7 +24,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(FORMATTED_TIME_12, formattedTime)
+        assertEquals(expectedFormattedTime, formattedTime)
     }
 
     @Test fun ofLocalizedTime_12SystemSettingUsLocale_uses12HourFormat() {
@@ -32,7 +33,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(FORMATTED_TIME_12, formattedTime)
+        assertEquals(expectedFormattedTime, formattedTime)
     }
 
     @Test fun ofLocalizedTime_24SystemSettingUsLocale_uses24HourFormat() {
@@ -41,7 +42,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(FORMATTED_TIME_24, formattedTime)
+        assertEquals(expectedFormattedTime, formattedTime)
     }
 
     @Test fun ofLocalizedTime_nullSystemSettingItalyLocale_uses24HourFormat() {
@@ -55,7 +56,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(FORMATTED_TIME_24, formattedTime)
+        assertEquals(expectedFormattedTime, formattedTime)
     }
 
     @Test fun ofLocalizedTime_12SystemSettingItalyLocale_uses12HourFormat() {
@@ -64,7 +65,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(FORMATTED_TIME_12, formattedTime)
+        assertEquals(expectedFormattedTime, formattedTime)
     }
 
     @Test fun ofLocalizedTime_24SystemSettingItalyLocale_uses24HourFormat() {
@@ -73,8 +74,10 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(FORMATTED_TIME_24, formattedTime)
+        assertEquals(expectedFormattedTime, formattedTime)
     }
+
+    private val expectedFormattedTime get(): String = androidTimeFormatInUtc.format(LEGACY_TIME)
 
     private companion object {
         private val TAG = AndroidDateTimeFormatterTest::class.java.simpleName
@@ -82,8 +85,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         private const val SDK_INT_NULLABLE_TIME_SETTING = 28
 
         private val TIME = LocalTime.of(16, 44)
-
-        private const val FORMATTED_TIME_12 = "4:44 PM"
-        private const val FORMATTED_TIME_24 = "16:44"
+        @JvmStatic private val LEGACY_TIME: Date = timeFormat24InUtc.parse("16:44")
     }
 }
+
