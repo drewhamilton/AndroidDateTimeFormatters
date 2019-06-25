@@ -12,8 +12,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import static android.text.format.DateFormat.getDateFormat;
-import static android.text.format.DateFormat.getTimeFormat;
+import static android.text.format.DateFormat.*;
 
 /**
  * Provides Android-specific {@link DateTimeFormatter}s, such as a localized time formatter that respects the user's
@@ -36,8 +35,26 @@ public final class AndroidDateTimeFormatter {
      * @param context the application context
      * @return a {@link DateTimeFormatter} that properly formats the date.
      */
-    public static DateTimeFormatter ofLocalizedDate(Context context) {
+    public static DateTimeFormatter ofLocalizedDateShort(Context context) {
         return convertLegacyFormat(context, getDateFormat(context));
+    }
+
+    /**
+     * Returns a {@link DateTimeFormatter} that can format the date according to the context's locale.
+     * @param context the application context
+     * @return a {@link DateTimeFormatter} that properly formats the date.
+     */
+    public static DateTimeFormatter ofLocalizedDateMedium(Context context) {
+        return convertLegacyFormat(context, getMediumDateFormat(context));
+    }
+
+    /**
+     * Returns a {@link DateTimeFormatter} that can format the date according to the context's locale.
+     * @param context the application context
+     * @return a {@link DateTimeFormatter} that properly formats the date.
+     */
+    public static DateTimeFormatter ofLocalizedDateLong(Context context) {
+        return convertLegacyFormat(context, getLongDateFormat(context));
     }
 
     private static DateTimeFormatter convertLegacyFormat(Context context, DateFormat legacyFormat) throws IllegalArgumentException {

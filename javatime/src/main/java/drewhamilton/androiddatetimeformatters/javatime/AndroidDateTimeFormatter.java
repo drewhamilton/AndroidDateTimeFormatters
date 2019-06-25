@@ -38,8 +38,26 @@ public final class AndroidDateTimeFormatter {
      * @param context the application context
      * @return a {@link DateTimeFormatter} that properly formats the date.
      */
-    public static DateTimeFormatter ofLocalizedDate(Context context) {
+    public static DateTimeFormatter ofLocalizedDateShort(Context context) {
         return convertLegacyFormat(context, getDateFormat(context));
+    }
+
+    /**
+     * Returns a {@link DateTimeFormatter} that can format the date according to the context's locale.
+     * @param context the application context
+     * @return a {@link DateTimeFormatter} that properly formats the date.
+     */
+    public static DateTimeFormatter ofLocalizedDateMedium(Context context) {
+        return convertLegacyFormat(context, getMediumDateFormat(context));
+    }
+
+    /**
+     * Returns a {@link DateTimeFormatter} that can format the date according to the context's locale.
+     * @param context the application context
+     * @return a {@link DateTimeFormatter} that properly formats the date.
+     */
+    public static DateTimeFormatter ofLocalizedDateLong(Context context) {
+        return convertLegacyFormat(context, getLongDateFormat(context));
     }
 
     private static DateTimeFormatter convertLegacyFormat(Context context, DateFormat legacyFormat) throws IllegalArgumentException {
