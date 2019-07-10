@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.LocaleList;
-
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeFormatterBuilder;
 
@@ -13,14 +12,15 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
- * Provides Android-specific {@link DateTimeFormatter}s, such as a localized time formatter that
- * respects the user's 12-/24-hour clock preference.
+ * Provides Android-specific {@link DateTimeFormatter}s, such as a localized time formatter that respects the user's
+ * 12-/24-hour clock preference.
  */
 public final class AndroidDateTimeFormatter {
 
     /**
-     * Returns a {@link DateTimeFormatter} that can format the time according to the context's
-     * locale and the user's 12-/24-hour clock preference.
+     * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale and the user's
+     * 12-/24-hour clock preference.
+     *
      * @param context the application context
      * @return a {@link DateTimeFormatter} that properly formats the time.
      */
