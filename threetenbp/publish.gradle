@@ -3,7 +3,6 @@ apply from: '../publish.gradle'
 ext {
     bintrayName = 'AndroidDateTimeFormatters-ThreeTenBP'
     libraryName = 'ThreeTenBP AndroidDateTimeFormatters'
-    artifact = 'androiddatetimeformatters-threetenbp'
 
     libraryDescription = 'ThreeTenBP DateTimeFormatters for Android.'
 }

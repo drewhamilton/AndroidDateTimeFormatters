@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+ext.artifact = 'androiddatetimeformatters-javatime'
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -46,3 +48,42 @@ dependencies {
     androidTestImplementation project(':test')
     androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
+
+// TODO WORKAROUND: Get this to work in its own file
+//region Compatibility
+configurations {
+    baseline
+    latest
+}
+
+dependencies {
+    baseline("drewhamilton.androiddatetimeformatters:$artifact:$compatibleVersion") {
+        transitive = false
+        force = true
+    }
+    latest project(path: ":$project.name", configuration: 'releaseRuntimeElements')
+}
+
+apply plugin: 'me.champeau.gradle.japicmp'
+//noinspection UnnecessaryQualifiedReference
+task japicmp(type: me.champeau.gradle.japicmp.JapicmpTask) {
+    oldClasspath = configurations.baseline.incoming.artifactView { config ->
+        config.attributes { container ->
+            container.attribute(Attribute.of("artifactType", String.class), "jar")
+        }
+    }.artifacts.artifactFiles
+
+    newClasspath = configurations.latest.incoming.artifactView { config ->
+        config.attributes { container ->
+            container.attribute(Attribute.of("artifactType", String.class), "jar")
+        }
+    }.artifacts.artifactFiles
+
+    onlyBinaryIncompatibleModified = true
+    failOnModification = true
+    txtOutputFile = file("$buildDir/reports/japi.txt")
+}
+
+check.dependsOn(japicmp)
+build.dependsOn(check)
+//endregion

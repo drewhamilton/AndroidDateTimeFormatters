@@ -3,7 +3,6 @@ apply from: '../publish.gradle'
 ext {
     bintrayName = 'AndroidDateTimeFormatters-JavaTime'
     libraryName = 'java.time AndroidDateTimeFormatters'
-    artifact = 'androiddatetimeformatters-javatime'
 
     libraryDescription = 'java.time DateTimeFormatters for Android.'
 }
