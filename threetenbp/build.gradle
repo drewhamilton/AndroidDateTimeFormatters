@@ -44,6 +44,8 @@ dependencies {
     androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
+// TODO WORKAROUND: Get this to work in its own file
+//region Compatibility
 configurations {
     baseline
     latest
@@ -57,6 +59,7 @@ dependencies {
     latest project(path: ":$project.name", configuration: 'releaseRuntimeElements')
 }
 
+apply plugin: 'me.champeau.gradle.japicmp'
 //noinspection UnnecessaryQualifiedReference
 task japicmp(type: me.champeau.gradle.japicmp.JapicmpTask) {
     oldClasspath = configurations.baseline.incoming.artifactView { config ->
@@ -71,7 +74,11 @@ task japicmp(type: me.champeau.gradle.japicmp.JapicmpTask) {
         }
     }.artifacts.artifactFiles
 
-    onlyModified = true
+    onlyBinaryIncompatibleModified = true
     failOnModification = true
     txtOutputFile = file("$buildDir/reports/japi.txt")
 }
+
+check.dependsOn(japicmp)
+build.dependsOn(check)
+//endregion
