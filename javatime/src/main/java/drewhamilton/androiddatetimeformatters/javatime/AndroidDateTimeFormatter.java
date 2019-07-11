@@ -16,15 +16,16 @@ import java.util.Locale;
  * Provides Android-specific {@link DateTimeFormatter}s, such as a localized time formatter that respects the user's
  * 12-/24-hour clock preference.
  */
+@RequiresApi(26)
 public final class AndroidDateTimeFormatter {
 
     /**
      * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale and the user's
      * 12-/24-hour clock preference.
+     *
      * @param context the application context
      * @return a {@link DateTimeFormatter} that properly formats the time.
      */
-    @RequiresApi(26)
     public static DateTimeFormatter ofLocalizedTime(Context context) {
         DateFormat legacyFormat = android.text.format.DateFormat.getTimeFormat(context);
 

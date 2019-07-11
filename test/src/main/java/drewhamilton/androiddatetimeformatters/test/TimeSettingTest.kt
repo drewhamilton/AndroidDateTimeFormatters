@@ -45,11 +45,10 @@ abstract class TimeSettingTest {
 
     protected val testContext get(): Context = InstrumentationRegistry.getInstrumentation().context
 
-    protected val androidTimeFormatInUtc get(): DateFormat {
-        val format = android.text.format.DateFormat.getTimeFormat(testContext)
-        format.timeZone = TimeZone.getTimeZone("UTC")
-        return format
-    }
+    protected val androidTimeFormatInUtc: DateFormat
+        get() = android.text.format.DateFormat.getTimeFormat(testContext).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
 
     protected var timeSetting: String?
         get() = Settings.System.getString(testContext.contentResolver, Settings.System.TIME_12_24)
@@ -62,10 +61,8 @@ abstract class TimeSettingTest {
     protected companion object {
         private val TAG = TimeSettingTest::class.java.simpleName
 
-        @JvmStatic val timeFormat24InUtc get(): DateFormat {
-            val format = SimpleDateFormat("HH:mm", Locale.US)
-            format.timeZone = TimeZone.getTimeZone("UTC")
-            return format
+        @JvmStatic val timeFormat24InUtc get(): DateFormat = SimpleDateFormat("HH:mm", Locale.US).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
         }
     }
 }

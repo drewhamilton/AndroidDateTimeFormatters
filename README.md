@@ -9,7 +9,7 @@ Jake indicated he
 ThreeTenABP.
 
 ## Download
-[![Download](https://api.bintray.com/packages/drewhamilton/AndroidDateTimeFormatters/AndroidDateTimeFormatters-JavaTime/images/download.svg)](https://bintray.com/drewhamilton/RxPreferences)
+[![Download](https://api.bintray.com/packages/drewhamilton/AndroidDateTimeFormatters/AndroidDateTimeFormatters-JavaTime/images/download.svg)](https://bintray.com/drewhamilton/AndroidDateTimeFormatters)
 
 AndroidDateTimeFormatters is available on JCenter.
 
