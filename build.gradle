@@ -19,15 +19,19 @@ buildscript {
     }
 }
 
-allprojects {
+allprojects { project ->
     repositories {
         google()
         jcenter()
     }
-}
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    //noinspection UnnecessaryQualifiedReference
+    project.plugins.withType(com.android.build.gradle.LibraryPlugin) {
+        project.android.libraryVariants.all { variant ->
+            // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
+            variant.generateBuildConfig.enabled = false
+        }
+    }
 }
 
 ext {
@@ -41,4 +45,8 @@ ext {
     keystorePassword = project.hasProperty('personalKeystorePassword') ? personalKeystorePassword : 'dummy'
     keyAlias = project.hasProperty('personalKeyAlias') ? personalKeyAlias : 'dummy'
     keyPassword = project.hasProperty('personalKeyPassword') ? personalKeyPassword : 'dummy'
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
