@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.0-alpha03'
+        classpath 'com.android.tools.build:gradle:3.4.2'
 
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
@@ -29,7 +29,7 @@ allprojects { project ->
     project.plugins.withType(com.android.build.gradle.LibraryPlugin) {
         project.android.libraryVariants.all { variant ->
             // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
-            variant.generateBuildConfig.enabled = false
+            variant.generateBuildConfigProvider.get().enabled = false
         }
     }
 }
