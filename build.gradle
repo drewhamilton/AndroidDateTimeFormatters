@@ -35,7 +35,7 @@ allprojects { project ->
 }
 
 ext {
-    libraryVersion = '1.0.0-beta1'
+    libraryVersion = '1.0.0'
     compatibleVersion = '1.0.0-beta1'
 
     minSdkVersion = 15
