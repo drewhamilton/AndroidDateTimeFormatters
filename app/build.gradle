@@ -9,6 +9,9 @@ android {
         versionCode 1
         versionName rootProject.ext.libraryVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Support core library desugaring:
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -16,6 +19,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled = true
     }
 }
 
@@ -26,6 +35,8 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+
+    implementation 'com.android.support:multidex:1.0.3'
 
     testImplementation 'junit:junit:4.12'
 

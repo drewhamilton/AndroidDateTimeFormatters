@@ -1,9 +1,10 @@
 package drewhamilton.androiddatetimeformatters.demo;
 
-import android.app.Application;
+import androidx.multidex.MultiDexApplication;
+
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
-public class DemoApp extends Application {
+public class DemoApp extends MultiDexApplication {
 
     @Override
     public void onCreate() {
