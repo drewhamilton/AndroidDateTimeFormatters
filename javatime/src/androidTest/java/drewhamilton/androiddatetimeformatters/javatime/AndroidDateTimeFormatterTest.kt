@@ -9,7 +9,7 @@ import org.junit.Test
 import java.time.LocalTime
 import java.util.Locale
 
-@RequiresApi(26) // TODO: This should be able to run on lower APIs
+@RequiresApi(26) // TODO WORKAROUND: Desugaring should work for tests too
 class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
     @Test fun ofLocalizedTime_nullSystemSettingUsLocale_uses12HourFormat() {
