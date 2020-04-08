@@ -1,15 +1,15 @@
 package drewhamilton.androiddatetimeformatters.demo;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import drewhamilton.androiddatetimeformatters.javatime.AndroidDateTimeFormatter;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+
+import drewhamilton.androiddatetimeformatters.javatime.AndroidDateTimeFormatter;
 
 public class Demo extends AppCompatActivity {
 
@@ -22,13 +22,10 @@ public class Demo extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.SDK_INT >= 26) {
-            displayJavaTime();
-        }
+        displayJavaTime();
         displayThreeTenBpTime();
     }
 
-    @RequiresApi(26)
     private void displayJavaTime() {
         TextView javaTimeValue = findViewById(R.id.javaTimeValue);
         DateTimeFormatter formatter = AndroidDateTimeFormatter.ofLocalizedTime(getApplicationContext());

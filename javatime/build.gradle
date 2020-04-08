@@ -11,8 +11,11 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         versionName rootProject.ext.libraryVersion
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         consumerProguardFiles 'consumer-rules.pro'
+
+        // Support core library desugaring:
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -35,6 +38,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 }
 
@@ -43,7 +47,9 @@ apply from: 'publish.gradle'
 dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
 
-    testImplementation 'junit:junit:4.12'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.5'
+
+    testImplementation 'junit:junit:4.13'
 
     androidTestImplementation project(':test')
     androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"

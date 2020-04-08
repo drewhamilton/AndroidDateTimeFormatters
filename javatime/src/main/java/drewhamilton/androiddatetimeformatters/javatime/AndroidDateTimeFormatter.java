@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.LocaleList;
-import androidx.annotation.RequiresApi;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,7 +15,6 @@ import java.util.Locale;
  * Provides Android-specific {@link DateTimeFormatter}s, such as a localized time formatter that respects the user's
  * 12-/24-hour clock preference.
  */
-@RequiresApi(26)
 public final class AndroidDateTimeFormatter {
 
     /**
