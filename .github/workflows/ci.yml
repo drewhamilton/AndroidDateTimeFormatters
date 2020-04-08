@@ -16,6 +16,11 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
       - name: Build # including JVM tests
         run: ./gradlew clean build --stacktrace
+      - name: Instrumented tests on API 21
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 21
+          script: ./gradlew connectedCheck --stacktrace
       - name: Instrumented tests on API 29
         uses: reactivecircus/android-emulator-runner@v2
         with:
