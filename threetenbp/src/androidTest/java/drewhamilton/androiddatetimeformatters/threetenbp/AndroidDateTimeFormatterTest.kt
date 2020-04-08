@@ -17,7 +17,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
             return
         }
 
-        timeSetting = null
+        systemTimeSetting = null
         testLocale = Locale.US
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
@@ -26,7 +26,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
 
     @Test fun ofLocalizedTime_12SystemSettingUsLocale_uses12HourFormat() {
-        timeSetting = "12"
+        systemTimeSetting = "12"
         testLocale = Locale.US
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
@@ -35,7 +35,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
 
     @Test fun ofLocalizedTime_24SystemSettingUsLocale_uses24HourFormat() {
-        timeSetting = "24"
+        systemTimeSetting = "24"
         testLocale = Locale.US
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
@@ -49,7 +49,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
             return
         }
 
-        timeSetting = null
+        systemTimeSetting = null
         testLocale = Locale.ITALY
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
@@ -58,7 +58,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
 
     @Test fun ofLocalizedTime_12SystemSettingItalyLocale_uses12HourFormat() {
-        timeSetting = "12"
+        systemTimeSetting = "12"
         testLocale = Locale.ITALY
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
@@ -67,7 +67,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
 
     @Test fun ofLocalizedTime_24SystemSettingItalyLocale_uses24HourFormat() {
-        timeSetting = "24"
+        systemTimeSetting = "24"
         testLocale = Locale.ITALY
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
