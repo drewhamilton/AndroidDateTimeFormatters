@@ -11,7 +11,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         versionName rootProject.ext.libraryVersion
 
-        testInstrumentationRunner 'drewhamilton.androiddatetimeformatters.javatime.MultiDexAndroidJUnitRunner'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         consumerProguardFiles 'consumer-rules.pro'
 
         // Support core library desugaring:
