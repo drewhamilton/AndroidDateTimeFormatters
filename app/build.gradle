@@ -31,16 +31,11 @@ android {
 dependencies {
     implementation project(':javatime')
     implementation project(':threetenbp')
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.2'
+    implementation deps.threeTenAbp
+
+    implementation deps.multidex
+    coreLibraryDesugaring deps.desugarJdkLibs
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
-
-    implementation 'com.android.support:multidex:1.0.3'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.5'
-
-    testImplementation 'junit:junit:4.13'
-
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

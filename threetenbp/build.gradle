@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 ext.artifact = 'androiddatetimeformatters-threetenbp'
 
@@ -28,7 +27,7 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
     }
 }
@@ -36,12 +35,11 @@ android {
 apply from: 'publish.gradle'
 
 dependencies {
-    api 'org.threeten:threetenbp:1.4.0:no-tzdb'
-
-    testImplementation 'junit:junit:4.13'
+    api deps.threeTenAbp
+    api deps.threeTenBp
 
     androidTestImplementation project(':test')
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    androidTestImplementation deps.kotlinStdLib
 }
 
 // TODO WORKAROUND: Get this to work in its own file
