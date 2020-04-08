@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -22,9 +21,8 @@ android {
 }
 
 dependencies {
-    api 'androidx.test.ext:junit:1.1.1'
-    api 'androidx.test.espresso:espresso-core:3.2.0'
-    api 'androidx.test:rules:1.2.0'
+    api deps.junitAndroid
+    api deps.androidTestRules
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation deps.kotlinStdLib
 }
