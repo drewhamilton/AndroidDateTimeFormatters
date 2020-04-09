@@ -1,9 +1,9 @@
-package drewhamilton.androiddatetimeformatters.javatime
+package dev.drewhamilton.androiddatetimeformatters.javatime
 
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import drewhamilton.androiddatetimeformatters.test.TimeSettingTest
+import dev.drewhamilton.androiddatetimeformatters.test.TimeSettingTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.LocalTime

@@ -1,4 +1,4 @@
-package drewhamilton.androiddatetimeformatters.test
+package dev.drewhamilton.androiddatetimeformatters.test
 
 import android.content.Context
 import android.provider.Settings
