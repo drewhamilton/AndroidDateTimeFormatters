@@ -1,0 +1,4 @@
+public final class drewhamilton/androiddatetimeformatters/javatime/AndroidDateTimeFormatter {
+	public static fun ofLocalizedTime (Landroid/content/Context;)Ljava/time/format/DateTimeFormatter;
+}
+

@@ -20,7 +20,7 @@ buildscript {
 
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
 
-        classpath 'me.champeau.gradle:japicmp-gradle-plugin:0.2.8'
+        classpath 'org.jetbrains.kotlinx:binary-compatibility-validator:0.2.3'
 
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
@@ -31,6 +31,11 @@ buildscript {
         gradlePluginPortal()
         jcenter()
     }
+}
+
+apply plugin: 'binary-compatibility-validator'
+apiValidation {
+    ignoredProjects += ['test', 'app']
 }
 
 allprojects { project ->
