@@ -40,7 +40,7 @@ public final class AndroidDateTimeFormatter {
     private static Locale extractLocale(Context context) {
         Configuration configuration = context.getResources().getConfiguration();
         Locale locale = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= 24) {
             LocaleList localeList = configuration.getLocales();
             if (!localeList.isEmpty()) {
                 locale = localeList.get(0);
