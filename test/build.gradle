@@ -25,4 +25,5 @@ dependencies {
     api deps.androidTestRules
 
     implementation deps.kotlinStdLib
+    implementation 'androidx.core:core:1.2.0'
 }

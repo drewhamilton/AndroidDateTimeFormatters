@@ -1,8 +1,12 @@
 package dev.drewhamilton.androiddatetimeformatters.test
 
 import android.content.Context
+import android.os.Build
+import android.os.LocaleList
 import android.provider.Settings
 import android.util.Log
+import androidx.core.os.ConfigurationCompat
+import androidx.core.os.LocaleListCompat
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
 import org.junit.Assume.assumeTrue
@@ -20,31 +24,17 @@ import java.util.TimeZone
  * permission, tests work just fine without explicitly requesting it as long as the permission is declared in the test
  * manifest.
  *
- * Known issues:
- *  - Tests fail on APIs 23-27 because null is an unsupported value by the setter, but is returned by the
- *    getter on new devices. Further, `assumeTrue(false)` causes failures instead of the expected ignores.
- *  - 12-hour format tests in e.g. Italy locale fail on API 16. For some reason the Android formatter outputs "4:44 PM"
- *    while the ThreeTenBP formatter outputs "4:44 p.", despite an identical format pattern of "h:mm a".
+ * All tests are ignored on APIs 23-27 because null is an unsupported value system time setting, but is also the default
+ * system time setting, meaning the original setting cannot be restored.
  */
 abstract class TimeSettingTest {
 
     private var originalTimeSetting: String? = null
+    private lateinit var originalLocales: LocaleListCompat
 
-    @Before fun cacheOriginalTimeSetting() {
-        originalTimeSetting = systemTimeSetting
-        Log.d(TAG, "cached original setting: $originalTimeSetting")
-        // Ignore the test if the device won't allow resetting to the original hour setting:
-        ignoreIfThrowing<IllegalArgumentException> {
-            resetTimeSetting()
-        }
-    }
+    private var canResetSystemTimeSetting: Boolean = false
 
-    @After fun resetTimeSetting() {
-        Log.d(TAG, "Resetting original setting: $originalTimeSetting")
-        systemTimeSetting = originalTimeSetting
-    }
-
-    protected val testContext get(): Context = InstrumentationRegistry.getInstrumentation().context
+    protected val testContext: Context get() = InstrumentationRegistry.getInstrumentation().context
 
     protected val androidTimeFormatInUtc: DateFormat
         get() = android.text.format.DateFormat.getTimeFormat(testContext).apply {
@@ -58,10 +48,50 @@ abstract class TimeSettingTest {
         }
 
     protected var testLocale: Locale
-        get() = testContext.resources.configuration.locale
+        get() = ConfigurationCompat.getLocales(testContext.resources.configuration)[0]
         set(value) {
-            testContext.resources.configuration.locale = value
+            setLocales(LocaleListCompat.create(value))
         }
+
+    @Before fun cacheOriginalTimeSetting() {
+        originalTimeSetting = systemTimeSetting
+        // Ignore the test if the device won't allow resetting to the original hour setting:
+        ignoreIfThrowing<IllegalArgumentException> {
+            forceRestoreSystemTimeSetting()
+        }
+        canResetSystemTimeSetting = true
+        Log.d(TAG, "cached original setting: $originalTimeSetting")
+    }
+
+    @After fun restoreTimeSetting() {
+        if (canResetSystemTimeSetting) {
+            forceRestoreSystemTimeSetting()
+            Log.d(TAG, "Reset original setting: $originalTimeSetting")
+        }
+    }
+
+    private fun forceRestoreSystemTimeSetting() {
+        systemTimeSetting = originalTimeSetting
+    }
+
+    @Before fun cacheOriginalLocales() {
+        originalLocales = ConfigurationCompat.getLocales(testContext.resources.configuration)
+    }
+
+    @After fun restoreLocales() {
+        if (::originalLocales.isInitialized)
+            setLocales(originalLocales)
+    }
+
+    private fun setLocales(locales: LocaleListCompat) = when {
+        Build.VERSION.SDK_INT >= 24 ->
+            testContext.resources.configuration.setLocales(locales.unwrap() as LocaleList)
+        Build.VERSION.SDK_INT >= 17 ->
+            testContext.resources.configuration.setLocale(locales[0])
+        else ->
+            @Suppress("DEPRECATION")
+            testContext.resources.configuration.locale = locales[0]
+    }
 
     /**
      * Ignore the test in progress if [block] throws an instance of [E].
