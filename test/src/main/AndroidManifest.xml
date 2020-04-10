@@ -1,3 +1,3 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="drewhamilton.androiddatetimeformatters.test" />
+    package="dev.drewhamilton.androiddatetimeformatters.test" />

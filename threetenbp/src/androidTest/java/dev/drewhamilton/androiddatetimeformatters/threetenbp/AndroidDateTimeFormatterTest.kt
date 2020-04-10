@@ -1,8 +1,8 @@
-package drewhamilton.androiddatetimeformatters.threetenbp
+package dev.drewhamilton.androiddatetimeformatters.threetenbp
 
 import android.os.Build
 import android.util.Log
-import drewhamilton.androiddatetimeformatters.test.TimeSettingTest
+import dev.drewhamilton.androiddatetimeformatters.test.TimeSettingTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.threeten.bp.LocalTime

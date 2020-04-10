@@ -1,4 +1,4 @@
-package drewhamilton.androiddatetimeformatters.demo;
+package dev.drewhamilton.androiddatetimeformatters.demo;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import drewhamilton.androiddatetimeformatters.javatime.AndroidDateTimeFormatter;
+import dev.drewhamilton.androiddatetimeformatters.javatime.AndroidDateTimeFormatter;
 
 public class Demo extends AppCompatActivity {
 
@@ -35,7 +35,7 @@ public class Demo extends AppCompatActivity {
     private void displayThreeTenBpTime() {
         TextView threeTenBpValue = findViewById(R.id.threeTenBpValue);
         org.threeten.bp.format.DateTimeFormatter formatter =
-                drewhamilton.androiddatetimeformatters.threetenbp.AndroidDateTimeFormatter
+                dev.drewhamilton.androiddatetimeformatters.threetenbp.AndroidDateTimeFormatter
                         .ofLocalizedTime(getApplicationContext());
         threeTenBpValue.setText(formatter.format(org.threeten.bp.LocalTime.now()));
     }
