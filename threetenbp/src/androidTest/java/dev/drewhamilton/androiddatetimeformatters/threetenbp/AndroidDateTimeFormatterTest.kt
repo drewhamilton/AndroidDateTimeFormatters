@@ -11,6 +11,9 @@ import java.util.Locale
 
 class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
+    private val expectedFormattedTime: String
+        get() = androidTimeFormatInUtc.format(LEGACY_TIME)
+
     @Test fun ofLocalizedTime_nullSystemSettingUsLocale_uses12HourFormat() {
         assumeFalse(
             "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
@@ -26,7 +29,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
 
     @Test fun ofLocalizedTime_12SystemSettingUsLocale_uses12HourFormat() {
-        systemTimeSetting = "12"
+        systemTimeSetting = TIME_SETTING_12
         testLocale = Locale.US
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
@@ -35,7 +38,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
 
     @Test fun ofLocalizedTime_24SystemSettingUsLocale_uses24HourFormat() {
-        systemTimeSetting = "24"
+        systemTimeSetting = TIME_SETTING_24
         testLocale = Locale.US
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
@@ -58,7 +61,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
 
     @Test fun ofLocalizedTime_12SystemSettingItalyLocale_uses12HourFormat() {
-        systemTimeSetting = "12"
+        systemTimeSetting = TIME_SETTING_12
         testLocale = Locale.ITALY
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
@@ -67,7 +70,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
 
     @Test fun ofLocalizedTime_24SystemSettingItalyLocale_uses24HourFormat() {
-        systemTimeSetting = "24"
+        systemTimeSetting = TIME_SETTING_24
         testLocale = Locale.ITALY
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
@@ -75,12 +78,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         assertEquals(expectedFormattedTime, formattedTime)
     }
 
-    private val expectedFormattedTime get(): String = androidTimeFormatInUtc.format(LEGACY_TIME)
-
     private companion object {
-        private const val SDK_INT_NULLABLE_TIME_SETTING = 28
-
         private val TIME = LocalTime.of(16, 44)
-        private val LEGACY_TIME: Date = timeFormat24InUtc.parse("16:44")!!
+        private val LEGACY_TIME: Date = TIME_FORMAT_24_IN_UTC.parse("16:44")!!
     }
 }

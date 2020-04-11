@@ -9,7 +9,6 @@ import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
-import org.junit.Assume.assumeTrue
 import org.junit.Before
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -91,8 +90,8 @@ abstract class TimeSettingTest {
         } else {
             val originalLocale = originalLocales[0]
             val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, originalLocale)
-            val formattedTime = timeFormat.format(tenPm)
-            systemTimeSetting = if (formattedTime.contains("22")) "24" else "12"
+            val formattedTime = timeFormat.format(TEN_PM)
+            systemTimeSetting = if (formattedTime.contains("22")) TIME_SETTING_24 else TIME_SETTING_12
         }
     }
 
@@ -100,28 +99,20 @@ abstract class TimeSettingTest {
         systemTimeSetting = originalTimeSetting
     }
 
-    /**
-     * Ignore the test in progress if [block] throws an instance of [E].
-     */
-    private inline fun <reified E : Exception> ignoreIfThrowing(block: () -> Unit) {
-        try {
-            block()
-        } catch (exception: Exception) {
-            if (exception is E)
-                assumeTrue("Test ignored: ${exception.message}", false)
-            else
-                throw exception
-        }
-    }
-
     protected companion object {
         private val TAG = TimeSettingTest::class.java.simpleName
 
-        @JvmStatic val timeFormat24InUtc: DateFormat
-            get() = SimpleDateFormat("HH:mm", Locale.US).apply {
+        const val SDK_INT_NULLABLE_TIME_SETTING = 28
+
+        const val TIME_SETTING_12 = "12"
+        const val TIME_SETTING_24 = "24"
+
+        val TIME_FORMAT_24_IN_UTC: DateFormat by lazy {
+            SimpleDateFormat("HH:mm", Locale.US).apply {
                 timeZone = TimeZone.getTimeZone("UTC")
             }
+        }
 
-        private val tenPm = timeFormat24InUtc.parse("22:00")
+        private val TEN_PM = TIME_FORMAT_24_IN_UTC.parse("22:00")
     }
 }
