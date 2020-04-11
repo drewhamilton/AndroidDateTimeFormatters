@@ -5,6 +5,7 @@ buildscript {
         ]
         deps = [
             androidTestRules: 'androidx.test:rules:1.2.0',
+            androidXAnnotations: 'androidx.annotation:annotation:1.1.0',
             desugarJdkLibs: 'com.android.tools:desugar_jdk_libs:1.0.5',
             junit: 'junit:junit:4.13',
             junitAndroid: 'androidx.test.ext:junit:1.1.1',
