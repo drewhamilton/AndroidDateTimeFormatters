@@ -56,7 +56,7 @@ allprojects { project ->
 }
 
 ext {
-    libraryVersion = '2.0.0-SNAPSHOT'
+    libraryVersion = '2.0.0'
 
     minSdkVersion = 15
     compileSdkVersion = 29

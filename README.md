@@ -1,25 +1,46 @@
 # AndroidDateTimeFormatters
 [![](https://github.com/drewhamilton/AndroidDateTimeFormatters/workflows/CI/badge.svg?branch=master)](https://github.com/drewhamilton/AndroidDateTimeFormatters/actions?query=workflow%3ACI+branch%3Amaster)
 
-This library provides a `DateTimeFormatter` that respects Android's 12-/24-hour clock system setting. Two versions of
-the library exist—one for java.time types and another for [ThreeTenABP](https://github.com/JakeWharton/ThreeTenABP).
+This library provides a `DateTimeFormatter` that respects Android's 12-/24-hour clock system
+setting. Two versions of the library exist—one for `java.time` types and another for
+[ThreeTenBP](https://github.com/ThreeTen/threetenbp) types.
 
-This library was created to address ThreeTenABP issue [#16](https://github.com/JakeWharton/ThreeTenABP/issues/16) after
-Jake indicated he
-[does not want to add this util](https://github.com/JakeWharton/ThreeTenABP/pull/103#issuecomment-498429319) directly to
-ThreeTenABP.
+With [core library desugaring](https://developer.android.com/studio/preview/features#j8-desugar)
+supported in Android Gradle Plugin 4.0+, the "datetimeformatters" artifact, using `java.time` types,
+is considered the primary and preferred artifact. However, "datetimeformatters-threetenbp" can be
+used in apps that still use ThreeTenBP. Both artifacts require a minimum Android SDK version of at
+least 15.
+
+To enable core library desugaring, include the following in your app module's build.gradle file:
+```groovy
+android {
+    defaultConfig {
+        // Only required if your minSdk is less than 21:
+        multidexEnabled true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+    }
+}
+dependencies {
+    // Latest version is 1.0.5 at the time of writing this:
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$coreLibraryDesugaringVersion"
+}
+```
 
 ## Download
-[ ![Download](https://api.bintray.com/packages/drewhamilton/AndroidDateTimeFormatters/AndroidDateTimeFormatters-JavaTime/images/download.svg) ](https://bintray.com/drewhamilton/AndroidDateTimeFormatters)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.drewhamilton.androidtime/datetimeformatters/badge.svg)](https://maven-badges.herokuapp.com/maven-central/dev.drewhamilton.androidtime/datetimeformatters)
 
-AndroidDateTimeFormatters is available on JCenter.
+AndroidDateTimeFormatters is available on Maven Central.
 
 ```groovy
 // java.time formatters:
-implementation "drewhamilton.androiddatetimeformatters:androiddatetimeformatters-javatime:$version"
+implementation "dev.drewhamilton.androidtime:datetimeformatters:$version"
 
 // ThreeTenBP formatters:
-implementation "drewhamilton.androiddatetimeformatters:androiddatetimeformatters-threetenbp:$version"
+implementation "dev.drewhamilton.androidtime:datetimeformatters-threetenbp:$version"
 ```
 
 ## License
