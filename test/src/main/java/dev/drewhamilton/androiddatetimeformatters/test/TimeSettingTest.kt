@@ -24,27 +24,18 @@ import java.util.TimeZone
  * permission, tests work just fine without explicitly requesting it as long as the permission is declared in the test
  * manifest.
  *
- * All tests are ignored on APIs 23-27 because null is an unsupported value system time setting, but is also the default
- * system time setting, meaning the original setting cannot be restored.
+ * Warning: on APIs 23-27, `null` is the default system time setting. But _setting_ `null` as the system time setting is
+ * unsupported. Thus, it is impossible to reset the device to its original system time setting of null. As a fallback,
+ * the system time setting is reset to the 12/24 hour preference of the device's primary locale instead.
  */
 abstract class TimeSettingTest {
 
-    private var originalTimeSetting: String? = null
-    private lateinit var originalLocales: LocaleListCompat
-
-    private var canResetSystemTimeSetting: Boolean = false
-
-    protected val testContext: Context get() = InstrumentationRegistry.getInstrumentation().context
+    protected val testContext: Context
+        get() = InstrumentationRegistry.getInstrumentation().context
 
     protected val androidTimeFormatInUtc: DateFormat
         get() = android.text.format.DateFormat.getTimeFormat(testContext).apply {
             timeZone = TimeZone.getTimeZone("UTC")
-        }
-
-    protected var systemTimeSetting: String?
-        get() = Settings.System.getString(testContext.contentResolver, Settings.System.TIME_12_24)
-        set(value) {
-            Settings.System.putString(testContext.contentResolver, Settings.System.TIME_12_24, value)
         }
 
     protected var testLocale: Locale
@@ -53,34 +44,22 @@ abstract class TimeSettingTest {
             setLocales(LocaleListCompat.create(value))
         }
 
-    @Before fun cacheOriginalTimeSetting() {
-        originalTimeSetting = systemTimeSetting
-        // Ignore the test if the device won't allow resetting to the original hour setting:
-        ignoreIfThrowing<IllegalArgumentException> {
-            forceRestoreSystemTimeSetting()
+    protected var systemTimeSetting: String?
+        get() = Settings.System.getString(testContext.contentResolver, Settings.System.TIME_12_24)
+        set(value) {
+            Settings.System.putString(testContext.contentResolver, Settings.System.TIME_12_24, value)
         }
-        canResetSystemTimeSetting = true
-        Log.d(TAG, "cached original setting: $originalTimeSetting")
-    }
 
-    @After fun restoreTimeSetting() {
-        if (canResetSystemTimeSetting) {
-            forceRestoreSystemTimeSetting()
-            Log.d(TAG, "Reset original setting: $originalTimeSetting")
-        }
-    }
-
-    private fun forceRestoreSystemTimeSetting() {
-        systemTimeSetting = originalTimeSetting
-    }
+    private lateinit var originalLocales: LocaleListCompat
+    private var originalTimeSetting: String? = null
+    private var canResetSystemTimeSetting: Boolean = false
 
     @Before fun cacheOriginalLocales() {
         originalLocales = ConfigurationCompat.getLocales(testContext.resources.configuration)
     }
 
     @After fun restoreLocales() {
-        if (::originalLocales.isInitialized)
-            setLocales(originalLocales)
+        setLocales(originalLocales)
     }
 
     private fun setLocales(locales: LocaleListCompat) = when {
@@ -91,6 +70,34 @@ abstract class TimeSettingTest {
         else ->
             @Suppress("DEPRECATION")
             testContext.resources.configuration.locale = locales[0]
+    }
+
+    @Before fun cacheOriginalTimeSetting() {
+        originalTimeSetting = systemTimeSetting
+        try {
+            forceRestoreSystemTimeSetting()
+            canResetSystemTimeSetting = true
+            Log.d(TAG, "Cached original setting: $originalTimeSetting")
+        } catch (illegalArgumentException: IllegalArgumentException) {
+            canResetSystemTimeSetting = false
+            Log.w(TAG, "Cannot restore original time setting; will fall back to setting from primary Locale")
+        }
+    }
+
+    @After fun restoreTimeSetting() {
+        if (canResetSystemTimeSetting) {
+            forceRestoreSystemTimeSetting()
+            Log.d(TAG, "Reset original setting: $originalTimeSetting")
+        } else {
+            val originalLocale = originalLocales[0]
+            val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, originalLocale)
+            val formattedTime = timeFormat.format(tenPm)
+            systemTimeSetting = if (formattedTime.contains("22")) "24" else "12"
+        }
+    }
+
+    private fun forceRestoreSystemTimeSetting() {
+        systemTimeSetting = originalTimeSetting
     }
 
     /**
@@ -114,5 +121,7 @@ abstract class TimeSettingTest {
             get() = SimpleDateFormat("HH:mm", Locale.US).apply {
                 timeZone = TimeZone.getTimeZone("UTC")
             }
+
+        private val tenPm = timeFormat24InUtc.parse("22:00")
     }
 }
