@@ -42,6 +42,7 @@ allprojects { project ->
     repositories {
         google()
         mavenCentral()
+        jcenter()
     }
 
     //noinspection UnnecessaryQualifiedReference

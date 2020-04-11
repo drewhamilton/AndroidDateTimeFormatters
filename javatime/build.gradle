@@ -5,7 +5,6 @@ ext {
     artifactName = 'datetimeformatters'
     publishedDescription = 'java.time DateTimeFormatters for Android.'
 }
-apply from: '../publish.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -44,6 +43,8 @@ android {
         coreLibraryDesugaringEnabled true
     }
 }
+
+apply from: '../publish.gradle'
 
 dependencies {
     coreLibraryDesugaring deps.desugarJdkLibs

@@ -5,7 +5,6 @@ ext {
     artifactName = 'datetimeformatters-threetenbp'
     publishedDescription = 'ThreeTenBP DateTimeFormatters for Android.'
 }
-apply from: '../publish.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -35,6 +34,8 @@ android {
         }
     }
 }
+
+apply from: '../publish.gradle'
 
 dependencies {
     api deps.threeTenAbp
