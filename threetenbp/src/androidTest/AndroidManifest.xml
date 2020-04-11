@@ -1,6 +1,6 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.drewhamilton.androiddatetimeformatters.threetenbp.test">
+    package="dev.drewhamilton.androidtime.threetenbp.format.test">
 
   <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 

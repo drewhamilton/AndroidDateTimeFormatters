@@ -1,2 +1,2 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.drewhamilton.androiddatetimeformatters.threetenbp" />
+    package="dev.drewhamilton.androidtime.threetenbp.format" />

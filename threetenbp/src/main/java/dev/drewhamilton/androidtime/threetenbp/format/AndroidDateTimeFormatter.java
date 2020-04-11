@@ -1,4 +1,4 @@
-package dev.drewhamilton.androiddatetimeformatters.threetenbp;
+package dev.drewhamilton.androidtime.threetenbp.format;
 
 import android.content.Context;
 import android.content.res.Configuration;

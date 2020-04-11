@@ -1,4 +1,4 @@
-public final class dev/drewhamilton/androiddatetimeformatters/threetenbp/AndroidDateTimeFormatter {
+public final class dev/drewhamilton/androidtime/threetenbp/format/AndroidDateTimeFormatter {
 	public static fun ofLocalizedTime (Landroid/content/Context;)Lorg/threeten/bp/format/DateTimeFormatter;
 }
 

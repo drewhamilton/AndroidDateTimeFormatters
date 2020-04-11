@@ -1,4 +1,4 @@
-package dev.drewhamilton.androiddatetimeformatters.javatime;
+package dev.drewhamilton.androidtime.format;
 
 import android.content.Context;
 import android.content.res.Configuration;

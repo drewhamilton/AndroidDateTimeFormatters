@@ -1,16 +1,14 @@
-package dev.drewhamilton.androiddatetimeformatters.javatime
+package dev.drewhamilton.androidtime.threetenbp.format
 
 import android.os.Build
-import androidx.annotation.RequiresApi
-import dev.drewhamilton.androiddatetimeformatters.test.TimeSettingTest
+import dev.drewhamilton.androidtime.format.test.TimeSettingTest
 import org.junit.Assert.assertEquals
 import org.junit.Assume.assumeFalse
 import org.junit.Test
-import java.time.LocalTime
+import org.threeten.bp.LocalTime
 import java.util.Date
 import java.util.Locale
 
-@RequiresApi(21) // Instrumented tests for Dynamic Features is not supported on API < 21 (AGP 4.0.0-beta04)
 class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
     private val expectedFormattedTime: String

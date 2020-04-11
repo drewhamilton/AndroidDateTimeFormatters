@@ -1,4 +1,4 @@
-package dev.drewhamilton.androiddatetimeformatters.demo;
+package dev.drewhamilton.androidtime.format.demo;
 
 import androidx.multidex.MultiDexApplication;
 
