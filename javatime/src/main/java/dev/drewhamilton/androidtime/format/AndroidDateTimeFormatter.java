@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.FormatStyle;
 import java.util.Locale;
 
 /**
@@ -23,8 +24,8 @@ public final class AndroidDateTimeFormatter {
      * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale and the user's
      * 12-/24-hour clock preference.
      *
-     * @param context the application context
-     * @return a {@link DateTimeFormatter} that properly formats the time.
+     * @param context The context with which the 12-/24-hour preference and the primary Locale are determined.
+     * @return A {@link DateTimeFormatter} that properly formats the time.
      */
     @NonNull
     public static DateTimeFormatter ofLocalizedTime(@NonNull Context context) {
@@ -43,6 +44,21 @@ public final class AndroidDateTimeFormatter {
                     SimpleDateFormat.class.getName(), legacyFormat.getClass().getName());
             throw new IllegalStateException(errorMessage);
         }
+    }
+
+    public static DateTimeFormatter ofLocalizedDate(Context context, FormatStyle dateStyle) {
+        return DateTimeFormatter.ofLocalizedDate(dateStyle)
+                .withLocale(extractLocale(context));
+    }
+
+    public static DateTimeFormatter ofLocalizedDateTime(Context context, FormatStyle dateTimeStyle) {
+        return DateTimeFormatter.ofLocalizedDateTime(dateTimeStyle)
+                .withLocale(extractLocale(context));
+    }
+
+    public static DateTimeFormatter ofLocalizedDateTime(Context context, FormatStyle dateStyle, FormatStyle timeStyle) {
+        return DateTimeFormatter.ofLocalizedDateTime(dateStyle, timeStyle)
+                .withLocale(extractLocale(context));
     }
 
     @NonNull
