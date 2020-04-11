@@ -47,7 +47,7 @@ allprojects { project ->
     //noinspection UnnecessaryQualifiedReference
     project.plugins.withType(com.android.build.gradle.LibraryPlugin) {
         project.android.libraryVariants.all { variant ->
-            // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
+            // TODO WORKAROUND: replace with https://issuetracker.google.com/issues/72050365 once released.
             variant.generateBuildConfigProvider.get().enabled = false
         }
     }
@@ -57,12 +57,12 @@ ext {
     libraryVersion = '2.0.0-SNAPSHOT'
 
     minSdkVersion = 15
-    compileSdkVersion = 28
+    compileSdkVersion = 29
 
-    keystore = project.hasProperty('personalKeystore') ? personalKeystore : 'dummy'
-    keystorePassword = project.hasProperty('personalKeystorePassword') ? personalKeystorePassword : 'dummy'
-    keyAlias = project.hasProperty('personalKeyAlias') ? personalKeyAlias : 'dummy'
-    keyPassword = project.hasProperty('personalKeyPassword') ? personalKeyPassword : 'dummy'
+    keystore = project.hasProperty('personalKeystore') ? personalKeystore : 'x'
+    keystorePassword = project.hasProperty('personalKeystorePassword') ? personalKeystorePassword : 'x'
+    keyAlias = project.hasProperty('personalKeyAlias') ? personalKeyAlias : 'x'
+    keyPassword = project.hasProperty('personalKeyPassword') ? personalKeyPassword : 'x'
 }
 
 task clean(type: Delete) {

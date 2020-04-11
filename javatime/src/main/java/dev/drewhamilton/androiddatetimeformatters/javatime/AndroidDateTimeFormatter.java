@@ -33,14 +33,19 @@ public final class AndroidDateTimeFormatter {
                     .appendPattern(pattern)
                     .toFormatter(extractLocale(context));
         } else {
-            throw new IllegalArgumentException("Unable to convert DateFormat to DateTimeFormatter");
+            // DateFormat.getTimeFormat is hard-coded to be a SimpleDateFormat instance, so this should never happen:
+            String errorMessage = String.format(
+                    Locale.US,
+                    "Expected Android time format to be %s, but it was %s",
+                    SimpleDateFormat.class.getName(), legacyFormat.getClass().getName());
+            throw new IllegalStateException(errorMessage);
         }
     }
 
     private static Locale extractLocale(Context context) {
         Configuration configuration = context.getResources().getConfiguration();
         Locale locale = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= 24) {
             LocaleList localeList = configuration.getLocales();
             if (!localeList.isEmpty()) {
                 locale = localeList.get(0);
