@@ -1,7 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-ext.artifact = 'androiddatetimeformatters-threetenbp'
+ext {
+    artifactName = 'datetimeformatters-threetenbp'
+    publishedDescription = 'ThreeTenBP DateTimeFormatters for Android.'
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -32,7 +35,7 @@ android {
     }
 }
 
-apply from: 'publish.gradle'
+apply from: '../publish.gradle'
 
 dependencies {
     api deps.threeTenAbp
