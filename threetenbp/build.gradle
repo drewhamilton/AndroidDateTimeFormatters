@@ -41,6 +41,8 @@ dependencies {
     api deps.threeTenAbp
     api deps.threeTenBp
 
+    implementation deps.androidXAnnotations
+
     androidTestImplementation project(':test')
     androidTestImplementation deps.kotlinStdLib
 }

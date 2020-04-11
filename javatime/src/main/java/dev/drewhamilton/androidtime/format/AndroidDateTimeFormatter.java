@@ -5,6 +5,8 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.LocaleList;
 
+import androidx.annotation.NonNull;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +26,8 @@ public final class AndroidDateTimeFormatter {
      * @param context the application context
      * @return a {@link DateTimeFormatter} that properly formats the time.
      */
-    public static DateTimeFormatter ofLocalizedTime(Context context) {
+    @NonNull
+    public static DateTimeFormatter ofLocalizedTime(@NonNull Context context) {
         DateFormat legacyFormat = android.text.format.DateFormat.getTimeFormat(context);
 
         if (legacyFormat instanceof SimpleDateFormat) {
@@ -42,7 +45,8 @@ public final class AndroidDateTimeFormatter {
         }
     }
 
-    private static Locale extractLocale(Context context) {
+    @NonNull
+    private static Locale extractLocale(@NonNull Context context) {
         Configuration configuration = context.getResources().getConfiguration();
         Locale locale = null;
         if (Build.VERSION.SDK_INT >= 24) {

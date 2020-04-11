@@ -49,6 +49,8 @@ apply from: '../publish.gradle'
 dependencies {
     coreLibraryDesugaring deps.desugarJdkLibs
 
+    implementation deps.androidXAnnotations
+
     androidTestImplementation project(':test')
     androidTestImplementation deps.kotlinStdLib
 }
