@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.1
+_2020_04_13_
+
+Lower the minSdk for the `java.time` artifact from 15 to 4.
+
 ## 2.0.0
 _2020-04-11_
 
