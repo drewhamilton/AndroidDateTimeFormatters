@@ -44,5 +44,4 @@ dependencies {
     coreLibraryDesugaring deps.desugarJdkLibs
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
 }
