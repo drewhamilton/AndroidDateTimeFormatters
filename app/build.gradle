@@ -1,13 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdk
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
     defaultConfig {
         applicationId "dev.drewhamilton.androidtime.format.demo"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.compileSdkVersion
+        minSdkVersion rootProject.ext.threeTenAbpMinSdk
+        targetSdkVersion rootProject.ext.compileSdk
         versionCode 1
         versionName rootProject.ext.libraryVersion
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Support core library desugaring:
@@ -26,6 +29,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         coreLibraryDesugaringEnabled true
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -37,5 +44,4 @@ dependencies {
     coreLibraryDesugaring deps.desugarJdkLibs
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
 }

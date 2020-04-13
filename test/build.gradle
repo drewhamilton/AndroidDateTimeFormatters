@@ -2,10 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdk
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion rootProject.ext.androidXMinSdk
         versionName rootProject.ext.libraryVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

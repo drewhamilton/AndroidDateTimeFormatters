@@ -58,8 +58,11 @@ allprojects { project ->
 ext {
     libraryVersion = '2.0.0'
 
-    minSdkVersion = 15
-    compileSdkVersion = 29
+    buildToolsVersion = '29.0.3'
+    compileSdk = 29
+    multidexMinSdk = 4
+    threeTenAbpMinSdk = 15
+    androidXMinSdk = 14
 
     keystore = project.hasProperty('personalKeystore') ? personalKeystore : 'x'
     keystorePassword = project.hasProperty('personalKeystorePassword') ? personalKeystorePassword : 'x'
