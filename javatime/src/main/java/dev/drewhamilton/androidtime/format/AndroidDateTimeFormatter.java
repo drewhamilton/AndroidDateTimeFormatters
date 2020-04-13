@@ -22,10 +22,11 @@ public final class AndroidDateTimeFormatter {
 
     /**
      * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale and the user's
-     * 12-/24-hour clock preference.
+     * 12-/24-hour clock preference. Due to the implementation of {@link android.text.format.DateFormat#getTimeFormat},
+     * this will always return a {@link FormatStyle#SHORT} time format.
      *
-     * @param context The context with which the 12-/24-hour preference and the primary Locale are determined.
-     * @return A {@link DateTimeFormatter} that properly formats the time.
+     * @param context the context with which the 12-/24-hour preference and the primary locale are determined.
+     * @return a {@link DateTimeFormatter} that properly formats the time.
      */
     @NonNull
     public static DateTimeFormatter ofLocalizedTime(@NonNull Context context) {
@@ -35,34 +36,95 @@ public final class AndroidDateTimeFormatter {
             String pattern = ((SimpleDateFormat) legacyFormat).toPattern();
             return new DateTimeFormatterBuilder()
                     .appendPattern(pattern)
-                    .toFormatter(extractLocale(context));
+                    .toFormatter(extractPrimaryLocale(context));
         } else {
             // DateFormat.getTimeFormat is hard-coded to be a SimpleDateFormat instance, so this should never happen:
-            String errorMessage = String.format(
-                    Locale.US,
+            String errorMessage = String.format(Locale.US,
                     "Expected Android time format to be %s, but it was %s",
                     SimpleDateFormat.class.getName(), legacyFormat.getClass().getName());
             throw new IllegalStateException(errorMessage);
         }
     }
 
-    public static DateTimeFormatter ofLocalizedDate(Context context, FormatStyle dateStyle) {
+    /**
+     * Returns a locale specific date format for the ISO chronology.
+     * <p>
+     * This returns a formatter that will format or parse a date. The exact format pattern used varies by locale.
+     * <p>
+     * The locale is determined from the formatter. The formatter returned directly by this method will use the provided
+     * Context's primary locale.
+     * <p>
+     * Note that the localized pattern is looked up lazily. This {@code DateTimeFormatter} holds the style required and
+     * the locale, looking up the pattern required on demand.
+     * <p>
+     * The returned formatter has a chronology of ISO set to ensure dates in other calendar systems are correctly
+     * converted. It has no override zone and uses the {@link java.time.format.ResolverStyle#SMART SMART} resolver
+     * style.
+     *
+     * @param context the context with which the primary locale is determined.
+     * @param dateStyle the formatter style to obtain
+     * @return the date formatter
+     */
+    @NonNull
+    public static DateTimeFormatter ofLocalizedDate(@NonNull Context context, @NonNull FormatStyle dateStyle) {
         return DateTimeFormatter.ofLocalizedDate(dateStyle)
-                .withLocale(extractLocale(context));
+                .withLocale(extractPrimaryLocale(context));
     }
 
-    public static DateTimeFormatter ofLocalizedDateTime(Context context, FormatStyle dateTimeStyle) {
+    /**
+     * Returns a locale specific date-time formatter for the ISO chronology.
+     * <p>
+     * This returns a formatter that will format or parse a date-time. The exact format pattern used varies by locale.
+     * <p>
+     * The locale is determined from the formatter. The formatter returned directly by this method will use the provided
+     * Context's primary locale.
+     * <p>
+     * Note that the localized pattern is looked up lazily. This {@code DateTimeFormatter} holds the style required and
+     * the locale, looking up the pattern required on demand.
+     * <p>
+     * The returned formatter has a chronology of ISO set to ensure dates in other calendar systems are correctly
+     * converted. It has no override zone and uses the {@link java.time.format.ResolverStyle#SMART SMART} resolver
+     * style.
+     *
+     * @param context the context with which the primary locale is determined
+     * @param dateTimeStyle the formatter style to obtain
+     * @return the date-time formatter
+     */
+    @NonNull
+    public static DateTimeFormatter ofLocalizedDateTime(@NonNull Context context, @NonNull FormatStyle dateTimeStyle) {
         return DateTimeFormatter.ofLocalizedDateTime(dateTimeStyle)
-                .withLocale(extractLocale(context));
+                .withLocale(extractPrimaryLocale(context));
     }
 
-    public static DateTimeFormatter ofLocalizedDateTime(Context context, FormatStyle dateStyle, FormatStyle timeStyle) {
+    /**
+     * Returns a locale specific date and time format for the ISO chronology.
+     * <p>
+     * This returns a formatter that will format or parse a date-time. The exact format pattern used varies by locale.
+     * <p>
+     * The locale is determined from the formatter. The formatter returned directly by this method will use the provided
+     * context's primary locale.
+     * <p>
+     * Note that the localized pattern is looked up lazily. This {@code DateTimeFormatter} holds the style required and
+     * the locale, looking up the pattern required on demand.
+     * <p>
+     * The returned formatter has a chronology of ISO set to ensure dates in other calendar systems are correctly
+     * converted. It has no override zone and uses the {@link java.time.format.ResolverStyle#SMART SMART} resolver
+     * style.
+     *
+     * @param context the context with which the primary locale is determined
+     * @param dateStyle the date formatter style to obtain
+     * @param timeStyle the time formatter style to obtain
+     * @return the date, time or date-time formatter
+     */
+    @NonNull
+    public static DateTimeFormatter ofLocalizedDateTime(@NonNull Context context,
+            @NonNull FormatStyle dateStyle, @NonNull FormatStyle timeStyle) {
         return DateTimeFormatter.ofLocalizedDateTime(dateStyle, timeStyle)
-                .withLocale(extractLocale(context));
+                .withLocale(extractPrimaryLocale(context));
     }
 
     @NonNull
-    private static Locale extractLocale(@NonNull Context context) {
+    private static Locale extractPrimaryLocale(@NonNull Context context) {
         Configuration configuration = context.getResources().getConfiguration();
         Locale locale = null;
         if (Build.VERSION.SDK_INT >= 24) {
