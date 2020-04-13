@@ -6,7 +6,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion rootProject.ext.threeTenAbpMinSdk
+        minSdkVersion rootProject.ext.androidXMinSdk
         versionName rootProject.ext.libraryVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
