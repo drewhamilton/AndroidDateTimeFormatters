@@ -76,27 +76,54 @@ abstract class TimeSettingTest {
         try {
             forceRestoreSystemTimeSetting()
             canResetSystemTimeSetting = true
-            Log.d(TAG, "Cached original setting: $originalTimeSetting")
+            Log.d(TAG, "Cached original device time setting: $originalTimeSetting")
         } catch (illegalArgumentException: IllegalArgumentException) {
             canResetSystemTimeSetting = false
-            Log.w(TAG, "Cannot restore original time setting; will fall back to setting from primary Locale")
+            Log.w(TAG, "Cannot restore original device time setting; will fall back to setting from primary Locale")
         }
     }
 
     @After fun restoreTimeSetting() {
         if (canResetSystemTimeSetting) {
             forceRestoreSystemTimeSetting()
-            Log.d(TAG, "Reset original setting: $originalTimeSetting")
+            Log.d(TAG, "Reset device time setting to original setting: $originalTimeSetting")
         } else {
-            val originalLocale = originalLocales[0]
-            val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, originalLocale)
-            val formattedTime = timeFormat.format(TEN_PM)
-            systemTimeSetting = if (formattedTime.contains("22")) TIME_SETTING_24 else TIME_SETTING_12
+            val newTimeSetting = if (originalLocales[0].is24HourLocale())
+                TIME_SETTING_24
+            else
+                TIME_SETTING_12
+            systemTimeSetting = newTimeSetting
+            Log.d(TAG, "Reset device time setting to: $newTimeSetting")
         }
     }
 
     private fun forceRestoreSystemTimeSetting() {
         systemTimeSetting = originalTimeSetting
+    }
+
+    private fun Locale.is24HourLocale(): Boolean {
+        val natural = DateFormat.getTimeInstance(DateFormat.LONG, this)
+        return if (natural is SimpleDateFormat)
+            natural.toPattern().hasDesignator('H')
+        else
+            false
+    }
+
+    private fun CharSequence?.hasDesignator(designator: Char): Boolean {
+        if (this == null)
+            return false
+
+        var insideQuote = false
+        forEach { c ->
+            if (c == '\'') {
+                insideQuote = !insideQuote
+            } else if (!insideQuote) {
+                if (c == designator)
+                    return true
+            }
+        }
+
+        return false
     }
 
     protected companion object {
@@ -112,7 +139,5 @@ abstract class TimeSettingTest {
                 timeZone = TimeZone.getTimeZone("UTC")
             }
         }
-
-        private val TEN_PM = TIME_FORMAT_24_IN_UTC.parse("22:00")
     }
 }
