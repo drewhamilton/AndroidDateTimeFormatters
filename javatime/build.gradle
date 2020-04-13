@@ -8,6 +8,7 @@ ext {
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.threeTenAbpMinSdk
