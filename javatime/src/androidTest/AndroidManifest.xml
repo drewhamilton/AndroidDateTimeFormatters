@@ -1,7 +1,12 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="dev.drewhamilton.androidtime.format.test">
 
   <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+  <!--Allow use of test frameworks with higher minSdk than this library's:-->
+  <uses-sdk tools:overrideLibrary="dev.drewhamilton.androidtime.format.test, androidx.test.ext.junit, androidx.core,
+          androidx.test.core, androidx.test, androidx.lifecycle, androidx.versionedparcelable" />
 
 </manifest>
