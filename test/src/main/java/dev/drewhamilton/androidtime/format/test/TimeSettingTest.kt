@@ -40,7 +40,7 @@ abstract class TimeSettingTest {
     protected var testLocale: Locale
         get() = ConfigurationCompat.getLocales(testContext.resources.configuration)[0]
         set(value) {
-            setLocales(LocaleListCompat.create(value))
+            testContext.setLocales(LocaleListCompat.create(value))
         }
 
     protected var systemTimeSetting: String?
@@ -58,17 +58,17 @@ abstract class TimeSettingTest {
     }
 
     @After fun restoreLocales() {
-        setLocales(originalLocales)
+        testContext.setLocales(originalLocales)
     }
 
-    private fun setLocales(locales: LocaleListCompat) = when {
+    private fun Context.setLocales(locales: LocaleListCompat) = when {
         Build.VERSION.SDK_INT >= 24 ->
-            testContext.resources.configuration.setLocales(locales.unwrap() as LocaleList)
+            resources.configuration.setLocales(locales.unwrap() as LocaleList)
         Build.VERSION.SDK_INT >= 17 ->
-            testContext.resources.configuration.setLocale(locales[0])
+            resources.configuration.setLocale(locales[0])
         else ->
             @Suppress("DEPRECATION")
-            testContext.resources.configuration.locale = locales[0]
+            resources.configuration.locale = locales[0]
     }
 
     @Before fun cacheOriginalTimeSetting() {
