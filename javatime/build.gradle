@@ -7,10 +7,10 @@ ext {
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdk
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion rootProject.ext.threeTenAbpMinSdk
         versionName rootProject.ext.libraryVersion
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'

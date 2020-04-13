@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdk
     defaultConfig {
         applicationId "dev.drewhamilton.androidtime.format.demo"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.compileSdkVersion
+        minSdkVersion rootProject.ext.threeTenAbpMinSdk
+        targetSdkVersion rootProject.ext.compileSdk
         versionCode 1
         versionName rootProject.ext.libraryVersion
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Support core library desugaring:
