@@ -1,7 +1,6 @@
 package dev.drewhamilton.androidtime.format.demo;
 
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,13 +9,17 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import dev.drewhamilton.androidtime.format.AndroidDateTimeFormatter;
+import dev.drewhamilton.androidtime.format.demo.databinding.DemoBinding;
 
 public class Demo extends AppCompatActivity {
+
+    private DemoBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.demo);
+        binding = DemoBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
     }
 
     @Override
@@ -27,16 +30,13 @@ public class Demo extends AppCompatActivity {
     }
 
     private void displayJavaTime() {
-        TextView javaTimeValue = findViewById(R.id.javaTimeValue);
-        DateTimeFormatter formatter = AndroidDateTimeFormatter.ofLocalizedTime(getApplicationContext());
-        javaTimeValue.setText(formatter.format(LocalTime.now()));
+        DateTimeFormatter formatter = AndroidDateTimeFormatter.ofLocalizedTime(this);
+        binding.javaTimeValue.setText(formatter.format(LocalTime.now()));
     }
 
     private void displayThreeTenBpTime() {
-        TextView threeTenBpValue = findViewById(R.id.threeTenBpValue);
         org.threeten.bp.format.DateTimeFormatter formatter =
-                dev.drewhamilton.androidtime.threetenbp.format.AndroidDateTimeFormatter
-                        .ofLocalizedTime(getApplicationContext());
-        threeTenBpValue.setText(formatter.format(org.threeten.bp.LocalTime.now()));
+                dev.drewhamilton.androidtime.threetenbp.format.AndroidDateTimeFormatter.ofLocalizedTime(this);
+        binding.threeTenBpValue.setText(formatter.format(org.threeten.bp.LocalTime.now()));
     }
 }
