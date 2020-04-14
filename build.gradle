@@ -13,6 +13,7 @@ buildscript {
             multidex: 'com.android.support:multidex:1.0.3',
             threeTenAbp: 'com.jakewharton.threetenabp:threetenabp:1.2.3',
             threeTenBp: 'org.threeten:threetenbp:1.4.3:no-tzdb',
+            truth: 'com.google.truth:truth:1.0.1'
         ]
     }
 
