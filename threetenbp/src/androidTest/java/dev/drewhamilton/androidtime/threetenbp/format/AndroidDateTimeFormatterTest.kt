@@ -12,7 +12,7 @@ import java.util.Locale
 class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
     private val expectedFormattedTime: String
-        get() = androidTimeFormatInUtc.format(LEGACY_TIME)
+        get() = androidShortTimeFormatInUtc.format(LEGACY_TIME)
 
     @Test fun ofLocalizedTime_nullSystemSettingUsLocale_uses12HourFormat() {
         assumeFalse(

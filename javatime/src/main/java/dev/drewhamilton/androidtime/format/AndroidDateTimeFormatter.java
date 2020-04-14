@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.LocaleList;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.chrono.IsoChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
@@ -20,30 +23,54 @@ import java.util.Locale;
  */
 public final class AndroidDateTimeFormatter {
 
+    private static final String TAG = AndroidDateTimeFormatter.class.getSimpleName();
+
     /**
      * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale and the user's
-     * 12-/24-hour clock preference. Due to the implementation of {@link android.text.format.DateFormat#getTimeFormat},
-     * this will always return a {@link FormatStyle#SHORT} time format.
+     * 12-/24-hour clock preference. Convenience for {@link #ofLocalizedTime(Context, FormatStyle)} which uses
+     * {@link FormatStyle#SHORT}.
      *
-     * @param context the context with which the 12-/24-hour preference and the primary locale are determined.
-     * @return a {@link DateTimeFormatter} that properly formats the time.
+     * @param context the context with which the 12-/24-hour preference and the primary locale are determined
+     * @return the time formatter
      */
     @NonNull
     public static DateTimeFormatter ofLocalizedTime(@NonNull Context context) {
-        DateFormat legacyFormat = android.text.format.DateFormat.getTimeFormat(context);
+        return ofLocalizedTime(context, FormatStyle.SHORT);
+    }
 
-        if (legacyFormat instanceof SimpleDateFormat) {
-            String pattern = ((SimpleDateFormat) legacyFormat).toPattern();
-            return new DateTimeFormatterBuilder()
-                    .appendPattern(pattern)
-                    .toFormatter(extractPrimaryLocale(context));
-        } else {
-            // DateFormat.getTimeFormat is hard-coded to be a SimpleDateFormat instance, so this should never happen:
-            String errorMessage = String.format(Locale.US,
-                    "Expected Android time format to be %s, but it was %s",
-                    SimpleDateFormat.class.getName(), legacyFormat.getClass().getName());
-            throw new IllegalStateException(errorMessage);
+    /**
+     * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale. If
+     * {@param timeStyle} is {@link FormatStyle#SHORT}, the formatter also respects the user's 12-/24-hour clock
+     * preference.
+     * <p>
+     * The {@link FormatStyle#FULL} and {@link FormatStyle#LONG} styles typically require a time-zone. When formatting
+     * using these styles, a {@link java.time.ZoneId} must be available, either by using {@link java.time.ZonedDateTime}
+     * or {@link DateTimeFormatter#withZone}.
+     *
+     * @param context the context with which the 12-/24-hour preference and the primary locale are determined.
+     * @param timeStyle the formatter style to obtain
+     * @return the time formatter
+     */
+    @NonNull
+    public static DateTimeFormatter ofLocalizedTime(@NonNull Context context, @NonNull FormatStyle timeStyle) {
+        Locale contextPrimaryLocale = extractPrimaryLocale(context);
+
+        // If format is SHORT, try system 12-/24-hour setting-specific time format:
+        if (timeStyle == FormatStyle.SHORT) {
+            String pattern = getSystemTimeSettingAwareShortTimePattern(context);
+            if (pattern == null) {
+                Log.w(TAG, "Couldn't determine time pattern based on system 12-/24-hour setting");
+            } else {
+                return new DateTimeFormatterBuilder()
+                        .appendPattern(pattern)
+                        .toFormatter(contextPrimaryLocale)
+                        // Match java.time's ofLocalizedTime, which also hard-codes IsoChronology:
+                        .withChronology(IsoChronology.INSTANCE);
+            }
         }
+
+        return DateTimeFormatter.ofLocalizedTime(timeStyle)
+                .withLocale(contextPrimaryLocale);
     }
 
     /**
@@ -121,6 +148,17 @@ public final class AndroidDateTimeFormatter {
             @NonNull FormatStyle dateStyle, @NonNull FormatStyle timeStyle) {
         return DateTimeFormatter.ofLocalizedDateTime(dateStyle, timeStyle)
                 .withLocale(extractPrimaryLocale(context));
+    }
+
+    @Nullable
+    private static String getSystemTimeSettingAwareShortTimePattern(Context context) {
+        DateFormat legacyFormat = android.text.format.DateFormat.getTimeFormat(context);
+
+        if (legacyFormat instanceof SimpleDateFormat) {
+            return ((SimpleDateFormat) legacyFormat).toPattern();
+        } else {
+            return null;
+        }
     }
 
     @NonNull

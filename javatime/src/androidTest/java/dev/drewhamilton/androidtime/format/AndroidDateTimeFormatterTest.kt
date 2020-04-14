@@ -1,6 +1,7 @@
 package dev.drewhamilton.androidtime.format
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.common.truth.Truth.assertThat
 import dev.drewhamilton.androidtime.format.test.TimeSettingTest
@@ -12,6 +13,9 @@ import java.time.LocalTime
 import java.time.Month
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.time.chrono.Chronology
+import java.time.chrono.IsoChronology
+import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
 import java.util.Date
 import java.util.Locale
@@ -19,10 +23,10 @@ import java.util.Locale
 @RequiresApi(21) // Instrumented tests for Dynamic Features is not supported on API < 21 (AGP 4.0.0-beta04)
 class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
-    private val expectedFormattedTime: String
-        get() = androidTimeFormatInUtc.format(LEGACY_TIME)
+    private val expectedShortFormattedTime: String
+        get() = androidShortTimeFormatInUtc.format(LEGACY_TIME)
 
-    //region ofLocalizedTime
+    //region ofLocalizedTime with default style
     @Test fun ofLocalizedTime_nullSystemSettingUsLocale_uses12HourFormat() {
         assumeFalse(
             "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
@@ -34,7 +38,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(expectedFormattedTime, formattedTime)
+        assertEquals(expectedShortFormattedTime, formattedTime)
     }
 
     @Test fun ofLocalizedTime_12SystemSettingUsLocale_uses12HourFormat() {
@@ -43,7 +47,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(expectedFormattedTime, formattedTime)
+        assertEquals(expectedShortFormattedTime, formattedTime)
     }
 
     @Test fun ofLocalizedTime_24SystemSettingUsLocale_uses24HourFormat() {
@@ -52,7 +56,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(expectedFormattedTime, formattedTime)
+        assertEquals(expectedShortFormattedTime, formattedTime)
     }
 
     @Test fun ofLocalizedTime_nullSystemSettingItalyLocale_uses24HourFormat() {
@@ -66,7 +70,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(expectedFormattedTime, formattedTime)
+        assertEquals(expectedShortFormattedTime, formattedTime)
     }
 
     @Test fun ofLocalizedTime_12SystemSettingItalyLocale_uses12HourFormat() {
@@ -75,7 +79,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(expectedFormattedTime, formattedTime)
+        assertEquals(expectedShortFormattedTime, formattedTime)
     }
 
     @Test fun ofLocalizedTime_24SystemSettingItalyLocale_uses24HourFormat() {
@@ -84,7 +88,115 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(TIME)
-        assertEquals(expectedFormattedTime, formattedTime)
+        assertEquals(expectedShortFormattedTime, formattedTime)
+    }
+    //endregion
+
+    //region ofLocalizedTime with explicit style
+    @Test fun ofLocalizedTime_nullSystemSettingUsLocaleShortFormat_uses12HourFormat() {
+        assumeFalse(
+            "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
+            Build.VERSION.SDK_INT < SDK_INT_NULLABLE_TIME_SETTING
+        )
+
+        systemTimeSetting = null
+        testLocale = Locale.US
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
+        val formattedTime = formatter.format(TIME)
+        assertEquals(expectedShortFormattedTime, formattedTime)
+    }
+
+    @Test fun ofLocalizedTime_12SystemSettingUsLocaleShortFormat_uses12HourFormat() {
+        systemTimeSetting = TIME_SETTING_12
+        testLocale = Locale.US
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
+        val formattedTime = formatter.format(TIME)
+        assertEquals(expectedShortFormattedTime, formattedTime)
+    }
+
+    @Test fun ofLocalizedTime_24SystemSettingUsLocaleShortFormat_uses24HourFormat() {
+        systemTimeSetting = TIME_SETTING_24
+        testLocale = Locale.US
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
+        val formattedTime = formatter.format(TIME)
+        assertEquals(expectedShortFormattedTime, formattedTime)
+    }
+
+    @Test fun ofLocalizedTime_usLocaleMediumFormat_usesMediumUsFormat() {
+        testLocale = Locale.US
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.MEDIUM)
+        assertEquals("4:44:00 PM", formatter.format(TIME))
+    }
+
+    @Test fun ofLocalizedTime_usLocaleLongFormat_usesLongUsFormat() {
+        testLocale = Locale.US
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.LONG)
+        assertEquals("4:44:00 PM Z", formatter.format(DATE_TIME))
+    }
+
+    @Test fun ofLocalizedTime_usLocaleFullFormat_usesFullUsFormat() {
+        testLocale = Locale.US
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.FULL)
+        assertEquals("4:44:00 PM Z", formatter.format(DATE_TIME))
+    }
+
+    @Test fun ofLocalizedTime_nullSystemSettingItalyLocaleShortFormat_uses24HourFormat() {
+        assumeFalse(
+            "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
+            Build.VERSION.SDK_INT < SDK_INT_NULLABLE_TIME_SETTING
+        )
+
+        systemTimeSetting = null
+        testLocale = Locale.ITALY
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
+        val formattedTime = formatter.format(TIME)
+        assertEquals(expectedShortFormattedTime, formattedTime)
+    }
+
+    @Test fun ofLocalizedTime_12SystemSettingItalyLocaleShortFormat_uses12HourFormat() {
+        systemTimeSetting = TIME_SETTING_12
+        testLocale = Locale.ITALY
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
+        val formattedTime = formatter.format(TIME)
+        assertEquals(expectedShortFormattedTime, formattedTime)
+    }
+
+    @Test fun ofLocalizedTime_24SystemSettingItalyLocaleShortFormat_uses24HourFormat() {
+        systemTimeSetting = TIME_SETTING_24
+        testLocale = Locale.ITALY
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
+        val formattedTime = formatter.format(TIME)
+        assertEquals(expectedShortFormattedTime, formattedTime)
+    }
+
+    @Test fun ofLocalizedTime_italyLocaleMediumFormat_usesMediumItalyFormat() {
+        testLocale = Locale.ITALY
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.MEDIUM)
+        assertEquals(ITALY_MEDIUM_TIME, formatter.format(TIME))
+    }
+
+    @Test fun ofLocalizedTime_italyLocaleLongFormat_usesLongItalyFormat() {
+        testLocale = Locale.ITALY
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.LONG)
+        assertEquals("16:44:00 Z", formatter.format(DATE_TIME))
+    }
+
+    @Test fun ofLocalizedTime_italyLocaleFullFormat_usesFullItalyFormat() {
+        testLocale = Locale.ITALY
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.FULL)
+        assertEquals("16:44:00 Z", formatter.format(DATE_TIME))
     }
     //endregion
 

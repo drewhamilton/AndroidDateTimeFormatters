@@ -32,7 +32,7 @@ abstract class TimeSettingTest {
     protected val testContext: Context
         get() = InstrumentationRegistry.getInstrumentation().context
 
-    protected val androidTimeFormatInUtc: DateFormat
+    protected val androidShortTimeFormatInUtc: DateFormat
         get() = android.text.format.DateFormat.getTimeFormat(testContext).apply {
             timeZone = TimeZone.getTimeZone("UTC")
         }
