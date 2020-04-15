@@ -39,7 +39,7 @@ public final class AndroidDateTimeFormatter {
     }
 
     /**
-     * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale. If {@param
+     * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale. If {@code
      * timeStyle} is {@link FormatStyle#SHORT}, the formatter also respects the user's 12-/24-hour clock preference.
      * <p>
      * The {@link FormatStyle#FULL} and {@link FormatStyle#LONG} styles typically require a time-zone. When formatting
