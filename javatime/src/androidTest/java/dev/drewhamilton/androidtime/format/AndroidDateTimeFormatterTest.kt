@@ -1,7 +1,6 @@
 package dev.drewhamilton.androidtime.format
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.common.truth.Truth.assertThat
 import dev.drewhamilton.androidtime.format.test.TimeSettingTest
@@ -13,9 +12,6 @@ import java.time.LocalTime
 import java.time.Month
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.time.chrono.Chronology
-import java.time.chrono.IsoChronology
-import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
 import java.util.Date
 import java.util.Locale
@@ -28,10 +24,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
     //region ofLocalizedTime with default style
     @Test fun ofLocalizedTime_nullSystemSettingUsLocale_uses12HourFormat() {
-        assumeFalse(
-            "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
-            Build.VERSION.SDK_INT < SDK_INT_NULLABLE_TIME_SETTING
-        )
+        assumeNullableSystemTimeSetting()
 
         systemTimeSetting = null
         testLocale = Locale.US
@@ -60,10 +53,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
 
     @Test fun ofLocalizedTime_nullSystemSettingItalyLocale_uses24HourFormat() {
-        assumeFalse(
-            "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
-            Build.VERSION.SDK_INT < SDK_INT_NULLABLE_TIME_SETTING
-        )
+        assumeNullableSystemTimeSetting()
 
         systemTimeSetting = null
         testLocale = Locale.ITALY
@@ -94,10 +84,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
     //region ofLocalizedTime with explicit style
     @Test fun ofLocalizedTime_nullSystemSettingUsLocaleShortFormat_uses12HourFormat() {
-        assumeFalse(
-            "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
-            Build.VERSION.SDK_INT < SDK_INT_NULLABLE_TIME_SETTING
-        )
+        assumeNullableSystemTimeSetting()
 
         systemTimeSetting = null
         testLocale = Locale.US
@@ -147,10 +134,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
 
     @Test fun ofLocalizedTime_nullSystemSettingItalyLocaleShortFormat_uses24HourFormat() {
-        assumeFalse(
-            "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
-            Build.VERSION.SDK_INT < SDK_INT_NULLABLE_TIME_SETTING
-        )
+        assumeNullableSystemTimeSetting()
 
         systemTimeSetting = null
         testLocale = Locale.ITALY
@@ -259,7 +243,10 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     //endregion
 
     //region ofLocalizedDateTime with dateTimeStyle
-    @Test fun ofLocalizedDateTime_usLocaleShortDateTimeFormat_usesShortUsFormat() {
+    @Test fun ofLocalizedDateTime_nullSystemSettingUsLocaleShortDateTimeFormat_usesShort12HourUsFormat() {
+        assumeNullableSystemTimeSetting()
+
+        systemTimeSetting = null
         testLocale = Locale.US
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
@@ -267,6 +254,28 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val result = formatter.format(DATE_TIME)
         assertThat(result).contains("4/24/10")
         assertThat(result).contains("4:44 PM")
+    }
+
+    @Test fun ofLocalizedDateTime_12SystemSettingUsLocaleShortDateTimeFormat_usesShort12HourUsFormat() {
+        systemTimeSetting = TIME_SETTING_12
+        testLocale = Locale.US
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
+
+        val result = formatter.format(DATE_TIME)
+        assertThat(result).contains("4/24/10")
+        assertThat(result).contains("4:44 PM")
+    }
+
+    @Test fun ofLocalizedDateTime_24SystemSettingUsLocaleShortDateTimeFormat_usesShort24HourUsFormat() {
+        systemTimeSetting = TIME_SETTING_24
+        testLocale = Locale.US
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
+
+        val result = formatter.format(DATE_TIME)
+        assertThat(result).contains("4/24/10")
+        assertThat(result).contains("16:44")
     }
 
     @Test fun ofLocalizedDateTime_usLocaleMediumDateTimeFormat_usesMediumUsFormat() {
@@ -299,15 +308,39 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         assertThat(result).contains("4:44:00 PM Z")
     }
 
-    @Test fun ofLocalizedDateTime_italyLocaleShortDateTimeFormat_usesShortItalyFormat() {
+    @Test fun ofLocalizedDateTime_nullSystemSettingItalyLocaleShortDateTimeFormat_usesShort24HourItalyFormat() {
+        assumeNullableSystemTimeSetting()
+
+        systemTimeSetting = null
         testLocale = Locale.ITALY
-        systemTimeSetting = TIME_SETTING_24
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
         assertThat(result).contains("24/04/10")
-        assertThat(result).contains(ITALY_SHORT_TIME)
+        assertThat(result).contains("16:44")
+    }
+
+    @Test fun ofLocalizedDateTime_12SystemSettingItalyLocaleShortDateTimeFormat_usesShort12HourItalyFormat() {
+        systemTimeSetting = TIME_SETTING_12
+        testLocale = Locale.ITALY
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
+
+        val result = formatter.format(DATE_TIME)
+        assertThat(result).contains("24/04/10")
+        assertThat(result).contains("4:44 PM")
+    }
+
+    @Test fun ofLocalizedDateTime_24SystemSettingItalyLocaleShortDateTimeFormat_usesShort24HourItalyFormat() {
+        systemTimeSetting = TIME_SETTING_24
+        testLocale = Locale.ITALY
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
+
+        val result = formatter.format(DATE_TIME)
+        assertThat(result).contains("24/04/10")
+        assertThat(result).contains("16:44")
     }
 
     @Test fun ofLocalizedDateTime_italyLocaleMediumDateTimeFormat_usesMediumItalyFormat() {
@@ -417,6 +450,11 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         assertThat(result).contains(ITALY_SHORT_TIME)
     }
     //endregion
+
+    private fun assumeNullableSystemTimeSetting() = assumeFalse(
+        "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
+        Build.VERSION.SDK_INT < SDK_INT_NULLABLE_TIME_SETTING
+    )
 
     private companion object {
         private val DATE = LocalDate.of(2010, Month.APRIL, 24)

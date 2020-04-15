@@ -27,8 +27,8 @@ public final class AndroidDateTimeFormatter {
 
     /**
      * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale and the user's
-     * 12-/24-hour clock preference. Convenience for {@link #ofLocalizedTime(Context, FormatStyle)} which uses
-     * {@link FormatStyle#SHORT}.
+     * 12-/24-hour clock preference. Convenience for {@link #ofLocalizedTime(Context, FormatStyle)} which uses {@link
+     * FormatStyle#SHORT}.
      *
      * @param context the context with which the 12-/24-hour preference and the primary locale are determined
      * @return the time formatter
@@ -39,9 +39,8 @@ public final class AndroidDateTimeFormatter {
     }
 
     /**
-     * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale. If
-     * {@param timeStyle} is {@link FormatStyle#SHORT}, the formatter also respects the user's 12-/24-hour clock
-     * preference.
+     * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale. If {@param
+     * timeStyle} is {@link FormatStyle#SHORT}, the formatter also respects the user's 12-/24-hour clock preference.
      * <p>
      * The {@link FormatStyle#FULL} and {@link FormatStyle#LONG} styles typically require a time-zone. When formatting
      * using these styles, a {@link java.time.ZoneId} must be available, either by using {@link java.time.ZonedDateTime}
@@ -119,8 +118,32 @@ public final class AndroidDateTimeFormatter {
      */
     @NonNull
     public static DateTimeFormatter ofLocalizedDateTime(@NonNull Context context, @NonNull FormatStyle dateTimeStyle) {
+        Locale contextPrimaryLocale = extractPrimaryLocale(context);
+
+        // If format is SHORT, try system 12-/24-hour setting-specific time format:
+        if (dateTimeStyle == FormatStyle.SHORT) {
+            String timePattern = getSystemTimeSettingAwareShortTimePattern(context);
+            if (timePattern != null) {
+                // We have a system-specific time pattern:
+                String defaultDateTimePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(dateTimeStyle,
+                        dateTimeStyle, IsoChronology.INSTANCE, contextPrimaryLocale);
+                String defaultTimePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(null,
+                        dateTimeStyle, IsoChronology.INSTANCE, contextPrimaryLocale);
+                if (!timePattern.equals(defaultTimePattern) && defaultDateTimePattern.contains(defaultTimePattern)) {
+                    // We can replace the default time pattern with the system-specific one:
+                    String dateTimePattern = defaultDateTimePattern.replace(defaultTimePattern, timePattern);
+                    return new DateTimeFormatterBuilder()
+                            .appendPattern(dateTimePattern)
+                            .toFormatter(contextPrimaryLocale)
+                            // Match java.time's ofLocalizedDateTime, which also hard-codes IsoChronology:
+                            .withChronology(IsoChronology.INSTANCE);
+                }
+            }
+        }
+
+        // Either the format is not SHORT or we otherwise can't insert the system-specific pattern:
         return DateTimeFormatter.ofLocalizedDateTime(dateTimeStyle)
-                .withLocale(extractPrimaryLocale(context));
+                .withLocale(contextPrimaryLocale);
     }
 
     /**
