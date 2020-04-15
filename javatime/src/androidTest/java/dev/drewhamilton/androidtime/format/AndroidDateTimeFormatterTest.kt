@@ -379,7 +379,21 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         assertThat(result).contains("4:44:00 PM Z")
     }
 
-    @Test fun ofLocalizedDateTime_usLocaleMediumDateFormatShortTimeFormat_usesMediumDateShortTimeUsFormat() {
+    @Test fun ofLocalizedDateTime_nullSettingUsLocaleLongDateFormatShortTimeFormat_usesLongDate12HourTimeUsFormat() {
+        assumeNullableSystemTimeSetting()
+
+        systemTimeSetting = null
+        testLocale = Locale.US
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.LONG, FormatStyle.SHORT)
+
+        val result = formatter.format(DATE_TIME)
+        assertThat(result).contains("April 24, 2010")
+        assertThat(result).contains("4:44 PM")
+    }
+
+    @Test fun ofLocalizedDateTime_12SettingUsLocaleMediumDateFormatShortTimeFormat_usesMediumDate12HourTimeUsFormat() {
+        systemTimeSetting = TIME_SETTING_12
         testLocale = Locale.US
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.SHORT)
@@ -387,6 +401,17 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val result = formatter.format(DATE_TIME)
         assertThat(result).contains("Apr 24, 2010")
         assertThat(result).contains("4:44 PM")
+    }
+
+    @Test fun ofLocalizedDateTime_24SettingUsLocaleMediumDateFormatShortTimeFormat_usesMediumDate24HourTimeUsFormat() {
+        systemTimeSetting = TIME_SETTING_24
+        testLocale = Locale.US
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.SHORT)
+
+        val result = formatter.format(DATE_TIME)
+        assertThat(result).contains("Apr 24, 2010")
+        assertThat(result).contains("16:44")
     }
 
     @Test fun ofLocalizedDateTime_usLocaleLongDateFormatFullTimeFormat_usesLongDateFullTimeUsFormat() {
@@ -440,14 +465,42 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         assertThat(result).contains(ITALY_MEDIUM_TIME)
     }
 
-    @Test fun ofLocalizedDateTime_italyLocaleFullDateFormatShortTimeFormat_usesFullDateShortTimeItalyFormat() {
+    @Test
+    fun ofLocalizedDateTime_nullSettingItalyLocaleLongDateFormatShortTimeFormat_usesLongDate24HourTimeItalyFormat() {
+        assumeNullableSystemTimeSetting()
+
+        systemTimeSetting = null
         testLocale = Locale.ITALY
 
-        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.FULL, FormatStyle.SHORT)
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.LONG, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        assertThat(result).contains("sabato 24 aprile 2010")
-        assertThat(result).contains(ITALY_SHORT_TIME)
+        assertThat(result).contains("24 aprile 2010")
+        assertThat(result).contains("16:44")
+    }
+
+    @Test
+    fun ofLocalizedDateTime_12SettingItalyLocaleMediumDateFormatShortTimeFormat_usesMediumDate12HourTimeItalyFormat() {
+        systemTimeSetting = TIME_SETTING_12
+        testLocale = Locale.ITALY
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.SHORT)
+
+        val result = formatter.format(DATE_TIME)
+        assertThat(result).contains("24 apr 2010")
+        assertThat(result).contains("4:44 PM")
+    }
+
+    @Test
+    fun ofLocalizedDateTime_24SettingItalyLocaleMediumDateFormatShortTimeFormat_usesMediumDate24HourTimeItalyFormat() {
+        systemTimeSetting = TIME_SETTING_24
+        testLocale = Locale.ITALY
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.SHORT)
+
+        val result = formatter.format(DATE_TIME)
+        assertThat(result).contains("24 apr 2010")
+        assertThat(result).contains("16:44")
     }
     //endregion
 
@@ -467,6 +520,5 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
             "16:44:00"
         else
             "4:44:00 PM"
-        private val ITALY_SHORT_TIME = ITALY_MEDIUM_TIME.replace(":00", "")
     }
 }
