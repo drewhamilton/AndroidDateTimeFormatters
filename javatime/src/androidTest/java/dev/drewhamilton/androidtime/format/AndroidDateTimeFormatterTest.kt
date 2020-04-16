@@ -224,7 +224,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         testLocale = Locale.ITALY
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.MEDIUM)
-        assertEquals("24 apr 2010", formatter.format(DATE))
+        assertEquals(ITALY_MEDIUM_DATE, formatter.format(DATE))
     }
 
     @Test fun ofLocalizedDate_italyLocaleLongFormat_usesLongItalyFormat() {
@@ -349,7 +349,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM)
 
         val result = formatter.format(DATE_TIME)
-        assertThat(result).contains("24 apr 2010")
+        assertThat(result).contains(ITALY_MEDIUM_DATE)
         assertThat(result).contains(ITALY_MEDIUM_TIME)
     }
 
@@ -451,7 +451,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.LONG)
 
         val result = formatter.format(DATE_TIME)
-        assertThat(result).contains("24 apr 2010")
+        assertThat(result).contains(ITALY_MEDIUM_DATE)
         assertThat(result).contains("16:44:00 Z")
     }
 
@@ -487,7 +487,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        assertThat(result).contains("24 apr 2010")
+        assertThat(result).contains(ITALY_MEDIUM_DATE)
         assertThat(result).contains("4:44 PM")
     }
 
@@ -499,7 +499,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        assertThat(result).contains("24 apr 2010")
+        assertThat(result).contains(ITALY_MEDIUM_DATE)
         assertThat(result).contains("16:44")
     }
     //endregion
@@ -516,9 +516,16 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
         private val LEGACY_TIME: Date = TIME_FORMAT_24_IN_UTC.parse("16:44")!!
 
+        private val ITALY_MEDIUM_DATE = if (Build.VERSION.SDK_INT > 22)
+            "24 apr 2010"
+        else
+            "24/apr/2010"
+
         private val ITALY_MEDIUM_TIME = if (Build.VERSION.SDK_INT > 25)
             "16:44:00"
-        else
+        else if (Build.VERSION.SDK_INT > 22)
             "4:44:00 PM"
+        else
+            "04:44:00 PM"
     }
 }
