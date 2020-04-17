@@ -524,8 +524,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         private val ITALY_MEDIUM_TIME = when {
             Build.VERSION.SDK_INT > 25 -> "16:44:00"
             Build.VERSION.SDK_INT > 22 -> "4:44:00 PM"
-            Build.VERSION.SDK_INT > 21 -> "16:44:00"
-            else -> "04:44:00 PM"
+            Build.VERSION.SDK_INT > 21 -> "04:44:00 PM"
+            else -> "16:44:00"
         }
     }
 }
