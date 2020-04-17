@@ -521,11 +521,11 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         else
             "24/apr/2010"
 
-        private val ITALY_MEDIUM_TIME = if (Build.VERSION.SDK_INT > 25)
-            "16:44:00"
-        else if (Build.VERSION.SDK_INT > 22)
-            "4:44:00 PM"
-        else
-            "04:44:00 PM"
+        // This may fail locally on API < 23, but passes on GitHub
+        private val ITALY_MEDIUM_TIME = when {
+            Build.VERSION.SDK_INT > 25 -> "16:44:00"
+            Build.VERSION.SDK_INT > 22 -> "4:44:00 PM"
+            else -> "16:44:00"
+        }
     }
 }
