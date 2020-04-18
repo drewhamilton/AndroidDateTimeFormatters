@@ -174,7 +174,6 @@ public final class AndroidDateTimeFormatter {
         if (timePattern != null) {
             Locale contextPrimaryLocale = extractPrimaryLocale(context);
 
-            // We have a system-specific time pattern:
             String defaultDateTimePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(dateStyle, timeStyle,
                     IsoChronology.INSTANCE, contextPrimaryLocale);
             String defaultTimePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(null, timeStyle,

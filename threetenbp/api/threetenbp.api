@@ -1,4 +1,8 @@
 public final class dev/drewhamilton/androidtime/threetenbp/format/AndroidDateTimeFormatter {
+	public static fun ofLocalizedDate (Landroid/content/Context;Lorg/threeten/bp/format/FormatStyle;)Lorg/threeten/bp/format/DateTimeFormatter;
+	public static fun ofLocalizedDateTime (Landroid/content/Context;Lorg/threeten/bp/format/FormatStyle;)Lorg/threeten/bp/format/DateTimeFormatter;
+	public static fun ofLocalizedDateTime (Landroid/content/Context;Lorg/threeten/bp/format/FormatStyle;Lorg/threeten/bp/format/FormatStyle;)Lorg/threeten/bp/format/DateTimeFormatter;
 	public static fun ofLocalizedTime (Landroid/content/Context;)Lorg/threeten/bp/format/DateTimeFormatter;
+	public static fun ofLocalizedTime (Landroid/content/Context;Lorg/threeten/bp/format/FormatStyle;)Lorg/threeten/bp/format/DateTimeFormatter;
 }
 
