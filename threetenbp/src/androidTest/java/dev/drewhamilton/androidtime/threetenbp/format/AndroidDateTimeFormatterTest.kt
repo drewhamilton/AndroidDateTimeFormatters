@@ -1,7 +1,6 @@
 package dev.drewhamilton.androidtime.threetenbp.format
 
 import android.os.Build
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import dev.drewhamilton.androidtime.format.test.TimeSettingTest
 import org.junit.Assert.assertEquals
@@ -13,7 +12,6 @@ import org.threeten.bp.Month
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.FormatStyle
-
 import java.util.Date
 import java.util.Locale
 
@@ -522,6 +520,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
             "24/apr/2010"
 
         private val ITALY_MEDIUM_TIME = when {
+            Build.VERSION.SDK_INT > 28 -> "16:44:00"
             Build.VERSION.SDK_INT > 22 -> "4:44:00 PM"
             Build.VERSION.SDK_INT > 21 -> "04:44:00 PM"
             else -> "16:44:00"
