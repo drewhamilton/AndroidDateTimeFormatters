@@ -24,6 +24,7 @@ android {
 dependencies {
     api deps.junitAndroid
     api deps.androidTestRules
+    api deps.truth
 
     implementation deps.kotlinStdLib
     implementation 'androidx.core:core:1.2.0'
