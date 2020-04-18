@@ -2,6 +2,7 @@ package dev.drewhamilton.androidtime.threetenbp.format
 
 import android.os.Build
 import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import dev.drewhamilton.androidtime.format.test.TimeSettingTest
 import org.junit.Assert.assertEquals
 import org.junit.Assume.assumeFalse
@@ -251,8 +252,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("4/24/10")
-        Truth.assertThat(result).contains("4:44 PM")
+        assertThat(result).contains("4/24/10")
+        assertThat(result).contains("4:44 PM")
     }
 
     @Test fun ofLocalizedDateTime_12SystemSettingUsLocaleShortDateTimeFormat_usesShort12HourUsFormat() {
@@ -262,8 +263,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("4/24/10")
-        Truth.assertThat(result).contains("4:44 PM")
+        assertThat(result).contains("4/24/10")
+        assertThat(result).contains("4:44 PM")
     }
 
     @Test fun ofLocalizedDateTime_24SystemSettingUsLocaleShortDateTimeFormat_usesShort24HourUsFormat() {
@@ -273,8 +274,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("4/24/10")
-        Truth.assertThat(result).contains("16:44")
+        assertThat(result).contains("4/24/10")
+        assertThat(result).contains("16:44")
     }
 
     @Test fun ofLocalizedDateTime_usLocaleMediumDateTimeFormat_usesMediumUsFormat() {
@@ -283,8 +284,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("Apr 24, 2010")
-        Truth.assertThat(result).contains("4:44:00 PM")
+        assertThat(result).contains("Apr 24, 2010")
+        assertThat(result).contains("4:44:00 PM")
     }
 
     @Test fun ofLocalizedDateTime_usLocaleLongDateTimeFormat_usesLongUsFormat() {
@@ -293,8 +294,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.LONG)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("April 24, 2010")
-        Truth.assertThat(result).contains("4:44:00 PM Z")
+        assertThat(result).contains("April 24, 2010")
+        assertThat(result).contains("4:44:00 PM Z")
     }
 
     @Test fun ofLocalizedDateTime_usLocaleFullDateTimeFormat_usesFullUsFormat() {
@@ -303,8 +304,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.FULL)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("Saturday, April 24, 2010")
-        Truth.assertThat(result).contains("4:44:00 PM Z")
+        assertThat(result).contains("Saturday, April 24, 2010")
+        assertThat(result).contains("4:44:00 PM Z")
     }
 
     @Test fun ofLocalizedDateTime_nullSystemSettingItalyLocaleShortDateTimeFormat_usesShort24HourItalyFormat() {
@@ -316,8 +317,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("24/04/10")
-        Truth.assertThat(result).contains("16:44")
+        assertThat(result).contains("24/04/10")
+        assertThat(result).contains("16:44")
     }
 
     @Test fun ofLocalizedDateTime_12SystemSettingItalyLocaleShortDateTimeFormat_usesShort12HourItalyFormat() {
@@ -327,8 +328,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("24/04/10")
-        Truth.assertThat(result).contains("4:44 PM")
+        assertThat(result).contains("24/04/10")
+        assertThat(result).contains("4:44 PM")
     }
 
     @Test fun ofLocalizedDateTime_24SystemSettingItalyLocaleShortDateTimeFormat_usesShort24HourItalyFormat() {
@@ -338,8 +339,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("24/04/10")
-        Truth.assertThat(result).contains("16:44")
+        assertThat(result).contains("24/04/10")
+        assertThat(result).contains("16:44")
     }
 
     @Test fun ofLocalizedDateTime_italyLocaleMediumDateTimeFormat_usesMediumItalyFormat() {
@@ -348,8 +349,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains(ITALY_MEDIUM_DATE)
-        Truth.assertThat(result).contains(ITALY_MEDIUM_TIME)
+        assertThat(result).contains(ITALY_MEDIUM_DATE)
+        assertThat(result).contains(ITALY_MEDIUM_TIME)
     }
 
     @Test fun ofLocalizedDateTime_italyLocaleLongDateTimeFormat_usesLongItalyFormat() {
@@ -374,8 +375,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT, FormatStyle.LONG)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("4/24/10")
-        Truth.assertThat(result).contains("4:44:00 PM Z")
+        assertThat(result).contains("4/24/10")
+        assertThat(result).contains("4:44:00 PM Z")
     }
 
     @Test fun ofLocalizedDateTime_nullSettingUsLocaleLongDateFormatShortTimeFormat_usesLongDate12HourTimeUsFormat() {
@@ -387,8 +388,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.LONG, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("April 24, 2010")
-        Truth.assertThat(result).contains("4:44 PM")
+        assertThat(result).contains("April 24, 2010")
+        assertThat(result).contains("4:44 PM")
     }
 
     @Test fun ofLocalizedDateTime_12SettingUsLocaleMediumDateFormatShortTimeFormat_usesMediumDate12HourTimeUsFormat() {
@@ -398,8 +399,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("Apr 24, 2010")
-        Truth.assertThat(result).contains("4:44 PM")
+        assertThat(result).contains("Apr 24, 2010")
+        assertThat(result).contains("4:44 PM")
     }
 
     @Test fun ofLocalizedDateTime_24SettingUsLocaleMediumDateFormatShortTimeFormat_usesMediumDate24HourTimeUsFormat() {
@@ -409,8 +410,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("Apr 24, 2010")
-        Truth.assertThat(result).contains("16:44")
+        assertThat(result).contains("Apr 24, 2010")
+        assertThat(result).contains("16:44")
     }
 
     @Test fun ofLocalizedDateTime_usLocaleLongDateFormatFullTimeFormat_usesLongDateFullTimeUsFormat() {
@@ -419,8 +420,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.LONG, FormatStyle.FULL)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("April 24, 2010")
-        Truth.assertThat(result).contains("4:44:00 PM Z")
+        assertThat(result).contains("April 24, 2010")
+        assertThat(result).contains("4:44:00 PM Z")
     }
 
     @Test fun ofLocalizedDateTime_usLocaleFullDateFormatMediumTimeFormat_usesFullDateMediumTimeUsFormat() {
@@ -429,8 +430,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.FULL, FormatStyle.MEDIUM)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("Saturday, April 24, 2010")
-        Truth.assertThat(result).contains("4:44:00 PM")
+        assertThat(result).contains("Saturday, April 24, 2010")
+        assertThat(result).contains("4:44:00 PM")
     }
 
     @Test fun ofLocalizedDateTime_italyLocaleShortDateFormatFullTimeFormat_usesShortDateFullTimeItalyFormat() {
@@ -440,8 +441,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.SHORT, FormatStyle.FULL)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("24/04/10")
-        Truth.assertThat(result).contains("16:44:00 Z")
+        assertThat(result).contains("24/04/10")
+        assertThat(result).contains("16:44:00 Z")
     }
 
     @Test fun ofLocalizedDateTime_italyLocaleMediumDateFormatLongTimeFormat_usesMediumDateLongTimeItalyFormat() {
@@ -450,8 +451,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.LONG)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains(ITALY_MEDIUM_DATE)
-        Truth.assertThat(result).contains("16:44:00 Z")
+        assertThat(result).contains(ITALY_MEDIUM_DATE)
+        assertThat(result).contains("16:44:00 Z")
     }
 
     @Test fun ofLocalizedDateTime_italyLocaleLongDateFormatMediumTimeFormat_usesLongDateMediumTimeItalyFormat() {
@@ -460,8 +461,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.LONG, FormatStyle.MEDIUM)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("24 aprile 2010")
-        Truth.assertThat(result).contains(ITALY_MEDIUM_TIME)
+        assertThat(result).contains("24 aprile 2010")
+        assertThat(result).contains(ITALY_MEDIUM_TIME)
     }
 
     @Test
@@ -474,8 +475,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.LONG, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains("24 aprile 2010")
-        Truth.assertThat(result).contains("16:44")
+        assertThat(result).contains("24 aprile 2010")
+        assertThat(result).contains("16:44")
     }
 
     @Test
@@ -486,8 +487,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains(ITALY_MEDIUM_DATE)
-        Truth.assertThat(result).contains("4:44 PM")
+        assertThat(result).contains(ITALY_MEDIUM_DATE)
+        assertThat(result).contains("4:44 PM")
     }
 
     @Test
@@ -498,8 +499,8 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(testContext, FormatStyle.MEDIUM, FormatStyle.SHORT)
 
         val result = formatter.format(DATE_TIME)
-        Truth.assertThat(result).contains(ITALY_MEDIUM_DATE)
-        Truth.assertThat(result).contains("16:44")
+        assertThat(result).contains(ITALY_MEDIUM_DATE)
+        assertThat(result).contains("16:44")
     }
     //endregion
 
