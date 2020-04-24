@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.1
+_2020-04-24_
+
+Published with Gradle module metadata and a minor fix for the `threetenbp` POM.
+
 ## 2.1.0
 _2020-04-18_
 
