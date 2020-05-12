@@ -11,8 +11,8 @@ buildscript {
             junitAndroid: 'androidx.test.ext:junit:1.1.1',
             kotlinStdLib: "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
             multidex: 'com.android.support:multidex:1.0.3',
-            threeTenAbp: 'com.jakewharton.threetenabp:threetenabp:1.2.3',
-            threeTenBp: 'org.threeten:threetenbp:1.4.3:no-tzdb',
+            threeTenAbp: 'com.jakewharton.threetenabp:threetenabp:1.2.4',
+            threeTenBp: 'org.threeten:threetenbp:1.4.4:no-tzdb',
             truth: 'com.google.truth:truth:1.0.1'
         ]
     }
