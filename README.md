@@ -1,5 +1,5 @@
 # AndroidDateTimeFormatters
-[![](https://github.com/drewhamilton/AndroidDateTimeFormatters/workflows/CI/badge.svg?branch=master)](https://github.com/drewhamilton/AndroidDateTimeFormatters/actions?query=workflow%3ACI+branch%3Amaster)
+[![](https://github.com/drewhamilton/AndroidDateTimeFormatters/workflows/CI/badge.svg?branch=main)](https://github.com/drewhamilton/AndroidDateTimeFormatters/actions?query=workflow%3ACI+branch%3Amain)
 
 This library provides a `DateTimeFormatter` that respects Android's 12-/24-hour clock system
 setting. Two versions of the library exist—one for `java.time` types and another for
