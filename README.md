@@ -5,30 +5,11 @@ This library provides a `DateTimeFormatter` that respects Android's 12-/24-hour 
 setting. Two versions of the library exist—one for `java.time` types and another for
 [ThreeTenBP](https://github.com/ThreeTen/threetenbp) types.
 
-With [core library desugaring](https://developer.android.com/studio/preview/features#j8-desugar)
+With [core library desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
 supported in Android Gradle Plugin 4.0+, the "datetimeformatters" artifact, using `java.time` types,
 is considered the primary and preferred artifact. However, "datetimeformatters-threetenbp" can be
 used in apps that still use ThreeTenBP. Both artifacts require a minimum Android SDK version of at
 least 15.
-
-To enable core library desugaring, include the following in your app module's build.gradle file:
-```groovy
-android {
-    defaultConfig {
-        // Only required if your minSdk is less than 21:
-        multidexEnabled true
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-        coreLibraryDesugaringEnabled true
-    }
-}
-dependencies {
-    // Latest version is 1.0.5 at the time of writing this:
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$coreLibraryDesugaringVersion"
-}
-```
 
 ## Download
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.drewhamilton.androidtime/datetimeformatters/badge.svg)](https://maven-badges.herokuapp.com/maven-central/dev.drewhamilton.androidtime/datetimeformatters)
