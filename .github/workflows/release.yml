@@ -2,7 +2,9 @@ name: Release
 
 on:
   push:
-    branches: main, release-action
+    branches:
+      - main
+      - release-action
     tags: '*'
 
 jobs:
