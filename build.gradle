@@ -47,7 +47,6 @@ allprojects { project ->
         jcenter()
     }
 
-    //noinspection UnnecessaryQualifiedReference
     project.plugins.withType(com.android.build.gradle.LibraryPlugin) {
         project.android.libraryVariants.all { variant ->
             // TODO WORKAROUND: replace with https://issuetracker.google.com/issues/72050365 once released.
@@ -57,7 +56,7 @@ allprojects { project ->
 }
 
 ext {
-    libraryVersion = '2.1.1'
+    libraryVersion = '2.2.0-SNAPSHOT'
 
     buildToolsVersion = '29.0.3'
     compileSdk = 29
