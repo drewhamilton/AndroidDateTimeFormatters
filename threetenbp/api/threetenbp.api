@@ -4,5 +4,7 @@ public final class dev/drewhamilton/androidtime/threetenbp/format/AndroidDateTim
 	public static fun ofLocalizedDateTime (Landroid/content/Context;Lorg/threeten/bp/format/FormatStyle;Lorg/threeten/bp/format/FormatStyle;)Lorg/threeten/bp/format/DateTimeFormatter;
 	public static fun ofLocalizedTime (Landroid/content/Context;)Lorg/threeten/bp/format/DateTimeFormatter;
 	public static fun ofLocalizedTime (Landroid/content/Context;Lorg/threeten/bp/format/FormatStyle;)Lorg/threeten/bp/format/DateTimeFormatter;
+	public static fun ofSkeleton (Ljava/lang/String;Landroid/content/Context;)Lorg/threeten/bp/format/DateTimeFormatter;
+	public static fun ofSkeleton (Ljava/lang/String;Ljava/util/Locale;)Lorg/threeten/bp/format/DateTimeFormatter;
 }
 
