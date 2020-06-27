@@ -27,6 +27,7 @@ public final class AndroidDateTimeFormatter {
     private static final String TAG = AndroidDateTimeFormatter.class.getSimpleName();
 
     //region ofLocalizedTime
+
     /**
      * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale and the user's
      * 12-/24-hour clock preference. Convenience for {@link #ofLocalizedTime(Context, FormatStyle)} which uses {@link
@@ -76,6 +77,7 @@ public final class AndroidDateTimeFormatter {
     //endregion
 
     //region ofLocalizedDate
+
     /**
      * Returns a locale specific date format for the ISO chronology.
      * <p>
@@ -103,6 +105,7 @@ public final class AndroidDateTimeFormatter {
     //endregion
 
     //region ofLocalizedDateTime
+
     /**
      * Returns a locale specific date-time formatter for the ISO chronology.
      * <p>
@@ -211,6 +214,7 @@ public final class AndroidDateTimeFormatter {
     }
 
     //region ofSkeleton
+
     /**
      * Returns the best possible localized formatter of the given skeleton for the given context's primary locale. A
      * skeleton is similar to, and uses the same format characters as, a Unicode
@@ -223,9 +227,11 @@ public final class AndroidDateTimeFormatter {
      * {@code es_ES}, we'd have even more extra text: "d 'de' MMMM".
      *
      * <p>This method will automatically correct for grammatical necessity. Given the same "MMMMd" input, the formatter
-     * will use "d LLLL" in the {@code fa_IR} locale, where stand-alone months are necessary. Lengths are preserved
-     * where meaningful, so "Md" would give a different result to "MMMd", say, except in a locale such as {@code ja_JP}
-     * where there is only one length of month.
+     * will use "d LLLL" in the {@code fa_IR} locale, where stand-alone months are necessary. <strong>Warning: core
+     * library desugaring does not currently support formatting with 'L'.</strong>
+     *
+     * <p>Lengths are preserved where meaningful, so "Md" would give a different result to "MMMd", say, except in a
+     * locale such as {@code ja_JP} where there is only one length of month.
      *
      * <p>This method will only use patterns that are in CLDR, and is useful whenever you know what elements you want
      * in your format string but don't want to make your code specific to any one locale.
