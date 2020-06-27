@@ -235,14 +235,14 @@ public final class AndroidDateTimeFormatter {
      * <p>This method will only use patterns that are in CLDR, and is useful whenever you know what elements you want
      * in your format string but don't want to make your code specific to any one locale.
      *
-     * @param context the context with which the primary locale is determined
      * @param skeleton a skeleton as described above
+     * @param context the context with which the primary locale is determined
      * @return a formatter with the localized pattern based on the skeleton
      */
     @RequiresApi(18)
     @NonNull
-    public static DateTimeFormatter ofSkeleton(@NonNull Context context, @NonNull String skeleton) {
-        return ofSkeleton(extractPrimaryLocale(context), skeleton);
+    public static DateTimeFormatter ofSkeleton(@NonNull String skeleton, @NonNull Context context) {
+        return ofSkeleton(skeleton, extractPrimaryLocale(context));
     }
 
     /**
@@ -264,13 +264,13 @@ public final class AndroidDateTimeFormatter {
      * <p>This method will only use patterns that are in CLDR, and is useful whenever you know what elements you want
      * in your format string but don't want to make your code specific to any one locale.
      *
-     * @param locale the locale into which the skeleton should be localized
      * @param skeleton a skeleton as described above
+     * @param locale the locale into which the skeleton should be localized
      * @return a formatter with the localized pattern based on the skeleton
      */
     @RequiresApi(18)
     @NonNull
-    public static DateTimeFormatter ofSkeleton(@NonNull Locale locale, @NonNull String skeleton) {
+    public static DateTimeFormatter ofSkeleton(@NonNull String skeleton, @NonNull Locale locale) {
         String pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, skeleton);
         return DateTimeFormatter.ofPattern(pattern, locale);
     }

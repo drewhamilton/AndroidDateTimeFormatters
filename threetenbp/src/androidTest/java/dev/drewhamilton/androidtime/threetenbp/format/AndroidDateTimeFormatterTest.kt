@@ -505,22 +505,22 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     //region ofSkeleton
     @Test fun ofSkeleton_MMMMdJaLocaleFromContext_formatsToJapaneseMonthAndDay() {
         testLocale = Locale.JAPAN
-        val formatter = AndroidDateTimeFormatter.ofSkeleton(testContext, "MMMMd")
+        val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", testContext)
         assertThat(formatter.format(DATE)).isEqualTo("4月24日")
     }
 
     @Test fun ofSkeleton_MMMMdUsLocale_formatsToFullMonthFollowedByDay() {
-        val formatter = AndroidDateTimeFormatter.ofSkeleton(Locale.US, "MMMMd")
+        val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", Locale.US)
         assertThat(formatter.format(DATE)).isEqualTo("April 24")
     }
 
     @Test fun ofSkeleton_MMMMdRuLocale_formatsToDayFollowedByRussianMonth() {
-        val formatter = AndroidDateTimeFormatter.ofSkeleton(Locale.forLanguageTag("ru"), "MMMMd")
+        val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", Locale.forLanguageTag("ru"))
         assertThat(formatter.format(DATE)).isEqualTo("24 апреля")
     }
 
     @Test fun ofSkeleton_MMMMdFaLocale_formatsToDayFollowedByPersianMonth() {
-        val formatter = AndroidDateTimeFormatter.ofSkeleton(Locale.forLanguageTag("fa"), "MMMMd")
+        val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", Locale.forLanguageTag("fa"))
         assertThat(formatter.format(DATE)).isEqualTo("24 آوریل")
     }
     //endregion
