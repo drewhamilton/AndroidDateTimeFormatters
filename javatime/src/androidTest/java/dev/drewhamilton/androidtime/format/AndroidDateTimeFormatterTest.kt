@@ -505,6 +505,12 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     //endregion
 
     //region ofSkeleton
+    @Test fun ofSkeleton_MMMMdJaLocaleFromContext_formatsToDayFollowedByJapaneseMonth() {
+        testLocale = Locale.JAPAN
+        val formatter = AndroidDateTimeFormatter.ofSkeleton(testContext, "MMMMd")
+        assertThat(formatter.format(DATE)).isEqualTo("4月24日")
+    }
+
     @Test fun ofSkeleton_MMMMdUsLocale_formatsToFullMonthFollowedByDay() {
         val formatter = AndroidDateTimeFormatter.ofSkeleton(Locale.US, "MMMMd")
         assertThat(formatter.format(DATE)).isEqualTo("April 24")
