@@ -271,9 +271,7 @@ public final class AndroidDateTimeFormatter {
         String pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, skeleton);
         return new DateTimeFormatterBuilder()
                 .appendPattern(pattern)
-                .toFormatter(locale)
-                // TODO: Should this be specified here?
-                .withChronology(IsoChronology.INSTANCE);
+                .toFormatter(locale);
     }
     //endregion
 
