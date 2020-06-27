@@ -269,9 +269,7 @@ public final class AndroidDateTimeFormatter {
     @NonNull
     public static DateTimeFormatter ofSkeleton(@NonNull Locale locale, @NonNull String skeleton) {
         String pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, skeleton);
-        return new DateTimeFormatterBuilder()
-                .appendPattern(pattern)
-                .toFormatter(locale);
+        return DateTimeFormatter.ofPattern(pattern, locale);
     }
     //endregion
 
