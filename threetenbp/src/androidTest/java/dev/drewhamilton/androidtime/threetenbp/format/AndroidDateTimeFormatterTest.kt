@@ -11,9 +11,13 @@ import org.threeten.bp.LocalTime
 import org.threeten.bp.Month
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.chrono.IsoChronology
+import org.threeten.bp.format.DateTimeFormatterBuilder
 import org.threeten.bp.format.FormatStyle
+import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
@@ -501,6 +505,31 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         assertThat(result).contains("16:44")
     }
     //endregion
+
+    @Test fun legacyFormatLComparison() {
+        val dateString = "2020-01-04"
+        val locale = Locale.forLanguageTag("ru")
+        val standalonePattern = "LLLL"
+
+        val legacyUtc = TimeZone.getTimeZone("UTC")
+        val legacyDate = with(SimpleDateFormat("yyyy-MM-dd", Locale.US)) {
+            timeZone = legacyUtc
+            parse(dateString)!!
+        }
+        val legacyFormatter = SimpleDateFormat(standalonePattern, locale).apply {
+            timeZone = legacyUtc
+        }
+        val legacyResult = legacyFormatter.format(legacyDate) // Январь
+
+        val date = LocalDate.parse(dateString)
+        val formatter = DateTimeFormatterBuilder()
+            .appendPattern(standalonePattern)
+            .toFormatter(locale)
+            .withChronology(IsoChronology.INSTANCE)
+        val result = formatter.format(date) // 1
+
+        assertThat(result).isEqualTo(legacyResult)
+    }
 
     private fun assumeNullableSystemTimeSetting() = assumeFalse(
         "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",

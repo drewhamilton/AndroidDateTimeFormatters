@@ -7,14 +7,18 @@ import dev.drewhamilton.androidtime.format.test.TimeSettingTest
 import org.junit.Assert.assertEquals
 import org.junit.Assume.assumeFalse
 import org.junit.Test
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.Month
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.time.chrono.IsoChronology
+import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 @RequiresApi(21) // Instrumented tests for Dynamic Features is not supported on API < 21 (AGP 4.0.0-beta04)
 class AndroidDateTimeFormatterTest : TimeSettingTest() {
@@ -503,6 +507,31 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
         assertThat(result).contains("16:44")
     }
     //endregion
+
+    @Test fun legacyFormatLComparison() {
+        val dateString = "2020-01-04"
+        val locale = Locale.forLanguageTag("ru")
+        val standalonePattern = "LLLL"
+
+        val legacyUtc = TimeZone.getTimeZone("UTC")
+        val legacyDate = with(SimpleDateFormat("yyyy-MM-dd", Locale.US)) {
+            timeZone = legacyUtc
+            parse(dateString)!!
+        }
+        val legacyFormatter = SimpleDateFormat(standalonePattern, locale).apply {
+            timeZone = legacyUtc
+        }
+        val legacyResult = legacyFormatter.format(legacyDate) // Январь
+
+        val date = LocalDate.parse(dateString)
+        val formatter = DateTimeFormatterBuilder()
+            .appendPattern(standalonePattern)
+            .toFormatter(locale)
+            .withChronology(IsoChronology.INSTANCE)
+        val result = formatter.format(date) // 1
+
+        assertThat(result).isEqualTo(legacyResult)
+    }
 
     private fun assumeNullableSystemTimeSetting() = assumeFalse(
         "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
