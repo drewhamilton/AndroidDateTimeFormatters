@@ -504,6 +504,24 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
     //endregion
 
+    //region ofSkeleton
+    @Test fun ofSkeleton_MMMMdUsLocale_formatsToFullMonthFollowedByDay() {
+        val formatter = AndroidDateTimeFormatter.ofSkeleton(Locale.US, "MMMMd")
+        assertThat(formatter.format(JANUARY_4_2020)).isEqualTo("January 4")
+    }
+
+    @Test fun ofSkeleton_MMMMdRuLocale_formatsToDayFollowedByRussianMonth() {
+        val formatter = AndroidDateTimeFormatter.ofSkeleton(Locale.forLanguageTag("ru"), "MMMMd")
+        assertThat(formatter.format(JANUARY_4_2020)).isEqualTo("4 января")
+    }
+
+    // Unwanted case because coreLibraryDesugaring does not support "L" format:
+    @Test fun ofSkeleton_MMMMdFaLocale_formatsToDayFollowedByMonthNumber() {
+        val formatter = AndroidDateTimeFormatter.ofSkeleton(Locale.forLanguageTag("fa"), "MMMMd")
+        assertThat(formatter.format(JANUARY_4_2020)).isEqualTo("4 1")
+    }
+    //endregion
+
     private fun assumeNullableSystemTimeSetting() = assumeFalse(
         "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
         Build.VERSION.SDK_INT < SDK_INT_NULLABLE_TIME_SETTING
@@ -527,5 +545,7 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
             Build.VERSION.SDK_INT > 21 -> "04:44:00 PM"
             else -> "16:44:00"
         }
+
+        private val JANUARY_4_2020 = LocalDate.of(2020, Month.JANUARY, 4)
     }
 }
