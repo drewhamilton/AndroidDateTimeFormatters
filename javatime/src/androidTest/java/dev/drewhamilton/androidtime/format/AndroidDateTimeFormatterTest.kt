@@ -507,18 +507,18 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     //region ofSkeleton
     @Test fun ofSkeleton_MMMMdUsLocale_formatsToFullMonthFollowedByDay() {
         val formatter = AndroidDateTimeFormatter.ofSkeleton(Locale.US, "MMMMd")
-        assertThat(formatter.format(JANUARY_4_2020)).isEqualTo("January 4")
+        assertThat(formatter.format(DATE)).isEqualTo("April 24")
     }
 
     @Test fun ofSkeleton_MMMMdRuLocale_formatsToDayFollowedByRussianMonth() {
         val formatter = AndroidDateTimeFormatter.ofSkeleton(Locale.forLanguageTag("ru"), "MMMMd")
-        assertThat(formatter.format(JANUARY_4_2020)).isEqualTo("4 января")
+        assertThat(formatter.format(DATE)).isEqualTo("24 апреля")
     }
 
     // Unwanted case because coreLibraryDesugaring does not support "L" format:
     @Test fun ofSkeleton_MMMMdFaLocale_formatsToDayFollowedByMonthNumber() {
         val formatter = AndroidDateTimeFormatter.ofSkeleton(Locale.forLanguageTag("fa"), "MMMMd")
-        assertThat(formatter.format(JANUARY_4_2020)).isEqualTo("4 1")
+        assertThat(formatter.format(DATE)).isEqualTo("24 4")
     }
     //endregion
 
@@ -545,7 +545,5 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
             Build.VERSION.SDK_INT > 21 -> "04:44:00 PM"
             else -> "16:44:00"
         }
-
-        private val JANUARY_4_2020 = LocalDate.of(2020, Month.JANUARY, 4)
     }
 }
