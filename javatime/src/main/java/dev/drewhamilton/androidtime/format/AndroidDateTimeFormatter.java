@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,8 @@ import java.util.Locale;
 public final class AndroidDateTimeFormatter {
 
     private static final String TAG = AndroidDateTimeFormatter.class.getSimpleName();
+
+    //region ofLocalizedTime
 
     /**
      * Returns a {@link DateTimeFormatter} that can format the time according to the context's locale and the user's
@@ -71,6 +74,9 @@ public final class AndroidDateTimeFormatter {
         return DateTimeFormatter.ofLocalizedTime(timeStyle)
                 .withLocale(contextPrimaryLocale);
     }
+    //endregion
+
+    //region ofLocalizedDate
 
     /**
      * Returns a locale specific date format for the ISO chronology.
@@ -96,6 +102,9 @@ public final class AndroidDateTimeFormatter {
         return DateTimeFormatter.ofLocalizedDate(dateStyle)
                 .withLocale(extractPrimaryLocale(context));
     }
+    //endregion
+
+    //region ofLocalizedDateTime
 
     /**
      * Returns a locale specific date-time formatter for the ISO chronology.
@@ -191,6 +200,7 @@ public final class AndroidDateTimeFormatter {
         }
         return null;
     }
+    //endregion
 
     @Nullable
     private static String getSystemTimeSettingAwareShortTimePattern(Context context) {
@@ -202,6 +212,72 @@ public final class AndroidDateTimeFormatter {
             return null;
         }
     }
+
+    //region ofSkeleton
+
+    /**
+     * Returns the best possible localized formatter of the given skeleton for the given context's primary locale. A
+     * skeleton is similar to, and uses the same format characters as, a Unicode
+     * <a href="http://www.unicode.org/reports/tr35/#Date_Format_Patterns">UTS #35</a> pattern.
+     *
+     * <p>One difference is that order is irrelevant. For example, "MMMMd" will become "MMMM d" in the {@code en_US}
+     * locale, but "d. MMMM" in the {@code de_CH} locale.
+     *
+     * <p>Note also in that second example that the necessary punctuation for German was added. For the same input in
+     * {@code es_ES}, we'd have even more extra text: "d 'de' MMMM".
+     *
+     * <p>This method will automatically correct for grammatical necessity. Given the same "MMMMd" input, the formatter
+     * will use "d LLLL" in the {@code fa_IR} locale, where stand-alone months are necessary. <strong>Warning: core
+     * library desugaring does not currently support formatting with 'L'.</strong>
+     *
+     * <p>Lengths are preserved where meaningful, so "Md" would give a different result to "MMMd", say, except in a
+     * locale such as {@code ja_JP} where there is only one length of month.
+     *
+     * <p>This method will only use patterns that are in CLDR, and is useful whenever you know what elements you want
+     * in your format string but don't want to make your code specific to any one locale.
+     *
+     * @param skeleton a skeleton as described above
+     * @param context the context with which the primary locale is determined
+     * @return a formatter with the localized pattern based on the skeleton
+     */
+    @RequiresApi(18)
+    @NonNull
+    public static DateTimeFormatter ofSkeleton(@NonNull String skeleton, @NonNull Context context) {
+        return ofSkeleton(skeleton, extractPrimaryLocale(context));
+    }
+
+    /**
+     * Returns the best possible localized formatter of the given skeleton for the given locale. A skeleton is similar
+     * to, and uses the same format characters as, a Unicode
+     * <a href="http://www.unicode.org/reports/tr35/#Date_Format_Patterns">UTS #35</a> pattern.
+     *
+     * <p>One difference is that order is irrelevant. For example, "MMMMd" will become "MMMM d" in the {@code en_US}
+     * locale, but "d. MMMM" in the {@code de_CH} locale.
+     *
+     * <p>Note also in that second example that the necessary punctuation for German was added. For the same input in
+     * {@code es_ES}, we'd have even more extra text: "d 'de' MMMM".
+     *
+     * <p>This method will automatically correct for grammatical necessity. Given the same "MMMMd" input, the formatter
+     * will use "d LLLL" in the {@code fa_IR} locale, where stand-alone months are necessary. <strong>Warning: core
+     * library desugaring does not currently support formatting with 'L'.</strong>
+     *
+     * <p>Lengths are preserved where meaningful, so "Md" would give a different result to "MMMd", say, except in a
+     * locale such as {@code ja_JP} where there is only one length of month.
+     *
+     * <p>This method will only use patterns that are in CLDR, and is useful whenever you know what elements you want
+     * in your format string but don't want to make your code specific to any one locale.
+     *
+     * @param skeleton a skeleton as described above
+     * @param locale the locale into which the skeleton should be localized
+     * @return a formatter with the localized pattern based on the skeleton
+     */
+    @RequiresApi(18)
+    @NonNull
+    public static DateTimeFormatter ofSkeleton(@NonNull String skeleton, @NonNull Locale locale) {
+        String pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, skeleton);
+        return DateTimeFormatter.ofPattern(pattern, locale);
+    }
+    //endregion
 
     @NonNull
     private static Locale extractPrimaryLocale(@NonNull Context context) {
