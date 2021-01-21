@@ -1,0 +1,57 @@
+apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
+
+ext {
+    artifactName = 'datetimeformatters-kotlinx'
+    publishedDescription = 'KotlinX DateTimeFormatters for Android.'
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdk
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.multidexMinSdk
+        versionName rootProject.ext.libraryVersion
+
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        consumerProguardFiles 'consumer-rules.pro'
+
+        // Support core library desugaring:
+        multiDexEnabled true
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(keystore)
+            storePassword keystorePassword
+            keyAlias keyAlias
+            keyPassword keyPassword
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring deps.desugarJdkLibs
+
+    implementation deps.kotlinXDateTime
+
+    androidTestImplementation project(':test')
+}
