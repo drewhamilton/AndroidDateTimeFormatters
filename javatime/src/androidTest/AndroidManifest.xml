@@ -6,7 +6,17 @@
   <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
   <!--Allow use of test frameworks with higher minSdk than this library's:-->
-  <uses-sdk tools:overrideLibrary="dev.drewhamilton.androidtime.format.test, androidx.test.ext.junit, androidx.core,
-          androidx.test.core, androidx.test, androidx.lifecycle, androidx.versionedparcelable" />
+  <uses-sdk tools:overrideLibrary="
+          androidx.core,
+          androidx.core.ktx,
+          androidx.lifecycle,
+          androidx.test,
+          androidx.test.core,
+          androidx.test.ext.junit,
+          androidx.test.monitor,
+          androidx.test.rules,
+          androidx.test.runner,
+          androidx.versionedparcelable,
+          dev.drewhamilton.androidtime.format.test" />
 
 </manifest>
