@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2.0
+_2021-01-31_
+
+Add `ofSkeleton` formatters which localize a "skeleton" format string (based on
+`android.text.format.DateFormat.getBestDateTimePattern(Locale locale, String skeleton)`).
+
 ## 2.1.1
 _2020-04-24_
 

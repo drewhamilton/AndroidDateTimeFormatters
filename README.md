@@ -1,15 +1,19 @@
 # AndroidDateTimeFormatters
 [![](https://github.com/drewhamilton/AndroidDateTimeFormatters/workflows/CI/badge.svg?branch=main)](https://github.com/drewhamilton/AndroidDateTimeFormatters/actions?query=workflow%3ACI+branch%3Amain)
 
-This library provides a `DateTimeFormatter` that respects Android's 12-/24-hour clock system
-setting. Two versions of the library exist—one for `java.time` types and another for
+This library provides `DateTimeFormatter`s that make use of Android-specific features. Localized
+time formatters respect Android's 12-/24-hour clock system setting. And "skeleton" formatters take a
+format string skeleton and localize it based on the given Context.
+
+Two versions of the library exist: one for `java.time` types and another for
 [ThreeTenBP](https://github.com/ThreeTen/threetenbp) types.
 
-With [core library desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
-supported in Android Gradle Plugin 4.0+, the "datetimeformatters" artifact, using `java.time` types,
-is considered the primary and preferred artifact. However, "datetimeformatters-threetenbp" can be
-used in apps that still use ThreeTenBP. Both artifacts require a minimum Android SDK version of at
-least 15.
+With [core library
+desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) supported
+in Android Gradle Plugin 4+, the "datetimeformatters" artifact, using `java.time` types, is
+considered the primary and preferred artifact and can be used down to Android SDK version 4.
+However, "datetimeformatters-threetenbp" can be used in apps that still use ThreeTenBP, down to
+Android SDK version 15.
 
 ## Download
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.drewhamilton.androidtime/datetimeformatters/badge.svg)](https://maven-badges.herokuapp.com/maven-central/dev.drewhamilton.androidtime/datetimeformatters)
