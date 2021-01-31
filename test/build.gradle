@@ -24,8 +24,11 @@ android {
 dependencies {
     api deps.junitAndroid
     api deps.androidTestRules
-    api deps.truth
+    api(deps.truth) {
+        exclude group: 'com.google.guava'
+    }
 
+    implementation deps.guava
     implementation deps.kotlinStdLib
     implementation 'androidx.core:core-ktx:1.3.2'
 }
