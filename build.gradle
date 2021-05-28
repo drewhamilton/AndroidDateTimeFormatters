@@ -28,9 +28,8 @@ buildscript {
     }
 
     repositories {
-        google()
-        gradlePluginPortal()
         mavenCentral()
+        google()
     }
 }
 
@@ -41,8 +40,8 @@ apiValidation {
 
 allprojects { project ->
     repositories {
-        google()
         mavenCentral()
+        google()
     }
 
     project.plugins.withType(com.android.build.gradle.LibraryPlugin) {
