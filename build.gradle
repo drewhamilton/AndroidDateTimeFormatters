@@ -43,7 +43,6 @@ allprojects { project ->
     repositories {
         google()
         mavenCentral()
-        jcenter()
     }
 
     project.plugins.withType(com.android.build.gradle.LibraryPlugin) {
