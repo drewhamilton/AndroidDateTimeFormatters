@@ -3,11 +3,9 @@ apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.androidXMinSdk
-        versionName rootProject.ext.libraryVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'

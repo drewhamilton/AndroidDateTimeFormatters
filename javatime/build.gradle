@@ -8,11 +8,9 @@ ext {
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.multidexMinSdk
-        versionName rootProject.ext.libraryVersion
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         consumerProguardFiles 'consumer-rules.pro'
