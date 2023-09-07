@@ -2,7 +2,6 @@
 
 agp = "7.4.2"
 kotlin = "1.9.10"
-threeTen-bp = "1.5.1:no-tzdb"
 
 [libraries]
 
@@ -24,7 +23,6 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 multidex = "com.android.support:multidex:1.0.3"
 
 threeTen-abp = "com.jakewharton.threetenabp:threetenabp:1.3.1"
-threeTen-bp = { module = "org.threeten:threetenbp", version.ref = "threeTen-bp" }
 
 truth = "com.google.truth:truth:1.1.5"
 

@@ -40,7 +40,8 @@ apply from: '../publish.gradle'
 
 dependencies {
     api(libs.threeTen.abp)
-    api(libs.threeTen.bp)
+    // Can't use ":no-tzdb" in libs.versions.toml:
+    api("org.threeten:threetenbp:1.5.1:no-tzdb")
 
     implementation(libs.androidx.annotation)
 
