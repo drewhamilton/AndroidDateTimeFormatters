@@ -39,8 +39,6 @@ android {
 
 dependencies {
     implementation(project(':javatime'))
-    implementation(project(':threetenbp'))
-    implementation(libs.threeTen.abp)
 
     implementation(libs.multidex)
     coreLibraryDesugaring(libs.desugarJdkLibs)
