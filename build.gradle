@@ -20,12 +20,6 @@ allprojects { project ->
         mavenCentral()
         google()
     }
-
-    project.plugins.withType(com.android.build.gradle.LibraryPlugin) {
-        project.android.libraryVariants.all { variant ->
-            variant.generateBuildConfigProvider.get().enabled = false
-        }
-    }
 }
 
 ext {
