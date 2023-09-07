@@ -1,4 +1,6 @@
-apply plugin: 'com.android.application'
+plugins {
+    alias(libs.plugins.android.app)
+}
 
 android {
     compileSdk = rootProject.ext.compileSdk
@@ -35,12 +37,12 @@ android {
 }
 
 dependencies {
-    implementation project(':javatime')
-    implementation project(':threetenbp')
-    implementation deps.threeTenAbp
+    implementation(project(':javatime'))
+    implementation(project(':threetenbp'))
+    implementation(libs.threeTen.abp)
 
-    implementation deps.multidex
-    coreLibraryDesugaring deps.desugarJdkLibs
+    implementation(libs.multidex)
+    coreLibraryDesugaring(libs.desugarJdkLibs)
 
-    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation(libs.androidx.appcompat)
 }

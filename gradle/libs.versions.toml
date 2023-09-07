@@ -1,0 +1,34 @@
+[versions]
+
+agp = "7.4.2"
+kotlin = "1.7.0"
+
+[libraries]
+
+androidx-annotation = "androidx.annotation:annotation:1.2.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.3.0"
+androidx-coreKtx = "androidx.core:core-ktx:1.5.0"
+androidx-test-junit = "androidx.test.ext:junit:1.1.2"
+androidx-test-rules = "androidx.test:rules:1.3.0"
+
+desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
+
+# Stick with 30.0 to allow running tests on non-Java 8 modules:
+guava = "com.google.guava:guava:30.0-android"
+
+junit = "junit:junit:4.13.2"
+
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+
+multidex = "com.android.support:multidex:1.0.3"
+
+threeTen-abp = "com.jakewharton.threetenabp:threetenabp:1.3.1"
+
+truth = "com.google.truth:truth:1.1.5"
+
+[plugins]
+
+android-app = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinx-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.5.0" }

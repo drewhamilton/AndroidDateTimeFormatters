@@ -1,5 +1,7 @@
-apply plugin: 'com.android.library'
-apply plugin: 'org.jetbrains.kotlin.android'
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+}
 
 android {
     compileSdk = rootProject.ext.compileSdk
@@ -17,16 +19,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    api deps.junitAndroid
-    api deps.androidTestRules
-    api(deps.truth) {
-        exclude group: 'com.google.guava'
+    api(libs.androidx.test.junit)
+    api(libs.androidx.test.rules)
+    api(libs.truth) {
+        exclude(group: "com.google.guava")
     }
 
-    implementation deps.guava
-    implementation deps.kotlinStdLib
-    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation(libs.guava)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.androidx.coreKtx)
 }
