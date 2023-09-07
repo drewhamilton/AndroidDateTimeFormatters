@@ -1,7 +1,7 @@
 [versions]
 
 agp = "7.4.2"
-kotlin = "1.9.10"
+kotlin = "1.7.0"
 
 [libraries]
 
