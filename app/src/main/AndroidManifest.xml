@@ -14,7 +14,8 @@
       tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
     <activity
-        android:name=".Demo">
+        android:name=".Demo"
+        android:exported="true">
 
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
