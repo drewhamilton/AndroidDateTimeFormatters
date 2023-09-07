@@ -1,5 +1,7 @@
-apply plugin: 'com.android.library'
-apply plugin: 'org.jetbrains.kotlin.android'
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+}
 
 ext {
     artifactName = 'datetimeformatters'
@@ -49,10 +51,10 @@ android {
 apply from: '../publish.gradle'
 
 dependencies {
-    coreLibraryDesugaring deps.desugarJdkLibs
+    coreLibraryDesugaring(libs.desugarJdkLibs)
 
-    implementation deps.androidXAnnotations
+    implementation(libs.androidx.annotation)
 
-    androidTestImplementation project(':test')
-    androidTestImplementation deps.kotlinStdLib
+    androidTestImplementation(libs.kotlin.stdlib)
+    androidTestImplementation(project(":test"))
 }

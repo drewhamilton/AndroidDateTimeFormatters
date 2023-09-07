@@ -1,3 +1,10 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        google()
+    }
+}
+
 include ':javatime', ':threetenbp'
 include ':test', ':app'
 rootProject.name='AndroidDateTimeFormatters'
