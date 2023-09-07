@@ -54,8 +54,7 @@ allprojects { project ->
 ext {
     libraryVersion = '2.3.0-SNAPSHOT'
 
-    buildToolsVersion = '29.0.3'
-    compileSdk = 29
+    compileSdk = 33
     multidexMinSdk = 4
     threeTenAbpMinSdk = 15
     androidXMinSdk = 14

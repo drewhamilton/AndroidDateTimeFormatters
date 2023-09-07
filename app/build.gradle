@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdk
+    compileSdk = rootProject.ext.compileSdk
 
     defaultConfig {
         applicationId "dev.drewhamilton.androidtime.format.demo"
