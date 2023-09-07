@@ -1,21 +1,24 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="dev.drewhamilton.androidtime.format.test">
+    xmlns:tools="http://schemas.android.com/tools">
 
   <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
   <!--Allow use of test frameworks with higher minSdk than this library's:-->
   <uses-sdk tools:overrideLibrary="
+          androidx.annotation.experimental,
           androidx.core,
           androidx.core.ktx,
           androidx.lifecycle,
           androidx.test,
+          androidx.test.annotation,
           androidx.test.core,
           androidx.test.ext.junit,
           androidx.test.monitor,
           androidx.test.rules,
           androidx.test.runner,
+          androidx.test.services.storage,
+          androidx.tracing,
           androidx.versionedparcelable,
           dev.drewhamilton.androidtime.format.test" />
 

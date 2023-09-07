@@ -4,6 +4,7 @@ plugins {
 
 android {
     compileSdk = rootProject.ext.compileSdk
+    namespace = "dev.drewhamilton.androidtime.format.demo"
 
     defaultConfig {
         applicationId "dev.drewhamilton.androidtime.format.demo"

@@ -10,6 +10,8 @@ ext {
 
 android {
     compileSdk = rootProject.ext.compileSdk
+    namespace = "dev.drewhamilton.androidtime.threetenbp.format"
+    testNamespace = "dev.drewhamilton.androidtime.threetenbp.format.test"
 
     defaultConfig {
         minSdkVersion rootProject.ext.threeTenAbpMinSdk
