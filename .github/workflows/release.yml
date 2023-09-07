@@ -23,7 +23,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: wrapper
-          arguments: ./gradlew assembleRelease --stacktrace --no-configuration-cache
+          arguments: assembleRelease --stacktrace --no-configuration-cache
       - name: Publish
         uses: gradle/gradle-build-action@v2
         with:
