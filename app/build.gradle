@@ -38,7 +38,7 @@ android {
 }
 
 dependencies {
-    implementation(project(':javatime'))
+    implementation(project(':datetimeformatters'))
 
     implementation(libs.multidex)
     coreLibraryDesugaring(libs.desugarJdkLibs)
