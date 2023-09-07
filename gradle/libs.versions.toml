@@ -14,7 +14,7 @@ androidx-test-rules = "androidx.test:rules:1.3.0"
 desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
 
 # Stick with 30.0 to allow running tests on non-Java 8 modules:
-guava = "com.google.guava:guava:30.0-android"
+guava = "com.google.guava:guava:30.1.1-jre"
 
 junit = "junit:junit:4.13.2"
 
