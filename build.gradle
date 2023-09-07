@@ -9,7 +9,7 @@ buildscript {
             desugarJdkLibs: 'com.android.tools:desugar_jdk_libs:1.1.5',
             // Stick with 30.0 to allow running tests on non-Java 8 modules:
             guava: 'com.google.guava:guava:30.0-android',
-            junit: 'junit:junit:4.13.1',
+            junit: 'junit:junit:4.13.2',
             junitAndroid: 'androidx.test.ext:junit:1.1.2',
             kotlinStdLib: "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
             multidex: 'com.android.support:multidex:1.0.3',
