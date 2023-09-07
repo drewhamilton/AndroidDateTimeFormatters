@@ -1,11 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-}
-
-ext {
-    artifactName = 'datetimeformatters-threetenbp'
-    publishedDescription = 'ThreeTenBP DateTimeFormatters for Android.'
+    alias(libs.plugins.mavenPublish)
 }
 
 android {
@@ -37,8 +33,6 @@ android {
         }
     }
 }
-
-apply from: '../publish.gradle'
 
 dependencies {
     api(libs.threeTen.abp)
