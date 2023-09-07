@@ -7,9 +7,12 @@
   <!--Allow use of test frameworks with higher minSdk than this library's:-->
   <uses-sdk tools:overrideLibrary="
           androidx.annotation.experimental,
+          androidx.arch.core,
           androidx.core,
           androidx.core.ktx,
+          androidx.interpolator,
           androidx.lifecycle,
+          androidx.lifecycle.runtime,
           androidx.test,
           androidx.test.annotation,
           androidx.test.core,

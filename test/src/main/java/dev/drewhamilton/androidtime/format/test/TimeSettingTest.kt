@@ -38,7 +38,7 @@ abstract class TimeSettingTest {
         }
 
     protected var testLocale: Locale
-        get() = ConfigurationCompat.getLocales(testContext.resources.configuration)[0]
+        get() = ConfigurationCompat.getLocales(testContext.resources.configuration)[0]!!
         set(value) {
             testContext.setLocales(LocaleListCompat.create(value))
         }
@@ -88,7 +88,7 @@ abstract class TimeSettingTest {
             forceRestoreSystemTimeSetting()
             Log.d(TAG, "Reset device time setting to original setting: $originalTimeSetting")
         } else {
-            val newTimeSetting = if (originalLocales[0].is24HourLocale())
+            val newTimeSetting = if (originalLocales[0]!!.is24HourLocale())
                 TIME_SETTING_24
             else
                 TIME_SETTING_12
