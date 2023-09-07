@@ -11,7 +11,7 @@ androidx-coreKtx = "androidx.core:core-ktx:1.5.0"
 androidx-test-junit = "androidx.test.ext:junit:1.1.5"
 androidx-test-rules = "androidx.test:rules:1.5.0"
 
-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
+desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.2.3"
 
 # Stick with 30.0 to allow running tests on non-Java 8 modules:
 guava = "com.google.guava:guava:30.0-android"
