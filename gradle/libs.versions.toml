@@ -13,9 +13,6 @@ androidx-test-rules = "androidx.test:rules:1.5.0"
 
 desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.2.3"
 
-# Stick with 30.0 to allow running tests on non-Java 8 modules:
-guava = "com.google.guava:guava:30.0-android"
-
 junit = "junit:junit:4.13.2"
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
