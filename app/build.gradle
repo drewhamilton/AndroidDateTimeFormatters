@@ -11,7 +11,7 @@ android {
         minSdkVersion rootProject.ext.threeTenAbpMinSdk
         targetSdkVersion rootProject.ext.compileSdk
         versionCode 1
-        versionName rootProject.ext.libraryVersion
+        versionName rootProject.property("VERSION_NAME")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
