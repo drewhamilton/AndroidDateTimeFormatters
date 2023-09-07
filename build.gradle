@@ -9,7 +9,7 @@ plugins {
 
 apply plugin: 'binary-compatibility-validator'
 apiValidation {
-    ignoredProjects += ['test', 'app']
+    ignoredProjects += ['app']
 }
 
 allprojects { project ->
