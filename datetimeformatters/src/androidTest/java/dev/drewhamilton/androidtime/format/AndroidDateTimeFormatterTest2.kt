@@ -13,7 +13,6 @@ import java.time.ZonedDateTime
 import java.time.format.FormatStyle
 import java.util.Locale
 import java.util.TimeZone
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.Date as JavaUtilDate
@@ -43,7 +42,7 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(time)
-        assertEquals(expectedShortFormattedTime, formattedTime)
+        assertThat(formattedTime).isEqualTo(expectedShortFormattedTime)
     }
 
     @Test fun ofLocalizedTime_12SystemSetting_matchesLegacySystemFormat() {
@@ -52,7 +51,7 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(time)
-        assertEquals(expectedShortFormattedTime, formattedTime)
+        assertThat(formattedTime).isEqualTo(expectedShortFormattedTime)
     }
 
     @Test fun ofLocalizedTime_24SystemSetting_matchesLegacySystemFormat() {
@@ -61,7 +60,7 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext)
         val formattedTime = formatter.format(time)
-        assertEquals(expectedShortFormattedTime, formattedTime)
+        assertThat(formattedTime).isEqualTo(expectedShortFormattedTime)
     }
 
     @Test fun ofLocalizedTime_nullSystemSetting_usesLocaleFormat() {
@@ -72,7 +71,7 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
         val formattedTime = formatter.format(time)
-        assertEquals(locale.shortTimePreferred, formattedTime)
+        assertThat(formattedTime).isEqualTo(locale.shortTimePreferred)
     }
 
     @Test fun ofLocalizedTime_12SystemSetting_uses12HourFormat() {
@@ -81,7 +80,7 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
         val formattedTime = formatter.format(time)
-        assertEquals(locale.shortTime12, formattedTime)
+        assertThat(formattedTime).isEqualTo(locale.shortTime12)
     }
 
     @Test fun ofLocalizedTime_24SystemSetting_uses24HourFormat() {
@@ -90,7 +89,7 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
         val formattedTime = formatter.format(time)
-        assertEquals(locale.shortTime24, formattedTime)
+        assertThat(formattedTime).isEqualTo(locale.shortTime24)
     }
     //endregion
 
@@ -103,7 +102,7 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
         val formattedTime = formatter.format(time)
-        assertEquals(expectedShortFormattedTime, formattedTime)
+        assertThat(formattedTime).isEqualTo(expectedShortFormattedTime)
     }
 
     @Test fun ofLocalizedTime_12SystemSettingShortFormat_matchesLegacySystemFormat() {
@@ -112,7 +111,7 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
         val formattedTime = formatter.format(time)
-        assertEquals(expectedShortFormattedTime, formattedTime)
+        assertThat(formattedTime).isEqualTo(expectedShortFormattedTime)
     }
 
     @Test fun ofLocalizedTime_24SystemSettingShortFormat_matchesLegacySystemFormat() {
@@ -121,7 +120,7 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
         val formattedTime = formatter.format(time)
-        assertEquals(expectedShortFormattedTime, formattedTime)
+        assertThat(formattedTime).isEqualTo(expectedShortFormattedTime)
     }
 
     @Test fun ofLocalizedTime_nullSystemSettingShortFormat_usesLocaleFormat() {
@@ -132,7 +131,7 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
         val formattedTime = formatter.format(time)
-        assertEquals(locale.shortTimePreferred, formattedTime)
+        assertThat(formattedTime).isEqualTo(locale.shortTimePreferred)
     }
 
     @Test fun ofLocalizedTime_12SystemSettingShortFormat_uses12HourFormat() {
@@ -141,7 +140,7 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
         val formattedTime = formatter.format(time)
-        assertEquals(locale.shortTime12, formattedTime)
+        assertThat(formattedTime).isEqualTo(locale.shortTime12)
     }
 
     @Test fun ofLocalizedTime_24SystemSettingShortFormat_uses24HourFormat() {
@@ -150,28 +149,28 @@ class AndroidDateTimeFormatterTest2(
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.SHORT)
         val formattedTime = formatter.format(time)
-        assertEquals(locale.shortTime24, formattedTime)
+        assertThat(formattedTime).isEqualTo(locale.shortTime24)
     }
 
     @Test fun ofLocalizedTime_mediumFormat() {
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.MEDIUM)
-        assertEquals(locale.mediumTime, formatter.format(time))
+        assertThat(formatter.format(time)).isEqualTo(locale.mediumTime)
     }
 
     @Test fun ofLocalizedTime_longFormat() {
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.LONG)
-        assertEquals(locale.longTime, formatter.format(dateTime))
+        assertThat(formatter.format(dateTime)).isEqualTo(locale.longTime)
     }
 
     @Test fun ofLocalizedTime_fullFormat() {
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.FULL)
-        assertEquals(locale.fullTime, formatter.format(dateTime))
+        assertThat(formatter.format(dateTime)).isEqualTo(locale.fullTime)
     }
     //endregion
 
@@ -180,28 +179,28 @@ class AndroidDateTimeFormatterTest2(
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.SHORT)
-        assertEquals(locale.shortDate, formatter.format(date))
+        assertThat(formatter.format(date)).isEqualTo(locale.shortDate)
     }
 
     @Test fun ofLocalizedDate_mediumFormat() {
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.MEDIUM)
-        assertEquals(locale.mediumDate, formatter.format(date))
+        assertThat(formatter.format(date)).isEqualTo(locale.mediumDate)
     }
 
     @Test fun ofLocalizedDate_longFormat() {
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.LONG)
-        assertEquals(locale.longDate, formatter.format(date))
+        assertThat(formatter.format(date)).isEqualTo(locale.longDate)
     }
 
     @Test fun ofLocalizedDate_fullFormat() {
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.FULL)
-        assertEquals(locale.fullDate, formatter.format(date))
+        assertThat(formatter.format(date)).isEqualTo(locale.fullDate)
     }
     //endregion
 
