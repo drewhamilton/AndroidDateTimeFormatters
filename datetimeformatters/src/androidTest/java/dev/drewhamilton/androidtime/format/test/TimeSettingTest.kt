@@ -14,7 +14,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
-import org.junit.Assume
+import org.junit.Assume.assumeFalse
 import android.text.format.DateFormat as AndroidDateFormat
 
 /**
@@ -130,7 +130,7 @@ abstract class TimeSettingTest {
         return false
     }
 
-    protected fun assumeNullableSystemTimeSetting() = Assume.assumeFalse(
+    protected fun assumeNullableSystemTimeSetting() = assumeFalse(
         "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
         Build.VERSION.SDK_INT < SDK_INT_NULLABLE_TIME_SETTING
     )

@@ -14,6 +14,7 @@ import java.time.ZonedDateTime
 import java.time.format.FormatStyle
 import java.util.Locale
 import java.util.TimeZone
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.Date as JavaUtilDate
@@ -353,12 +354,16 @@ class AndroidDateTimeFormatterTest(
 
     //region ofSkeleton
     @Test fun ofSkeleton_MMMMdAndContext() {
+        assumeTrue(Build.VERSION.SDK_INT >= 18)
+
         testLocale = locale.value
         val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", testContext)
         assertThat(formatter.format(date)).isEqualTo(locale.skeletonMMMMd)
     }
 
     @Test fun ofSkeleton_MMMMdAndLocale() {
+        assumeTrue(Build.VERSION.SDK_INT >= 18)
+
         val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", locale.value)
         assertThat(formatter.format(date)).isEqualTo(locale.skeletonMMMMd)
     }
@@ -444,7 +449,7 @@ class AndroidDateTimeFormatterTest(
             skeletonMMMMd = "9月7日",
         ),
         Russian(
-            value = Locale.forLanguageTag("ru"),
+            value = Locale("ru"),
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = "6:01 PM",
             shortTime24 = "18:01",
@@ -458,7 +463,7 @@ class AndroidDateTimeFormatterTest(
             skeletonMMMMd = "7 сентября",
         ),
         Persian(
-            value = Locale.forLanguageTag("fa"),
+            value = Locale("fa"),
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = "6:01 بعدازظهر",
             shortTime24 = "18:01",
