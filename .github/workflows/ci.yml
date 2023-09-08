@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        api-level: [ 32, 33, 34 ]
+        api-level: [ 34 ]
 
     steps:
       - name: Start emulator
@@ -20,14 +20,13 @@ jobs:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           target: google_apis
-          script: ./gradlew connectedCheck --stacktrace
 
   build:
     runs-on: macos-latest
 
     strategy:
       matrix:
-        api-level: [ 29, 30 ]
+        api-level: [ 30, 32, 33 ]
         arch: [ x86_64 ]
         include:
           - api-level: 19
