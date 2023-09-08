@@ -21,6 +21,7 @@ import java.util.Date as JavaUtilDate
 class AndroidDateTimeFormatterTest2(
     @TestParameter val locale: TestLocale,
 ) : TimeSettingTest() {
+
     private val date: LocalDate = LocalDate.of(2023, Month.SEPTEMBER, 7)
     private val time: LocalTime = LocalTime.of(18, 1)
     private val dateTime: ZonedDateTime = ZonedDateTime.of(date, time, ZoneId.of("America/Chicago"))
@@ -93,21 +94,21 @@ class AndroidDateTimeFormatterTest2(
         assertEquals(expectedShortFormattedTime, formattedTime)
     }
 
-    @Test fun ofLocalizedTime_mediumFormat_usesLocaleFormat() {
+    @Test fun ofLocalizedTime_mediumFormat() {
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.MEDIUM)
         assertEquals(locale.mediumTime, formatter.format(time))
     }
 
-    @Test fun ofLocalizedTime_longFormat_usesLocaleFormat() {
+    @Test fun ofLocalizedTime_longFormat() {
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.LONG)
         assertEquals("${locale.mediumTime} ${locale.longTimeZone}", formatter.format(dateTime))
     }
 
-    @Test fun ofLocalizedTime_fullFormat_usesLocaleFormat() {
+    @Test fun ofLocalizedTime_fullFormat() {
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(testContext, FormatStyle.FULL)

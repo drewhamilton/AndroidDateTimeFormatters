@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 import org.junit.Assume
+import android.text.format.DateFormat as AndroidDateFormat
 
 /**
  * A base test class that facilitates using and changing the [Settings.System.TIME_12_24] setting by caching the current
@@ -34,7 +35,7 @@ abstract class TimeSettingTest {
         get() = InstrumentationRegistry.getInstrumentation().context
 
     protected val androidShortTimeFormatInUtc: DateFormat
-        get() = android.text.format.DateFormat.getTimeFormat(testContext).apply {
+        get() = AndroidDateFormat.getTimeFormat(testContext).apply {
             timeZone = TimeZone.getTimeZone("UTC")
         }
 
