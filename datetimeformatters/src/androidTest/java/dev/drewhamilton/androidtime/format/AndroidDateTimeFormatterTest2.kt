@@ -115,24 +115,66 @@ class AndroidDateTimeFormatterTest2(
     }
     //endregion
 
+    //region ofLocalizedDate
+    @Test fun ofLocalizedDate_shortFormat() {
+        testLocale = locale.value
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.SHORT)
+        assertEquals(locale.shortDate, formatter.format(date))
+    }
+
+    @Test fun ofLocalizedDate_mediumFormat() {
+        testLocale = locale.value
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.MEDIUM)
+        assertEquals(locale.mediumDate, formatter.format(date))
+    }
+
+    @Test fun ofLocalizedDate_longFormat() {
+        testLocale = locale.value
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.LONG)
+        assertEquals(locale.longDate, formatter.format(date))
+    }
+
+    @Test fun ofLocalizedDate_fullFormat() {
+        testLocale = locale.value
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.FULL)
+        assertEquals(locale.fullDate, formatter.format(date))
+    }
+    //endregion
+
     @Suppress("unused")
     enum class TestLocale(
         val value: Locale,
         val mediumTime: String,
         val longTimeZone: String,
         val fullTimeZone: String,
+        val shortDate: String,
+        val mediumDate: String,
+        val longDate: String,
+        val fullDate: String,
     ) {
         US(
             value = Locale.US,
             mediumTime = "6:01:00 PM",
             longTimeZone = "CDT",
             fullTimeZone = "Central Daylight Time",
+            shortDate = "9/7/23",
+            mediumDate = "Sep 7, 2023",
+            longDate = "September 7, 2023",
+            fullDate = "Thursday, September 7, 2023",
         ),
         Italy(
             value = Locale.ITALY,
             mediumTime = "18:01:00",
             longTimeZone = "GMT-05:00",
             fullTimeZone = "Ora legale centrale USA",
+            shortDate = "07/09/23",
+            mediumDate = "7 set 2023",
+            longDate = "7 settembre 2023",
+            fullDate = "giovedì 7 settembre 2023",
         ),
     }
 }

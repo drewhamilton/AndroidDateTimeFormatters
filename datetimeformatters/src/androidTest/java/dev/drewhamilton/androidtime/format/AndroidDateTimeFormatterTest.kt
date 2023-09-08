@@ -19,64 +19,6 @@ import java.util.Locale
 @RequiresApi(21) // Instrumented tests for Dynamic Features is not supported on API < 21 (AGP 4.0.0-beta04)
 class AndroidDateTimeFormatterTest : TimeSettingTest() {
 
-    //region ofLocalizedDate
-    @Test fun ofLocalizedDate_usLocaleShortFormat_usesShortUsFormat() {
-        testLocale = Locale.US
-
-        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.SHORT)
-        assertEquals("4/24/10", formatter.format(DATE))
-    }
-
-    @Test fun ofLocalizedDate_usLocaleMediumFormat_usesMediumUsFormat() {
-        testLocale = Locale.US
-
-        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.MEDIUM)
-        assertEquals("Apr 24, 2010", formatter.format(DATE))
-    }
-
-    @Test fun ofLocalizedDate_usLocaleLongFormat_usesLongUsFormat() {
-        testLocale = Locale.US
-
-        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.LONG)
-        assertEquals("April 24, 2010", formatter.format(DATE))
-    }
-
-    @Test fun ofLocalizedDate_usLocaleFullFormat_usesFullUsFormat() {
-        testLocale = Locale.US
-
-        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.FULL)
-        assertEquals("Saturday, April 24, 2010", formatter.format(DATE))
-    }
-
-    @Test fun ofLocalizedDate_italyLocaleShortFormat_usesShortItalyFormat() {
-        testLocale = Locale.ITALY
-
-        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.SHORT)
-        assertEquals("24/04/10", formatter.format(DATE))
-    }
-
-    @Test fun ofLocalizedDate_italyLocaleMediumFormat_usesMediumItalyFormat() {
-        testLocale = Locale.ITALY
-
-        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.MEDIUM)
-        assertEquals(ITALY_MEDIUM_DATE, formatter.format(DATE))
-    }
-
-    @Test fun ofLocalizedDate_italyLocaleLongFormat_usesLongItalyFormat() {
-        testLocale = Locale.ITALY
-
-        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.LONG)
-        assertEquals("24 aprile 2010", formatter.format(DATE))
-    }
-
-    @Test fun ofLocalizedDate_italyLocaleFullFormat_usesFullItalyFormat() {
-        testLocale = Locale.ITALY
-
-        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(testContext, FormatStyle.FULL)
-        assertEquals("sabato 24 aprile 2010", formatter.format(DATE))
-    }
-    //endregion
-
     //region ofLocalizedDateTime with dateTimeStyle
     @Test fun ofLocalizedDateTime_nullSystemSettingUsLocaleShortDateTimeFormat_usesShort12HourUsFormat() {
         assumeNullableSystemTimeSetting()
