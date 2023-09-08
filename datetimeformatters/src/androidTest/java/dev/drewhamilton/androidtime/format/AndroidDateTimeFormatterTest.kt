@@ -39,6 +39,7 @@ class AndroidDateTimeFormatterTest(
     //region ofLocalizedTime with default style
     @Test fun ofLocalizedTime_nullSystemSetting_matchesLegacySystemFormat() {
         assumeNullableSystemTimeSetting()
+        assumeShortTimeShouldMatchLegacySystemFormat()
 
         systemTimeSetting = null
         testLocale = locale.value
@@ -50,6 +51,7 @@ class AndroidDateTimeFormatterTest(
 
     @Test fun ofLocalizedTime_12SystemSetting_matchesLegacySystemFormat() {
         assumeShortTime12ShouldMatchLegacySystemFormat()
+        assumeShortTimeShouldMatchLegacySystemFormat()
 
         systemTimeSetting = TIME_SETTING_12
         testLocale = locale.value
@@ -60,6 +62,8 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedTime_24SystemSetting_matchesLegacySystemFormat() {
+        assumeShortTimeShouldMatchLegacySystemFormat()
+
         systemTimeSetting = TIME_SETTING_24
         testLocale = locale.value
 
@@ -101,6 +105,7 @@ class AndroidDateTimeFormatterTest(
     //region ofLocalizedTime with explicit style
     @Test fun ofLocalizedTime_nullSystemSettingShortFormat_matchesLegacySystemFormat() {
         assumeNullableSystemTimeSetting()
+        assumeShortTimeShouldMatchLegacySystemFormat()
 
         systemTimeSetting = null
         testLocale = locale.value
@@ -112,6 +117,7 @@ class AndroidDateTimeFormatterTest(
 
     @Test fun ofLocalizedTime_12SystemSettingShortFormat_matchesLegacySystemFormat() {
         assumeShortTime12ShouldMatchLegacySystemFormat()
+        assumeShortTimeShouldMatchLegacySystemFormat()
 
         systemTimeSetting = TIME_SETTING_12
         testLocale = locale.value
@@ -122,6 +128,8 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedTime_24SystemSettingShortFormat_matchesLegacySystemFormat() {
+        assumeShortTimeShouldMatchLegacySystemFormat()
+
         systemTimeSetting = TIME_SETTING_24
         testLocale = locale.value
 
@@ -378,8 +386,15 @@ class AndroidDateTimeFormatterTest(
      * On older APIs, the desugar libs do better than the system format did for alternate alphabets.
      */
     private fun assumeShortTime12ShouldMatchLegacySystemFormat() = assumeFalse(
-        Build.VERSION.SDK_INT < 26 &&
+        Build.VERSION.SDK_INT < 27 &&
                 locale in setOf(TestLocale.Japan, TestLocale.Russian, TestLocale.Persian)
+    )
+
+    /**
+     * On newer APIs, the desugar libs don't use alternate digits, while the legacy formatter does.
+     */
+    private fun assumeShortTimeShouldMatchLegacySystemFormat() = assumeFalse(
+        Build.VERSION.SDK_INT >= 28 && locale == TestLocale.Persian
     )
 
     @Suppress("unused")
@@ -432,7 +447,7 @@ class AndroidDateTimeFormatterTest(
             fullTime = "18:01:00 Ora legale centrale USA",
             shortDate = "07/09/23",
             mediumDate = when {
-                Build.VERSION.SDK_INT >= 26 -> "7 set 2023"
+                Build.VERSION.SDK_INT >= 27 -> "7 set 2023"
                 Build.VERSION.SDK_INT >= 23 -> "07 set 2023"
                 else -> "07/set/2023"
             },
@@ -492,6 +507,7 @@ class AndroidDateTimeFormatterTest(
             value = Locale("ru"),
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = when {
+                Build.VERSION.SDK_INT >= 28 -> "6:01 PM"
                 Build.VERSION.SDK_INT >= 24 -> "6:01 ПП"
                 Build.VERSION.SDK_INT >= 21 -> "6:01 PM"
                 else -> "6:01 после полудня"
