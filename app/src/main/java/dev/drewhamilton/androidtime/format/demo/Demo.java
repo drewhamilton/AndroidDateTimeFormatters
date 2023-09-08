@@ -26,17 +26,10 @@ public class Demo extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         displayJavaTime();
-        displayThreeTenBpTime();
     }
 
     private void displayJavaTime() {
         DateTimeFormatter formatter = AndroidDateTimeFormatter.ofLocalizedTime(this);
         binding.javaTimeValue.setText(formatter.format(LocalTime.now()));
-    }
-
-    private void displayThreeTenBpTime() {
-        org.threeten.bp.format.DateTimeFormatter formatter =
-                dev.drewhamilton.androidtime.threetenbp.format.AndroidDateTimeFormatter.ofLocalizedTime(this);
-        binding.threeTenBpValue.setText(formatter.format(org.threeten.bp.LocalTime.now()));
     }
 }

@@ -27,27 +27,4 @@
 
       tools:text="15:40" />
 
-  <Space
-      android:id="@+id/space"
-      android:layout_width="0dp"
-      android:layout_height="48dp" />
-
-  <TextView
-      android:id="@+id/threeTenBpLabel"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-
-      android:text="@string/three_ten_bp"
-      android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-      android:textColor="@color/lightBlue" />
-
-  <TextView
-      android:id="@+id/threeTenBpValue"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-
-      android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-
-      tools:text="15:40" />
-
 </LinearLayout>

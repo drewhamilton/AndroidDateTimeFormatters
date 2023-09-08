@@ -5,6 +5,7 @@ pluginManagement {
     }
 }
 
-include ':javatime', ':threetenbp'
-include ':test', ':app'
 rootProject.name='AndroidDateTimeFormatters'
+
+include ':datetimeformatters'
+include ':app'
