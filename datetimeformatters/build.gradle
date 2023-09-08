@@ -55,5 +55,6 @@ dependencies {
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.rules)
     androidTestImplementation(libs.kotlin.stdlib)
+    androidTestImplementation(libs.testParameterInjector)
     androidTestImplementation(libs.truth)
 }

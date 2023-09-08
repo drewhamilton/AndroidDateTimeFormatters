@@ -14,6 +14,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
+import org.junit.Assume
 
 /**
  * A base test class that facilitates using and changing the [Settings.System.TIME_12_24] setting by caching the current
@@ -55,10 +56,12 @@ abstract class TimeSettingTest {
 
     @Before fun cacheOriginalLocales() {
         originalLocales = ConfigurationCompat.getLocales(testContext.resources.configuration)
+        Log.d(TAG, "Cached original locales: $originalLocales")
     }
 
     @After fun restoreLocales() {
         testContext.setLocales(originalLocales)
+        Log.d(TAG, "Restored original locales: $originalLocales")
     }
 
     private fun Context.setLocales(locales: LocaleListCompat) = when {
@@ -125,6 +128,11 @@ abstract class TimeSettingTest {
 
         return false
     }
+
+    protected fun assumeNullableSystemTimeSetting() = Assume.assumeFalse(
+        "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
+        Build.VERSION.SDK_INT < SDK_INT_NULLABLE_TIME_SETTING
+    )
 
     protected companion object {
         private val TAG = TimeSettingTest::class.java.simpleName
