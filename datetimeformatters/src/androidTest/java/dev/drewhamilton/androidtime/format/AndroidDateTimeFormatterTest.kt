@@ -421,7 +421,7 @@ class AndroidDateTimeFormatterTest(
             shortTime24 = "18:01",
             mediumTime = when {
                 Build.VERSION.SDK_INT >= 26 -> "18:01:00"
-                Build.VERSION.SDK_INT >= 24 -> "6:01:00 PM"
+                Build.VERSION.SDK_INT >= 23 -> "6:01:00 PM"
                 Build.VERSION.SDK_INT >= 22 -> "06:01:00 PM"
                 else -> "18:01:00"
             },
@@ -433,6 +433,7 @@ class AndroidDateTimeFormatterTest(
             shortDate = "07/09/23",
             mediumDate = when {
                 Build.VERSION.SDK_INT >= 24 -> "7 set 2023"
+                Build.VERSION.SDK_INT >= 23 -> "07 set 2023"
                 else -> "07/set/2023"
             },
             longDate = when {
