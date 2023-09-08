@@ -386,8 +386,7 @@ class AndroidDateTimeFormatterTest(
      * On older APIs, the desugar libs do better than the system format did for alternate alphabets.
      */
     private fun assumeShortTime12ShouldMatchLegacySystemFormat() = assumeFalse(
-        Build.VERSION.SDK_INT < 27 &&
-                locale in setOf(TestLocale.Japan, TestLocale.Russian, TestLocale.Persian)
+        Build.VERSION.SDK_INT < 28 && locale in setOf(TestLocale.Japan, TestLocale.Russian, TestLocale.Persian)
     )
 
     /**
@@ -447,7 +446,7 @@ class AndroidDateTimeFormatterTest(
             fullTime = "18:01:00 Ora legale centrale USA",
             shortDate = "07/09/23",
             mediumDate = when {
-                Build.VERSION.SDK_INT >= 27 -> "7 set 2023"
+                Build.VERSION.SDK_INT >= 28 -> "7 set 2023"
                 Build.VERSION.SDK_INT >= 23 -> "07 set 2023"
                 else -> "07/set/2023"
             },
