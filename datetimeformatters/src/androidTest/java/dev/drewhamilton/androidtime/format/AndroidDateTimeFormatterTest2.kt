@@ -1,5 +1,6 @@
 package dev.drewhamilton.androidtime.format
 
+import android.os.Build
 import com.google.common.truth.Truth.assertThat
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
@@ -350,6 +351,19 @@ class AndroidDateTimeFormatterTest2(
     }
     //endregion
 
+    //region ofSkeleton
+    @Test fun ofSkeleton_MMMMdAndContext() {
+        testLocale = locale.value
+        val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", testContext)
+        assertThat(formatter.format(date)).isEqualTo(locale.skeletonMMMMd)
+    }
+
+    @Test fun ofSkeleton_MMMMdAndLocale() {
+        val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", locale.value)
+        assertThat(formatter.format(date)).isEqualTo(locale.skeletonMMMMd)
+    }
+    //endregion
+
     @Suppress("unused")
     enum class TestLocale(
         val value: Locale,
@@ -363,6 +377,7 @@ class AndroidDateTimeFormatterTest2(
         val mediumDate: String,
         val longDate: String,
         val fullDate: String,
+        val skeletonMMMMd: String,
     ) {
         US(
             value = Locale.US,
@@ -376,19 +391,29 @@ class AndroidDateTimeFormatterTest2(
             mediumDate = "Sep 7, 2023",
             longDate = "September 7, 2023",
             fullDate = "Thursday, September 7, 2023",
+            skeletonMMMMd = "September 7"
         ),
         Italy(
             value = Locale.ITALY,
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = "6:01 PM",
             shortTime24 = "18:01",
-            mediumTime = "18:01:00",
+            mediumTime = when {
+                Build.VERSION.SDK_INT >= 26 -> "18:01:00"
+                Build.VERSION.SDK_INT >= 23 -> "6:01:00 PM"
+                Build.VERSION.SDK_INT >= 22 -> "06:01:00 PM"
+                else -> "18:01:00"
+            },
             longTime = "18:01:00 GMT-05:00",
             fullTime = "18:01:00 Ora legale centrale USA",
             shortDate = "07/09/23",
-            mediumDate = "7 set 2023",
+            mediumDate = when {
+                Build.VERSION.SDK_INT >= 23 -> "7 set 2023"
+                else -> "7/set/2023"
+            },
             longDate = "7 settembre 2023",
             fullDate = "giovedì 7 settembre 2023",
+            skeletonMMMMd = "7 settembre",
         ),
         ;
 
