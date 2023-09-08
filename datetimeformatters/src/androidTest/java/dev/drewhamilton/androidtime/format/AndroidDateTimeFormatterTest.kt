@@ -425,7 +425,10 @@ class AndroidDateTimeFormatterTest(
                 Build.VERSION.SDK_INT >= 22 -> "06:01:00 PM"
                 else -> "18:01:00"
             },
-            longTime = "18:01:00 GMT-05:00",
+            longTime = when {
+                Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
+                else -> "18:01:00 CDT"
+            },
             fullTime = "18:01:00 Ora legale centrale USA",
             shortDate = "07/09/23",
             mediumDate = when {
@@ -449,7 +452,10 @@ class AndroidDateTimeFormatterTest(
                 Build.VERSION.SDK_INT >= 22 -> "6:01:00 PM"
                 else -> "18:01:00"
             },
-            longTime = "18:01:00 GMT-05:00",
+            longTime = when {
+                Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
+                else -> "18:01:00 CDT"
+            },
             fullTime = when {
                 Build.VERSION.SDK_INT >= 23 -> "18:01:00 heure d’été du Centre"
                 else -> "18:01:00 heure avancée du Centre"
@@ -470,7 +476,10 @@ class AndroidDateTimeFormatterTest(
                 Build.VERSION.SDK_INT >= 22 -> "午後6:01:00"
                 else -> "18:01:00"
             },
-            longTime = "18:01:00 GMT-05:00",
+            longTime = when {
+                Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
+                else -> "18:01:00 CDT"
+            },
             fullTime = "18時01分00秒 アメリカ中部夏時間",
             shortDate = "2023/09/07",
             mediumDate = "2023/09/07",
