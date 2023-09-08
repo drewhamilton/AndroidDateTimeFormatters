@@ -14,6 +14,8 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
+import org.junit.Assume.assumeFalse
+import android.text.format.DateFormat as AndroidDateFormat
 
 /**
  * A base test class that facilitates using and changing the [Settings.System.TIME_12_24] setting by caching the current
@@ -33,7 +35,7 @@ abstract class TimeSettingTest {
         get() = InstrumentationRegistry.getInstrumentation().context
 
     protected val androidShortTimeFormatInUtc: DateFormat
-        get() = android.text.format.DateFormat.getTimeFormat(testContext).apply {
+        get() = AndroidDateFormat.getTimeFormat(testContext).apply {
             timeZone = TimeZone.getTimeZone("UTC")
         }
 
@@ -55,10 +57,12 @@ abstract class TimeSettingTest {
 
     @Before fun cacheOriginalLocales() {
         originalLocales = ConfigurationCompat.getLocales(testContext.resources.configuration)
+        Log.d(TAG, "Cached original locales: $originalLocales")
     }
 
     @After fun restoreLocales() {
         testContext.setLocales(originalLocales)
+        Log.d(TAG, "Restored original locales: $originalLocales")
     }
 
     private fun Context.setLocales(locales: LocaleListCompat) = when {
@@ -126,6 +130,11 @@ abstract class TimeSettingTest {
         return false
     }
 
+    protected fun assumeNullableSystemTimeSetting() = assumeFalse(
+        "Time setting is not nullable in API ${Build.VERSION.SDK_INT}",
+        Build.VERSION.SDK_INT < SDK_INT_NULLABLE_TIME_SETTING
+    )
+
     protected companion object {
         private val TAG = TimeSettingTest::class.java.simpleName
 
@@ -133,11 +142,5 @@ abstract class TimeSettingTest {
 
         const val TIME_SETTING_12 = "12"
         const val TIME_SETTING_24 = "24"
-
-        val TIME_FORMAT_24_IN_UTC: DateFormat by lazy {
-            SimpleDateFormat("HH:mm", Locale.US).apply {
-                timeZone = TimeZone.getTimeZone("UTC")
-            }
-        }
     }
 }
