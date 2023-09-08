@@ -49,7 +49,6 @@ gen-external-apklibs
 
 # Whitelisted .idea files:
 !.idea/codeStyles/*
-!.idea/misc.xml
 
 # User-specific stuff:
 .idea/workspace.xml
