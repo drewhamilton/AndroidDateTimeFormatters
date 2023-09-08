@@ -3,6 +3,7 @@ package dev.drewhamilton.androidtime.format
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import dev.drewhamilton.androidtime.format.test.TimeSettingTest
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.Month
@@ -10,7 +11,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.FormatStyle
 import java.util.Locale
-import org.junit.Assert
+import java.util.TimeZone
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,7 +25,9 @@ class AndroidDateTimeFormatterTest2(
     private val time: LocalTime = LocalTime.of(18, 1)
     private val dateTime: ZonedDateTime = ZonedDateTime.of(date, time, ZoneId.of("America/Chicago"))
 
-    private val timeAsLegacyDate: JavaUtilDate = TIME_FORMAT_24_IN_UTC.parse("18:01")!!
+    private val timeAsLegacyDate: JavaUtilDate = SimpleDateFormat("HH:mm", Locale.US).apply {
+        timeZone = TimeZone.getTimeZone("UTC")
+    }.parse("18:01")!!
 
     private val expectedShortFormattedTime: String
         get() = androidShortTimeFormatInUtc.format(timeAsLegacyDate)

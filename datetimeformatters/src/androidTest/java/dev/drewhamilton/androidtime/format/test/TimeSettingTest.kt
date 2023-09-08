@@ -141,11 +141,5 @@ abstract class TimeSettingTest {
 
         const val TIME_SETTING_12 = "12"
         const val TIME_SETTING_24 = "24"
-
-        val TIME_FORMAT_24_IN_UTC: DateFormat by lazy {
-            SimpleDateFormat("HH:mm", Locale.US).apply {
-                timeZone = TimeZone.getTimeZone("UTC")
-            }
-        }
     }
 }
