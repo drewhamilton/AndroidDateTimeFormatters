@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        api-level: [ 30, 31, 32 ]
+        api-level: [ 32, 33, 34 ]
 
     steps:
       - name: Start emulator
@@ -19,6 +19,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
+          target: google_apis
           script: ./gradlew connectedCheck --stacktrace
 
   build:
@@ -26,8 +27,11 @@ jobs:
 
     strategy:
       matrix:
-        # Limit to 5 (GitHub max parallel MacOS machines):
-        api-level: [19, 27, 29]
+        api-level: [ 29, 30 ]
+        arch: [ x86_64 ]
+        include:
+          - api-level: 19
+            arch: x86
 
     steps:
       - name: Check out the repo
@@ -48,7 +52,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          arch: x86_64
+          arch: ${{ matrix.arch }}
+          target: google_apis
           script: ./gradlew connectedCheck --stacktrace
 
 env:
