@@ -6,27 +6,12 @@ on:
   pull_request:
 
 jobs:
-  emulators:
-    runs-on: macos-latest
-
-    strategy:
-      matrix:
-        api-level: [ 34 ]
-
-    steps:
-      - name: Start emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          target: google_apis
-
   build:
     runs-on: macos-latest
 
     strategy:
       matrix:
-        api-level: [ 30, 32, 33 ]
+        api-level: [ 30, 32, 33, 34 ]
         arch: [ x86_64 ]
         include:
           - api-level: 19
