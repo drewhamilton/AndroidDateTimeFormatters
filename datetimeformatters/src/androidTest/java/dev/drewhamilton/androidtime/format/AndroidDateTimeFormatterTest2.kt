@@ -429,6 +429,20 @@ class AndroidDateTimeFormatterTest2(
             fullDate = "jeudi 7 septembre 2023",
             skeletonMMMMd = "7 septembre",
         ),
+        Japan(
+            value = Locale.JAPAN,
+            preferredTimeSetting = TIME_SETTING_24,
+            shortTime12 = "午後6:01",
+            shortTime24 = "18:01",
+            mediumTime = "18:01:00",
+            longTime = "18:01:00 GMT-05:00",
+            fullTime = "18時01分00秒 アメリカ中部夏時間",
+            shortDate = "2023/09/07",
+            mediumDate = "2023/09/07",
+            longDate = "2023年9月7日",
+            fullDate = "2023年9月7日木曜日",
+            skeletonMMMMd = "9月7日",
+        ),
         ;
 
         val shortTimePreferred: String
