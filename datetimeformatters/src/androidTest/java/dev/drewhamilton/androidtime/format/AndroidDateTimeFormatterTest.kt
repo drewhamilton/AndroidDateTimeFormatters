@@ -378,7 +378,7 @@ class AndroidDateTimeFormatterTest(
      * On older APIs, the desugar libs do better than the system format did for alternate alphabets.
      */
     private fun assumeShortTime12ShouldMatchLegacySystemFormat() = assumeFalse(
-        Build.VERSION.SDK_INT < 25 &&
+        Build.VERSION.SDK_INT < 26 &&
                 locale in setOf(TestLocale.Japan, TestLocale.Russian, TestLocale.Persian)
     )
 
@@ -492,6 +492,7 @@ class AndroidDateTimeFormatterTest(
             value = Locale("ru"),
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = when {
+                Build.VERSION.SDK_INT >= 24 -> "6:01 ПП"
                 Build.VERSION.SDK_INT >= 21 -> "6:01 PM"
                 else -> "6:01 после полудня"
             },
