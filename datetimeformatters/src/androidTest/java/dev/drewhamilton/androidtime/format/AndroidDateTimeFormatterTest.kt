@@ -374,6 +374,9 @@ class AndroidDateTimeFormatterTest(
     }
     //endregion
 
+    /**
+     * On older APIs, the desugar libs do better than the system format did for alternate alphabets.
+     */
     private fun assumeShortTime12ShouldMatchLegacySystemFormat() = assumeFalse(
         Build.VERSION.SDK_INT < 21 &&
                 locale in setOf(TestLocale.Japan, TestLocale.Russian, TestLocale.Persian)
