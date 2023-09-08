@@ -517,13 +517,13 @@ class AndroidDateTimeFormatterTest : TimeSettingTest() {
     }
 
     @Test fun ofSkeleton_MMMMdRuLocale_formatsToDayFollowedByRussianMonth() {
-        val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", Locale.forLanguageTag("ru"))
+        val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", Locale("ru"))
         assertThat(formatter.format(DATE)).isEqualTo("24 апреля")
     }
 
     // Unwanted case because coreLibraryDesugaring does not support "L" format:
     @Test fun ofSkeleton_MMMMdFaLocale_formatsToDayFollowedByMonthNumber() {
-        val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", Locale.forLanguageTag("fa"))
+        val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", Locale("fa"))
         assertThat(formatter.format(DATE)).isEqualTo("24 4")
     }
     //endregion
