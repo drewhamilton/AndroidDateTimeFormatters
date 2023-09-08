@@ -401,7 +401,10 @@ class AndroidDateTimeFormatterTest(
         Italy(
             value = Locale.ITALY,
             preferredTimeSetting = TIME_SETTING_24,
-            shortTime12 = "6:01 PM",
+            shortTime12 = when {
+                Build.VERSION.SDK_INT>= 22 -> "6:01 PM"
+                else -> "06:01 PM"
+            },
             shortTime24 = "18:01",
             mediumTime = when {
                 Build.VERSION.SDK_INT >= 26 -> "18:01:00"
@@ -414,9 +417,13 @@ class AndroidDateTimeFormatterTest(
             shortDate = "07/09/23",
             mediumDate = when {
                 Build.VERSION.SDK_INT >= 23 -> "7 set 2023"
-                else -> "7/set/2023"
+                Build.VERSION.SDK_INT >= 22 -> "7/set/2023"
+                else -> "07/set/2023"
             },
-            longDate = "7 settembre 2023",
+            longDate = when {
+                Build.VERSION.SDK_INT >= 22 -> "7 settembre 2023"
+                else -> "07 settembre 2023"
+            },
             fullDate = "giovedì 7 settembre 2023",
             skeletonMMMMd = "7 settembre",
         ),
@@ -427,7 +434,10 @@ class AndroidDateTimeFormatterTest(
             shortTime24 = "18:01",
             mediumTime = "18:01:00",
             longTime = "18:01:00 GMT-05:00",
-            fullTime = "18:01:00 heure d’été du Centre",
+            fullTime = when {
+                Build.VERSION.SDK_INT >= 22 -> "18:01:00 heure d’été du Centre"
+                else -> "18:01:00 heure avancée du Centre"
+            },
             shortDate = "07/09/2023",
             mediumDate = "7 sept. 2023",
             longDate = "7 septembre 2023",
@@ -456,7 +466,10 @@ class AndroidDateTimeFormatterTest(
             mediumTime = "18:01:00",
             longTime = "18:01:00 GMT-05:00",
             fullTime = "18:01:00 Центральная Америка, летнее время",
-            shortDate = "07.09.2023",
+            shortDate = when {
+                Build.VERSION.SDK_INT >= 22 -> "07.09.2023"
+                else -> "07.09.23"
+            },
             mediumDate = "7 сент. 2023 г.",
             longDate = "7 сентября 2023 г.",
             fullDate = "четверг, 7 сентября 2023 г.",
