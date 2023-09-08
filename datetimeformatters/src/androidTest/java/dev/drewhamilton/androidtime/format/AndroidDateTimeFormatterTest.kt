@@ -378,7 +378,7 @@ class AndroidDateTimeFormatterTest(
      * On older APIs, the desugar libs do better than the system format did for alternate alphabets.
      */
     private fun assumeShortTime12ShouldMatchLegacySystemFormat() = assumeFalse(
-        Build.VERSION.SDK_INT < 21 &&
+        Build.VERSION.SDK_INT < 22 &&
                 locale in setOf(TestLocale.Japan, TestLocale.Russian, TestLocale.Persian)
     )
 
@@ -415,7 +415,7 @@ class AndroidDateTimeFormatterTest(
             value = Locale.ITALY,
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = when {
-                Build.VERSION.SDK_INT>= 22 -> "6:01 PM"
+                Build.VERSION.SDK_INT>= 23 -> "6:01 PM"
                 else -> "06:01 PM"
             },
             shortTime24 = "18:01",
@@ -430,11 +430,10 @@ class AndroidDateTimeFormatterTest(
             shortDate = "07/09/23",
             mediumDate = when {
                 Build.VERSION.SDK_INT >= 23 -> "7 set 2023"
-                Build.VERSION.SDK_INT >= 22 -> "7/set/2023"
                 else -> "07/set/2023"
             },
             longDate = when {
-                Build.VERSION.SDK_INT >= 22 -> "7 settembre 2023"
+                Build.VERSION.SDK_INT >= 23 -> "7 settembre 2023"
                 else -> "07 settembre 2023"
             },
             fullDate = "giovedì 7 settembre 2023",
@@ -445,10 +444,14 @@ class AndroidDateTimeFormatterTest(
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = "6:01 PM",
             shortTime24 = "18:01",
-            mediumTime = "18:01:00",
+            mediumTime = when {
+                Build.VERSION.SDK_INT >= 23 -> "18:01:00"
+                Build.VERSION.SDK_INT >= 22 -> "6:01:00 PM"
+                else -> "18:01:00"
+            },
             longTime = "18:01:00 GMT-05:00",
             fullTime = when {
-                Build.VERSION.SDK_INT >= 22 -> "18:01:00 heure d’été du Centre"
+                Build.VERSION.SDK_INT >= 23 -> "18:01:00 heure d’été du Centre"
                 else -> "18:01:00 heure avancée du Centre"
             },
             shortDate = "07/09/2023",
@@ -462,7 +465,11 @@ class AndroidDateTimeFormatterTest(
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = "午後6:01",
             shortTime24 = "18:01",
-            mediumTime = "18:01:00",
+            mediumTime = when {
+                Build.VERSION.SDK_INT >= 23 -> "18:01:00"
+                Build.VERSION.SDK_INT >= 22 -> "午後6:01:00"
+                else -> "18:01:00"
+            },
             longTime = "18:01:00 GMT-05:00",
             fullTime = "18時01分00秒 アメリカ中部夏時間",
             shortDate = "2023/09/07",
@@ -474,23 +481,30 @@ class AndroidDateTimeFormatterTest(
         Russian(
             value = Locale("ru"),
             preferredTimeSetting = TIME_SETTING_24,
-            shortTime12 = "6:01 после полудня",
+            shortTime12 = when {
+                Build.VERSION.SDK_INT >= 21 -> "6:01 PM"
+                else -> "6:01 после полудня"
+            },
             shortTime24 = "18:01",
-            mediumTime = "18:01:00",
+            mediumTime = when {
+                Build.VERSION.SDK_INT >= 23 -> "18:01:00"
+                Build.VERSION.SDK_INT >= 22 -> "6:01:00 PM"
+                else -> "18:01:00"
+            },
             longTime = when {
-                Build.VERSION.SDK_INT >= 22 -> "18:01:00 GMT-05:00"
+                Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
                 else -> "18:01:00 CDT"
             },
             fullTime = when {
-                Build.VERSION.SDK_INT >= 22 -> "18:01:00 Центральная Америка, летнее время"
+                Build.VERSION.SDK_INT >= 21 -> "18:01:00 Центральная Америка, летнее время"
                 else -> "18:01:00 Средне-американское летнее время"
             },
             shortDate = when {
-                Build.VERSION.SDK_INT >= 22 -> "07.09.2023"
+                Build.VERSION.SDK_INT >= 23 -> "07.09.2023"
                 else -> "07.09.23"
             },
             mediumDate = when {
-                Build.VERSION.SDK_INT >= 22 -> "7 сент. 2023 г."
+                Build.VERSION.SDK_INT >= 21 -> "7 сент. 2023 г."
                 else -> "07 сент. 2023 г."
             },
             longDate = "7 сентября 2023 г.",
@@ -502,9 +516,13 @@ class AndroidDateTimeFormatterTest(
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = "6:01 بعدازظهر",
             shortTime24 = "18:01",
-            mediumTime = "18:01:00",
+            mediumTime = when {
+                Build.VERSION.SDK_INT >= 23 -> "18:01:00"
+                Build.VERSION.SDK_INT >= 22 -> "6:01:00 بعدازظهر"
+                else -> "18:01:00"
+            },
             longTime = when {
-                Build.VERSION.SDK_INT >= 22 -> "18:01:00 (GMT-05:00)"
+                Build.VERSION.SDK_INT >= 21 -> "18:01:00 (GMT-05:00)"
                 else -> "18:01:00 (CDT)"
             },
             fullTime = "18:01:00 (وقت تابستانی مرکز امریکا)",
