@@ -1,10 +1,11 @@
 public final class dev/drewhamilton/androidtime/format/AndroidDateTimeFormatter {
-	public static fun ofLocalizedDate (Landroid/content/Context;Ljava/time/format/FormatStyle;)Ljava/time/format/DateTimeFormatter;
-	public static fun ofLocalizedDateTime (Landroid/content/Context;Ljava/time/format/FormatStyle;)Ljava/time/format/DateTimeFormatter;
-	public static fun ofLocalizedDateTime (Landroid/content/Context;Ljava/time/format/FormatStyle;Ljava/time/format/FormatStyle;)Ljava/time/format/DateTimeFormatter;
-	public static fun ofLocalizedTime (Landroid/content/Context;)Ljava/time/format/DateTimeFormatter;
-	public static fun ofLocalizedTime (Landroid/content/Context;Ljava/time/format/FormatStyle;)Ljava/time/format/DateTimeFormatter;
-	public static fun ofSkeleton (Ljava/lang/String;Landroid/content/Context;)Ljava/time/format/DateTimeFormatter;
-	public static fun ofSkeleton (Ljava/lang/String;Ljava/util/Locale;)Ljava/time/format/DateTimeFormatter;
+	public static final field INSTANCE Ldev/drewhamilton/androidtime/format/AndroidDateTimeFormatter;
+	public static final fun ofLocalizedDate (Landroid/content/Context;Ljava/time/format/FormatStyle;)Ljava/time/format/DateTimeFormatter;
+	public static final fun ofLocalizedDateTime (Landroid/content/Context;Ljava/time/format/FormatStyle;)Ljava/time/format/DateTimeFormatter;
+	public static final fun ofLocalizedDateTime (Landroid/content/Context;Ljava/time/format/FormatStyle;Ljava/time/format/FormatStyle;)Ljava/time/format/DateTimeFormatter;
+	public static final fun ofLocalizedTime (Landroid/content/Context;)Ljava/time/format/DateTimeFormatter;
+	public static final fun ofLocalizedTime (Landroid/content/Context;Ljava/time/format/FormatStyle;)Ljava/time/format/DateTimeFormatter;
+	public static final fun ofSkeleton (Ljava/lang/String;Landroid/content/Context;)Ljava/time/format/DateTimeFormatter;
+	public static final fun ofSkeleton (Ljava/lang/String;Ljava/util/Locale;)Ljava/time/format/DateTimeFormatter;
 }
 
