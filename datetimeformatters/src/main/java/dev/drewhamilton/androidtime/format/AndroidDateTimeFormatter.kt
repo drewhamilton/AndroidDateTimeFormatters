@@ -25,8 +25,7 @@ object AndroidDateTimeFormatter {
      * Returns a [DateTimeFormatter] that can format the time for the ISO chronology according to the [context]'s locale
      * and the user's 12-/24-hour clock preference. Overload which uses [FormatStyle.SHORT].
      */
-    // TODO: Can `open` be removed and retain compatibility?
-    @JvmStatic open fun ofLocalizedTime(
+    @JvmStatic fun ofLocalizedTime(
         context: Context,
     ): DateTimeFormatter = ofLocalizedTime(context, FormatStyle.SHORT)
 
@@ -39,7 +38,7 @@ object AndroidDateTimeFormatter {
      * styles, a [java.time.ZoneId] must be available, either by using [java.time.ZonedDateTime] or
      * [DateTimeFormatter.withZone].
      */
-    @JvmStatic open fun ofLocalizedTime(
+    @JvmStatic fun ofLocalizedTime(
         context: Context,
         timeStyle: FormatStyle,
     ): DateTimeFormatter {
@@ -65,7 +64,7 @@ object AndroidDateTimeFormatter {
      * Creates a [DateTimeFormatter] that can format the date for the ISO chronology according to the [context]'s
      * primary locale and the given [dateStyle].
      */
-    @JvmStatic open fun ofLocalizedDate(
+    @JvmStatic fun ofLocalizedDate(
         context: Context,
         dateStyle: FormatStyle,
     ): DateTimeFormatter {
@@ -82,7 +81,7 @@ object AndroidDateTimeFormatter {
      * styles, a [java.time.ZoneId] must be available, either by using [java.time.ZonedDateTime] or
      * [DateTimeFormatter.withZone].
      */
-    @JvmStatic open fun ofLocalizedDateTime(
+    @JvmStatic fun ofLocalizedDateTime(
         context: Context,
         dateTimeStyle: FormatStyle,
     ): DateTimeFormatter {
@@ -107,7 +106,7 @@ object AndroidDateTimeFormatter {
      * these styles, a [java.time.ZoneId] must be available, either by using [java.time.ZonedDateTime] or
      * [DateTimeFormatter.withZone].
      */
-    @JvmStatic open fun ofLocalizedDateTime(
+    @JvmStatic fun ofLocalizedDateTime(
         context: Context,
         dateStyle: FormatStyle,
         timeStyle: FormatStyle,
@@ -182,7 +181,7 @@ object AndroidDateTimeFormatter {
      * in your format string but don't want to make your code specific to any one locale.
      */
     @RequiresApi(18)
-    @JvmStatic open fun ofSkeleton(
+    @JvmStatic fun ofSkeleton(
         skeleton: String,
         context: Context,
     ): DateTimeFormatter {
@@ -209,7 +208,7 @@ object AndroidDateTimeFormatter {
      * in your format string but don't want to make your code specific to any one locale.
      */
     @RequiresApi(18)
-    @JvmStatic open fun ofSkeleton(
+    @JvmStatic fun ofSkeleton(
         skeleton: String,
         locale: Locale,
     ): DateTimeFormatter {
@@ -228,7 +227,7 @@ object AndroidDateTimeFormatter {
             }
         }
         if (locale == null) {
-            @Suppress("DEPRECATION") // Fallback to newer API approach
+            @Suppress("DEPRECATION") // Fallback for newer API approach
             locale = configuration.locale
         }
         if (locale == null) {
