@@ -24,6 +24,9 @@ object AndroidDateTimeFormatter {
     /**
      * Returns a [DateTimeFormatter] that can format the time for the ISO chronology according to the [context]'s locale
      * and the user's 12-/24-hour clock preference. Overload which uses [FormatStyle.SHORT].
+     *
+     * The formatter's pattern may be eagerly determined, meaning appending [DateTimeFormatter.withLocale] to the
+     * returned formatter is not guaranteed to fully localize the result.
      */
     @JvmStatic fun ofLocalizedTime(
         context: Context,
@@ -37,6 +40,9 @@ object AndroidDateTimeFormatter {
      * The [FormatStyle.FULL] and [FormatStyle.LONG] styles typically require a time zone. When formatting using these
      * styles, a [java.time.ZoneId] must be available, either by using [java.time.ZonedDateTime] or
      * [DateTimeFormatter.withZone].
+     *
+     * The formatter's pattern may be eagerly determined, meaning appending [DateTimeFormatter.withLocale] to the
+     * returned formatter is not guaranteed to fully localize the result.
      */
     @JvmStatic fun ofLocalizedTime(
         context: Context,
@@ -52,7 +58,8 @@ object AndroidDateTimeFormatter {
             } else {
                 return DateTimeFormatterBuilder()
                     .appendPattern(pattern)
-                    .toFormatter(contextPrimaryLocale) // Match java.time's ofLocalizedTime, which also hard-codes IsoChronology:
+                    .toFormatter(contextPrimaryLocale)
+                    // Match java.time's ofLocalizedTime, which also hard-codes IsoChronology:
                     .withChronology(IsoChronology.INSTANCE)
             }
         }
@@ -63,6 +70,9 @@ object AndroidDateTimeFormatter {
     /**
      * Creates a [DateTimeFormatter] that can format the date for the ISO chronology according to the [context]'s
      * primary locale and the given [dateStyle].
+     *
+     * The formatter's pattern may be eagerly determined, meaning appending [DateTimeFormatter.withLocale] to the
+     * returned formatter is not guaranteed to fully localize the result.
      */
     @JvmStatic fun ofLocalizedDate(
         context: Context,
@@ -80,6 +90,9 @@ object AndroidDateTimeFormatter {
      * The [FormatStyle.FULL] and [FormatStyle.LONG] styles typically require a time zone. When formatting using these
      * styles, a [java.time.ZoneId] must be available, either by using [java.time.ZonedDateTime] or
      * [DateTimeFormatter.withZone].
+     *
+     * The formatter's pattern may be eagerly determined, meaning appending [DateTimeFormatter.withLocale] to the
+     * returned formatter is not guaranteed to fully localize the result.
      */
     @JvmStatic fun ofLocalizedDateTime(
         context: Context,
@@ -87,8 +100,7 @@ object AndroidDateTimeFormatter {
     ): DateTimeFormatter {
         // If format is SHORT, try system 12-/24-hour setting-specific time format:
         if (dateTimeStyle == FormatStyle.SHORT) {
-            val systemSpecificFormatter =
-                attemptSystemSettingDateTimeFormatter(context, dateTimeStyle, dateTimeStyle)
+            val systemSpecificFormatter = attemptSystemSettingDateTimeFormatter(context, dateTimeStyle, dateTimeStyle)
             if (systemSpecificFormatter != null) return systemSpecificFormatter
         }
 
@@ -105,6 +117,9 @@ object AndroidDateTimeFormatter {
      * The [FormatStyle.FULL] and [FormatStyle.LONG] time styles typically require a time zone. When formatting using
      * these styles, a [java.time.ZoneId] must be available, either by using [java.time.ZonedDateTime] or
      * [DateTimeFormatter.withZone].
+     *
+     * The formatter's pattern may be eagerly determined, meaning appending [DateTimeFormatter.withLocale] to the
+     * returned formatter is not guaranteed to fully localize the result.
      */
     @JvmStatic fun ofLocalizedDateTime(
         context: Context,
@@ -127,36 +142,38 @@ object AndroidDateTimeFormatter {
         dateStyle: FormatStyle,
         timeStyle: FormatStyle,
     ): DateTimeFormatter? {
-        val timePattern = getSystemTimeSettingAwareShortTimePattern(context)
-        if (timePattern != null) {
-            val contextPrimaryLocale = context.extractPrimaryLocale()
-            val defaultDateTimePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
-                dateStyle, timeStyle,
-                IsoChronology.INSTANCE, contextPrimaryLocale
-            )
-            val defaultTimePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
-                null, timeStyle,
-                IsoChronology.INSTANCE, contextPrimaryLocale
-            )
-            if (timePattern != defaultTimePattern && defaultDateTimePattern.contains(defaultTimePattern)) {
-                // We can replace the default time pattern with the system-specific one:
-                val dateTimePattern: String = defaultDateTimePattern.replace(defaultTimePattern, timePattern)
-                return DateTimeFormatterBuilder()
-                    .appendPattern(dateTimePattern)
-                    .toFormatter(contextPrimaryLocale) // Match java.time's ofLocalizedDateTime, which also hard-codes IsoChronology:
-                    .withChronology(IsoChronology.INSTANCE)
-            }
+        val timePattern = getSystemTimeSettingAwareShortTimePattern(context) ?: return null
+
+        val contextPrimaryLocale = context.extractPrimaryLocale()
+        val defaultDateTimePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
+            dateStyle,
+            timeStyle,
+            IsoChronology.INSTANCE,
+            contextPrimaryLocale,
+        )
+        val defaultTimePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
+            null,
+            timeStyle,
+            IsoChronology.INSTANCE,
+            contextPrimaryLocale,
+        )
+
+        if (timePattern != defaultTimePattern && defaultDateTimePattern.contains(defaultTimePattern)) {
+            // We can replace the default time pattern with the system-specific one:
+            val dateTimePattern: String = defaultDateTimePattern.replace(defaultTimePattern, timePattern)
+            return DateTimeFormatterBuilder()
+                .appendPattern(dateTimePattern)
+                .toFormatter(contextPrimaryLocale)
+                // Match java.time's ofLocalizedDateTime, which also hard-codes IsoChronology:
+                .withChronology(IsoChronology.INSTANCE)
         }
+
         return null
     }
 
     @JvmStatic private fun getSystemTimeSettingAwareShortTimePattern(context: Context): String? {
-        val legacyFormat = DateFormat.getTimeFormat(context)
-        return if (legacyFormat is SimpleDateFormat) {
-            legacyFormat.toPattern()
-        } else {
-            null
-        }
+        val legacyFormat = DateFormat.getTimeFormat(context) as? SimpleDateFormat
+        return legacyFormat?.toLocalizedPattern()
     }
     //endregion
 
