@@ -196,6 +196,9 @@ object AndroidDateTimeFormatter {
      *
      * This function will only use patterns that are in CLDR, and is useful whenever you know what elements you want
      * in your format string but don't want to make your code specific to any one locale.
+     *
+     * The formatter's pattern is eagerly determined, meaning appending [DateTimeFormatter.withLocale] to the returned
+     * formatter is not guaranteed to fully localize the result.
      */
     @RequiresApi(18)
     @JvmStatic fun ofSkeleton(
@@ -223,6 +226,9 @@ object AndroidDateTimeFormatter {
      *
      * This function will only use patterns that are in CLDR, and is useful whenever you know what elements you want
      * in your format string but don't want to make your code specific to any one locale.
+     *
+     * The formatter's pattern is eagerly determined, meaning appending [DateTimeFormatter.withLocale] to the returned
+     * formatter is not guaranteed to fully localize the result.
      */
     @RequiresApi(18)
     @JvmStatic fun ofSkeleton(
