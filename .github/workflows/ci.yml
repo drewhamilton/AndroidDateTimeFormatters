@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        api-level: [ 30, 32, 33 ]
+        api-level: [ 29, 30, 32 ]
         arch: [ x86_64 ]
         include:
           - api-level: 19
@@ -35,7 +35,6 @@ jobs:
           arguments: build --stacktrace
 
       - name: Set up emulator cache
-        if: ${{ matrix.api-level }} != 33
         uses: actions/cache@v3
         id: avd-cache
         with:
@@ -45,7 +44,7 @@ jobs:
           key: avd-${{ matrix.api-level }}-${{ matrix.arch }}
 
       - name: Create emulator and generate snapshot for caching
-        if: ${{ matrix.api-level }} == 33 || steps.avd-cache.outputs.cache-hit != 'true'
+        if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
