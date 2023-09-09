@@ -43,7 +43,7 @@ object AndroidDateTimeFormatter {
         context: Context,
         timeStyle: FormatStyle,
     ): DateTimeFormatter {
-        val contextPrimaryLocale = extractPrimaryLocale(context)
+        val contextPrimaryLocale = context.extractPrimaryLocale()
 
         // If format is SHORT, try system 12-/24-hour setting-specific time format:
         if (timeStyle == FormatStyle.SHORT) {
@@ -70,7 +70,7 @@ object AndroidDateTimeFormatter {
         dateStyle: FormatStyle,
     ): DateTimeFormatter {
         return DateTimeFormatter.ofLocalizedDate(dateStyle)
-            .withLocale(extractPrimaryLocale(context))
+            .withLocale(context.extractPrimaryLocale())
     }
 
     /**
@@ -95,7 +95,7 @@ object AndroidDateTimeFormatter {
 
         // Either the format is not SHORT or we otherwise can't insert the system-specific pattern:
         return DateTimeFormatter.ofLocalizedDateTime(dateTimeStyle)
-            .withLocale(extractPrimaryLocale(context))
+            .withLocale(context.extractPrimaryLocale())
     }
 
     /**
@@ -120,7 +120,7 @@ object AndroidDateTimeFormatter {
 
         // Either the time format is not SHORT or we otherwise can't insert the system-specific pattern:
         return DateTimeFormatter.ofLocalizedDateTime(dateStyle, timeStyle)
-            .withLocale(extractPrimaryLocale(context))
+            .withLocale(context.extractPrimaryLocale())
     }
 
     @JvmStatic private fun attemptSystemSettingDateTimeFormatter(
@@ -130,7 +130,7 @@ object AndroidDateTimeFormatter {
     ): DateTimeFormatter? {
         val timePattern = getSystemTimeSettingAwareShortTimePattern(context)
         if (timePattern != null) {
-            val contextPrimaryLocale = extractPrimaryLocale(context)
+            val contextPrimaryLocale = context.extractPrimaryLocale()
             val defaultDateTimePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
                 dateStyle, timeStyle,
                 IsoChronology.INSTANCE, contextPrimaryLocale
@@ -186,7 +186,7 @@ object AndroidDateTimeFormatter {
         skeleton: String,
         context: Context,
     ): DateTimeFormatter {
-        return ofSkeleton(skeleton, extractPrimaryLocale(context))
+        return ofSkeleton(skeleton, context.extractPrimaryLocale())
     }
 
     /**
@@ -218,8 +218,8 @@ object AndroidDateTimeFormatter {
     }
     //endregion
 
-    @JvmStatic private fun extractPrimaryLocale(context: Context): Locale {
-        val configuration = context.resources.configuration
+    @JvmStatic private fun Context.extractPrimaryLocale(): Locale {
+        val configuration = resources.configuration
         var locale: Locale? = null
         if (Build.VERSION.SDK_INT >= 24) {
             val localeList = configuration.locales
@@ -228,6 +228,7 @@ object AndroidDateTimeFormatter {
             }
         }
         if (locale == null) {
+            @Suppress("DEPRECATION") // Fallback to newer API approach
             locale = configuration.locale
         }
         if (locale == null) {
