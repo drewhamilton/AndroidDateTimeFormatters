@@ -49,6 +49,8 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugarJdkLibs)
 
+    implementation(project(":datetimeformatters"))
+
     implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.activity.compose)
