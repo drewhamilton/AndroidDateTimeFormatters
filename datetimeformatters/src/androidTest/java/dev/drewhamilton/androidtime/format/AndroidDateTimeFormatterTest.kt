@@ -16,6 +16,7 @@ import java.util.Locale
 import java.util.TimeZone
 import org.junit.Assume.assumeFalse
 import org.junit.Assume.assumeTrue
+import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.Date as JavaUtilDate
@@ -609,5 +610,17 @@ class AndroidDateTimeFormatterTest(
                 TIME_SETTING_24 -> shortTime24
                 else -> throw AssertionError("Invalid preferred time setting: $preferredTimeSetting")
             }
+    }
+
+    companion object {
+        /**
+         * This class has strange behavior on APIs 22 through 27, inconsistently using the wrong
+         * 12/24 setting on short and/or medium times despite editing the system setting.
+         * Preemptively fail on these APIs to avoid confusion.
+         */
+        @BeforeClass
+        @JvmStatic fun preventApis22Through27() {
+            assertThat(Build.VERSION.SDK_INT).isNotIn(22..27)
+        }
     }
 }
