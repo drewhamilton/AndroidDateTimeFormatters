@@ -383,10 +383,15 @@ class AndroidDateTimeFormatterTest(
     //endregion
 
     /**
-     * On older APIs, the desugar libs do better than the system format did for alternate alphabets.
+     * On older APIs, the desugar libs do better than the system format did for some locales.
      */
     private fun assumeShortTime12ShouldMatchLegacySystemFormat() = assumeFalse(
-        Build.VERSION.SDK_INT < 28 && locale in setOf(TestLocale.Japan, TestLocale.Russian, TestLocale.Persian)
+        Build.VERSION.SDK_INT < 28 && locale in setOf(
+            TestLocale.CanadaFrench,
+            TestLocale.Japan,
+            TestLocale.Russian,
+            TestLocale.Persian,
+        )
     )
 
     /**
@@ -477,6 +482,43 @@ class AndroidDateTimeFormatterTest(
             },
             shortDate = "07/09/2023",
             mediumDate = "7 sept. 2023",
+            longDate = "7 septembre 2023",
+            fullDate = "jeudi 7 septembre 2023",
+            skeletonMMMMd = "7 septembre",
+        ),
+        CanadaFrench(
+            value = Locale.CANADA_FRENCH,
+            preferredTimeSetting = TIME_SETTING_24,
+            shortTime12 = when {
+                Build.VERSION.SDK_INT >= 28 -> "6 h 01 p.m."
+                Build.VERSION.SDK_INT >= 26 -> "6:01 p.m."
+                else -> "6:01 PM"
+            },
+            shortTime24 = when {
+                Build.VERSION.SDK_INT >= 28 -> "18 h 01"
+                else -> "18:01"
+            },
+            mediumTime = when {
+                Build.VERSION.SDK_INT >= 28 -> "18 h 01 min 00 s"
+                else -> "18:01:00"
+            },
+            longTime = when {
+                Build.VERSION.SDK_INT >= 28 -> "18 h 01 min 00 s HAC"
+                else -> "18:01:00 HAC"
+            },
+            fullTime = when {
+                Build.VERSION.SDK_INT >= 28 -> "18 h 01 min 00 s heure avancée du Centre"
+                Build.VERSION.SDK_INT >= 23 -> "18:01:00 heure avancée du Centre"
+                else -> "18 h 01 min 00 s heure avancée du Centre"
+            },
+            shortDate = when {
+                Build.VERSION.SDK_INT >= 30 -> "2023-09-07"
+                else -> "23-09-07"
+            },
+            mediumDate = when {
+                Build.VERSION.SDK_INT >= 23 -> "7 sept. 2023"
+                else -> "2023-09-07"
+            },
             longDate = "7 septembre 2023",
             fullDate = "jeudi 7 septembre 2023",
             skeletonMMMMd = "7 septembre",
