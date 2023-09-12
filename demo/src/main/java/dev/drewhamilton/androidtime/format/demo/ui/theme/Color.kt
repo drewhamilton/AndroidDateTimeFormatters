@@ -1,4 +1,4 @@
-package dev.drewhamilton.androidtime.format.demo.theme
+package dev.drewhamilton.androidtime.format.demo.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

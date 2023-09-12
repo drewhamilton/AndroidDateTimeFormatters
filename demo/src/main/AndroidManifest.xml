@@ -7,14 +7,15 @@
       android:name=".DemoApp"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
-      android:theme="@style/Theme.AndroidDateTimeFormatters"
+      android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
       android:allowBackup="false"
       android:supportsRtl="true"
       tools:ignore="AllowBackup,DataExtractionRules,GoogleAppIndexingWarning">
 
     <activity
         android:name=".DemoActivity"
-        android:exported="true">
+        android:exported="true"
+        android:windowSoftInputMode="adjustResize">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />

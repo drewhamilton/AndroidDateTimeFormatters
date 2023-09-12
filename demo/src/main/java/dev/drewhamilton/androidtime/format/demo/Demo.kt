@@ -8,17 +8,24 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.drewhamilton.androidtime.format.AndroidDateTimeFormatter
-import dev.drewhamilton.androidtime.format.demo.theme.DemoTheme
+import dev.drewhamilton.androidtime.format.demo.ui.plus
+import dev.drewhamilton.androidtime.format.demo.ui.theme.DemoTheme
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -26,54 +33,127 @@ import java.time.format.FormatStyle
 import android.text.format.DateFormat as AndroidTextDateFormat
 import java.util.Date as JavaUtilDate
 
+@OptIn(ExperimentalMaterial3Api::class) // Top app bar
 @Composable
 fun Demo(
     instant: Instant,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    Scaffold(
+        modifier = modifier
+            .background(color = MaterialTheme.colorScheme.background)
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.app_name))
+                },
+                scrollBehavior = scrollBehavior,
+            )
+        },
+    ) { contentPadding ->
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth(),
+            contentPadding = contentPadding + PaddingValues(16.dp),
+        ) {
+            item {
+                FormatComparison(
+                    instant = instant,
+                    dateTimeType = DateTimeType.Time,
+                    formatStyle = FormatStyle.SHORT,
+                )
+            }
 
-    val zone = ZoneId.systemDefault()
-    val time = remember(instant, zone) { instant.atZone(zone).toLocalTime() }
+            item {
+                FormatComparison(
+                    instant = instant,
+                    dateTimeType = DateTimeType.Time,
+                    formatStyle = FormatStyle.MEDIUM,
+                )
+            }
 
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.Center,
+            item {
+                FormatComparison(
+                    instant = instant,
+                    dateTimeType = DateTimeType.DateTime,
+                    formatStyle = FormatStyle.LONG,
+                )
+            }
+
+            item {
+                FormatComparison(
+                    instant = instant,
+                    dateTimeType = DateTimeType.Date,
+                    formatStyle = FormatStyle.FULL,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun FormatComparison(
+    instant: Instant,
+    dateTimeType: DateTimeType,
+    formatStyle: FormatStyle,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .padding(vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        item {
-            val formatter = AndroidDateTimeFormatter.ofLocalizedTime(context, FormatStyle.SHORT)
-            val formattedTime = remember(formatter, time) {
-                formatter.format(time)
-            }
-            LabeledText(
-                label = "Short time AndroidDateTimeFormatter",
-                value = formattedTime,
-            )
-        }
+        Text(
+            text = "$dateTimeType, ${formatStyle.toString().lowercase()}",
+            style = MaterialTheme.typography.titleMedium,
+        )
 
-        item {
-            val formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
-            val formattedTime = remember(formatter, time) {
-                formatter.format(time)
-            }
-            LabeledText(
-                label = "Short time DateTimeFormatter",
-                value = formattedTime,
-            )
-        }
+        val context = LocalContext.current
 
-        item {
-            val formatter = remember(context) { AndroidTextDateFormat.getTimeFormat(context) }
+        val zone = ZoneId.systemDefault()
+        val zonedDateTime = remember(instant, zone) { instant.atZone(zone) }
+
+        val androidFormatter = when (dateTimeType) {
+            DateTimeType.Time ->
+                AndroidDateTimeFormatter.ofLocalizedTime(context, formatStyle)
+            DateTimeType.Date ->
+                AndroidDateTimeFormatter.ofLocalizedDate(context, formatStyle)
+            DateTimeType.DateTime ->
+                AndroidDateTimeFormatter.ofLocalizedDateTime(context, formatStyle)
+        }
+        LabeledText(
+            label = "AndroidDateTimeFormatter",
+            value = androidFormatter.format(zonedDateTime),
+        )
+
+        val standardFormatter = when (dateTimeType) {
+            DateTimeType.Time -> DateTimeFormatter.ofLocalizedTime(formatStyle)
+            DateTimeType.Date -> DateTimeFormatter.ofLocalizedDate(formatStyle)
+            DateTimeType.DateTime -> DateTimeFormatter.ofLocalizedDateTime(formatStyle)
+        }
+        LabeledText(
+            label = "DateTimeFormatter",
+            value = standardFormatter.format(zonedDateTime),
+        )
+
+        if (formatStyle == FormatStyle.SHORT) {
+            val legacyDateFormat = AndroidTextDateFormat.getTimeFormat(context)
             val legacyDate = JavaUtilDate(instant.toEpochMilli())
-            val formattedLegacyDate = remember(formatter, legacyDate) {
-                formatter.format(legacyDate)
-            }
             LabeledText(
-                label = "java.util.Date short time",
-                value = formattedLegacyDate,
+                label = "android.text.format.DateFormat",
+                value = legacyDateFormat.format(legacyDate),
             )
         }
+    }
+}
+
+private enum class DateTimeType {
+    Time,
+    Date,
+    DateTime {
+        override fun toString() = "Date-time"
     }
 }
 
@@ -89,27 +169,25 @@ private fun LabeledText(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.labelMedium,
+            fontFamily = FontFamily.Monospace,
         )
         Text(
             text = value,
-            style = MaterialTheme.typography.displaySmall,
+            style = MaterialTheme.typography.bodyLarge,
         )
     }
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun GreetingPreview() {
     DemoTheme {
-        Surface(
+        Demo(
+            instant = Instant.now(),
             modifier = Modifier
-                .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.background),
-        ) {
-            Demo(
-                instant = Instant.now(),
-            )
-        }
+                .fillMaxWidth(),
+        )
     }
 }
