@@ -439,12 +439,7 @@ class AndroidDateTimeFormatterTest(
                 else -> "06:01 PM"
             },
             shortTime24 = "18:01",
-            mediumTime = when {
-                Build.VERSION.SDK_INT >= 26 -> "18:01:00"
-                Build.VERSION.SDK_INT >= 23 -> "6:01:00 PM"
-                Build.VERSION.SDK_INT >= 22 -> "06:01:00 PM"
-                else -> "18:01:00"
-            },
+            mediumTime = "18:01:00",
             longTime = when {
                 Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
                 else -> "18:01:00 CDT"
@@ -468,11 +463,7 @@ class AndroidDateTimeFormatterTest(
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = "6:01 PM",
             shortTime24 = "18:01",
-            mediumTime = when {
-                Build.VERSION.SDK_INT >= 26 -> "18:01:00"
-                Build.VERSION.SDK_INT >= 22 -> "6:01:00 PM"
-                else -> "18:01:00"
-            },
+            mediumTime = "18:01:00",
             longTime = when {
                 Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
                 else -> "18:01:00 CDT"
@@ -529,11 +520,7 @@ class AndroidDateTimeFormatterTest(
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = "午後6:01",
             shortTime24 = "18:01",
-            mediumTime = when {
-                Build.VERSION.SDK_INT >= 26 -> "18:01:00"
-                Build.VERSION.SDK_INT >= 22 -> "午後6:01:00"
-                else -> "18:01:00"
-            },
+            mediumTime = "18:01:00",
             longTime = when {
                 Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
                 else -> "18:01:00 CDT"
@@ -555,12 +542,7 @@ class AndroidDateTimeFormatterTest(
                 else -> "6:01 после полудня"
             },
             shortTime24 = "18:01",
-            mediumTime = when {
-                Build.VERSION.SDK_INT >= 26 -> "18:01:00"
-                Build.VERSION.SDK_INT >= 24 -> "6:01:00 ПП"
-                Build.VERSION.SDK_INT >= 22 -> "6:01:00 PM"
-                else -> "18:01:00"
-            },
+            mediumTime = "18:01:00",
             longTime = when {
                 Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
                 else -> "18:01:00 CDT"
@@ -586,11 +568,7 @@ class AndroidDateTimeFormatterTest(
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = "6:01 بعدازظهر",
             shortTime24 = "18:01",
-            mediumTime = when {
-                Build.VERSION.SDK_INT >= 26 -> "18:01:00"
-                Build.VERSION.SDK_INT >= 22 -> "6:01:00 بعدازظهر"
-                else -> "18:01:00"
-            },
+            mediumTime = "18:01:00",
             longTime = when {
                 Build.VERSION.SDK_INT >= 21 -> "18:01:00 (GMT-05:00)"
                 else -> "18:01:00 (CDT)"
