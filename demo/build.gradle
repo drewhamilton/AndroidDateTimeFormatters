@@ -1,19 +1,23 @@
 plugins {
     alias(libs.plugins.android.app)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
+    namespace = 'dev.drewhamilton.androidtime.format.demo'
     compileSdk = rootProject.ext.compileSdk
-    namespace = "dev.drewhamilton.androidtime.format.demo"
 
     defaultConfig {
         applicationId "dev.drewhamilton.androidtime.format.demo"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion rootProject.ext.compileSdk
         versionCode 1
         versionName rootProject.property("VERSION_NAME")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
 
         // Support core library desugaring:
         multiDexEnabled true
@@ -31,17 +35,30 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         coreLibraryDesugaringEnabled true
     }
-
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
     buildFeatures {
-        viewBinding true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.androidx.compose.compiler.get().version
     }
 }
 
 dependencies {
-    implementation(project(':datetimeformatters'))
-
-    implementation(libs.multidex)
     coreLibraryDesugaring(libs.desugarJdkLibs)
 
+    implementation(platform(libs.androidx.compose.bom))
+
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.compose.ui.core)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.coreKtx)
+    implementation(libs.multidex)
+
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }

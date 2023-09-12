@@ -25,7 +25,6 @@ allprojects { project ->
 ext {
     compileSdk = 34
     multidexMinSdk = 4
-    threeTenAbpMinSdk = 15
     androidXMinSdk = 14
 
     keystore = project.hasProperty('personalKeystore') ? personalKeystore : 'x'

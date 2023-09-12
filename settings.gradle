@@ -9,3 +9,4 @@ rootProject.name='AndroidDateTimeFormatters'
 
 include ':datetimeformatters'
 include ':app'
+include ':demo'
