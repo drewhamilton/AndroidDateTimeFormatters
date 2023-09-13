@@ -9,6 +9,7 @@ android {
 
     defaultConfig {
         applicationId "dev.drewhamilton.androidtime.format.demo"
+        // If 26+, native java.time will be used. If lower, desugaring will be used:
         minSdkVersion 21
         targetSdkVersion rootProject.ext.compileSdk
         versionCode 1
