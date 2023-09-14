@@ -1,0 +1,67 @@
+plugins {
+    alias(libs.plugins.android.app)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    namespace = 'dev.drewhamilton.androidtime.format.demo'
+    compileSdk = rootProject.ext.compileSdk
+
+    defaultConfig {
+        applicationId "dev.drewhamilton.androidtime.format.demo"
+        // If 26+, native java.time will be used. If lower, desugaring will be used:
+        minSdkVersion 21
+        targetSdkVersion rootProject.ext.compileSdk
+        versionCode 1
+        versionName rootProject.property("VERSION_NAME")
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+
+        // Support core library desugaring:
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.androidx.compose.compiler.get().version
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring(libs.desugarJdkLibs)
+
+    implementation(project(":datetimeformatters"))
+
+    implementation(platform(libs.androidx.compose.bom))
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.compose.ui.core)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.coreKtx)
+    implementation(libs.multidex)
+
+    debugImplementation(libs.androidx.compose.ui.tooling)
+}
