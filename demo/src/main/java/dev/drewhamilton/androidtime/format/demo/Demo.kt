@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -75,13 +77,14 @@ fun Demo(
                 modifier = Modifier
                     .fillMaxWidth(),
                 contentPadding = contentPadding + PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
+                val fillMaxWidthModifier = Modifier.fillMaxWidth()
                 item {
                     LocaleOverrideField(
                         value = typedLocale,
                         onValueChange = { typedLocale = it },
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = fillMaxWidthModifier,
                     )
                 }
 
@@ -90,6 +93,7 @@ fun Demo(
                         instant = instant,
                         dateTimeType = DateTimeType.Time,
                         formatStyle = FormatStyle.SHORT,
+                        modifier = fillMaxWidthModifier,
                     )
                 }
 
@@ -98,6 +102,7 @@ fun Demo(
                         instant = instant,
                         dateTimeType = DateTimeType.Time,
                         formatStyle = FormatStyle.MEDIUM,
+                        modifier = fillMaxWidthModifier,
                     )
                 }
 
@@ -106,6 +111,7 @@ fun Demo(
                         instant = instant,
                         dateTimeType = DateTimeType.DateTime,
                         formatStyle = FormatStyle.LONG,
+                        modifier = fillMaxWidthModifier,
                     )
                 }
 
@@ -114,6 +120,7 @@ fun Demo(
                         instant = instant,
                         dateTimeType = DateTimeType.Date,
                         formatStyle = FormatStyle.FULL,
+                        modifier = fillMaxWidthModifier,
                     )
                 }
             }
@@ -155,7 +162,8 @@ private fun LocaleOverrideField(
         },
         placeholder = {
             Text(locale.toString())
-        }
+        },
+        shape = RoundedCornerShape(16.dp),
     )
 }
 
@@ -166,51 +174,59 @@ private fun FormatComparison(
     formatStyle: FormatStyle,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .padding(vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(32.dp),
+        tonalElevation = 1.dp,
     ) {
-        Text(
-            text = "$dateTimeType, ${formatStyle.toString().lowercase()}",
-            style = MaterialTheme.typography.titleMedium,
-        )
-
-        val context = LocalContext.current
-
-        val zone = ZoneId.systemDefault()
-        val zonedDateTime = remember(instant, zone) { instant.atZone(zone) }
-
-        val androidFormatter = when (dateTimeType) {
-            DateTimeType.Time ->
-                AndroidDateTimeFormatter.ofLocalizedTime(context, formatStyle)
-            DateTimeType.Date ->
-                AndroidDateTimeFormatter.ofLocalizedDate(context, formatStyle)
-            DateTimeType.DateTime ->
-                AndroidDateTimeFormatter.ofLocalizedDateTime(context, formatStyle)
-        }
-        LabeledText(
-            label = "AndroidDateTimeFormatter",
-            value = androidFormatter.format(zonedDateTime),
-        )
-
-        val standardFormatter = when (dateTimeType) {
-            DateTimeType.Time -> DateTimeFormatter.ofLocalizedTime(formatStyle)
-            DateTimeType.Date -> DateTimeFormatter.ofLocalizedDate(formatStyle)
-            DateTimeType.DateTime -> DateTimeFormatter.ofLocalizedDateTime(formatStyle)
-        }.withLocale(context.extractPrimaryLocale())
-        LabeledText(
-            label = "DateTimeFormatter",
-            value = standardFormatter.format(zonedDateTime),
-        )
-
-        if (formatStyle == FormatStyle.SHORT) {
-            val legacyDateFormat = AndroidTextDateFormat.getTimeFormat(context)
-            val legacyDate = JavaUtilDate(instant.toEpochMilli())
-            LabeledText(
-                label = "android.text.format.DateFormat",
-                value = legacyDateFormat.format(legacyDate),
+        Column(
+            modifier = Modifier
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Text(
+                text = "$dateTimeType, ${formatStyle.toString().lowercase()}",
+                style = MaterialTheme.typography.titleMedium,
             )
+
+            val context = LocalContext.current
+
+            val zone = ZoneId.systemDefault()
+            val zonedDateTime = remember(instant, zone) { instant.atZone(zone) }
+
+            val androidFormatter = when (dateTimeType) {
+                DateTimeType.Time ->
+                    AndroidDateTimeFormatter.ofLocalizedTime(context, formatStyle)
+
+                DateTimeType.Date ->
+                    AndroidDateTimeFormatter.ofLocalizedDate(context, formatStyle)
+
+                DateTimeType.DateTime ->
+                    AndroidDateTimeFormatter.ofLocalizedDateTime(context, formatStyle)
+            }
+            LabeledText(
+                label = "AndroidDateTimeFormatter",
+                value = androidFormatter.format(zonedDateTime),
+            )
+
+            val standardFormatter = when (dateTimeType) {
+                DateTimeType.Time -> DateTimeFormatter.ofLocalizedTime(formatStyle)
+                DateTimeType.Date -> DateTimeFormatter.ofLocalizedDate(formatStyle)
+                DateTimeType.DateTime -> DateTimeFormatter.ofLocalizedDateTime(formatStyle)
+            }.withLocale(context.extractPrimaryLocale())
+            LabeledText(
+                label = "DateTimeFormatter",
+                value = standardFormatter.format(zonedDateTime),
+            )
+
+            if (formatStyle == FormatStyle.SHORT) {
+                val legacyDateFormat = AndroidTextDateFormat.getTimeFormat(context)
+                val legacyDate = JavaUtilDate(instant.toEpochMilli())
+                LabeledText(
+                    label = "android.text.format.DateFormat",
+                    value = legacyDateFormat.format(legacyDate),
+                )
+            }
         }
     }
 }
