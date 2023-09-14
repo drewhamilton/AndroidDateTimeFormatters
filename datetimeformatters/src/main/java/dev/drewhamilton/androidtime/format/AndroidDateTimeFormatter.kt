@@ -35,7 +35,9 @@ object AndroidDateTimeFormatter {
      */
     @JvmStatic fun ofLocalizedTime(
         context: Context,
-    ): DateTimeFormatter = ofLocalizedTime(context, FormatStyle.SHORT)
+    ): DateTimeFormatter {
+        return ofLocalizedTime(context, FormatStyle.SHORT)
+    }
 
     /**
      * Creates a [DateTimeFormatter] that can format the time for the ISO chronology according to
@@ -106,8 +108,23 @@ object AndroidDateTimeFormatter {
         context: Context,
         dateStyle: FormatStyle,
     ): DateTimeFormatter {
+        return ofLocalizedDate(context.extractPrimaryLocale(), dateStyle)
+    }
+
+    /**
+     * Creates a [DateTimeFormatter] that can format the date for the ISO chronology according to
+     * the given [locale] and [dateStyle].
+     *
+     * The formatter's pattern may be eagerly determined, so appending
+     * [DateTimeFormatter.withLocale] to the returned formatter is not guaranteed to fully localize
+     * the result.
+     */
+    @JvmStatic fun ofLocalizedDate(
+        locale: Locale,
+        dateStyle: FormatStyle,
+    ): DateTimeFormatter {
         return DateTimeFormatter.ofLocalizedDate(dateStyle)
-            .withLocale(context.extractPrimaryLocale())
+            .withLocale(locale)
     }
 
     /**
