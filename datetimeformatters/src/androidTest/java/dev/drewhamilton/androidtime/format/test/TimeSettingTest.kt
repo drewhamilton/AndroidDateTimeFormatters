@@ -1,6 +1,7 @@
 package dev.drewhamilton.androidtime.format.test
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
 import android.provider.Settings
@@ -8,14 +9,12 @@ import android.util.Log
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
 import androidx.test.platform.app.InstrumentationRegistry
-import org.junit.After
-import org.junit.Before
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.TimeZone
+import org.junit.After
 import org.junit.Assume.assumeFalse
-import android.text.format.DateFormat as AndroidDateFormat
+import org.junit.Before
 
 /**
  * A base test class that facilitates using and changing the [Settings.System.TIME_12_24] setting by caching the current
@@ -34,15 +33,12 @@ abstract class TimeSettingTest {
     protected val testContext: Context
         get() = InstrumentationRegistry.getInstrumentation().context
 
-    protected val androidShortTimeFormatInUtc: DateFormat
-        get() = AndroidDateFormat.getTimeFormat(testContext).apply {
-            timeZone = TimeZone.getTimeZone("UTC")
-        }
+    protected var localeContext: Context = testContext
 
     protected var testLocale: Locale
-        get() = ConfigurationCompat.getLocales(testContext.resources.configuration)[0]!!
+        get() = ConfigurationCompat.getLocales(localeContext.resources.configuration)[0]!!
         set(value) {
-            testContext.setLocales(LocaleListCompat.create(value))
+            localeContext = testContext.copyWithLocale(value)
         }
 
     protected var systemTimeSetting: String?
@@ -55,24 +51,20 @@ abstract class TimeSettingTest {
     private var originalTimeSetting: String? = null
     private var canResetSystemTimeSetting: Boolean = false
 
-    @Before fun cacheOriginalLocales() {
-        originalLocales = ConfigurationCompat.getLocales(testContext.resources.configuration)
-        Log.d(TAG, "Cached original locales: $originalLocales")
+    private fun Context.copyWithLocale(locale: Locale): Context {
+        val configuration = Configuration(resources.configuration)
+        configuration.setLocales(LocaleListCompat.create(locale))
+        return createConfigurationContext(configuration)
     }
 
-    @After fun restoreLocales() {
-        testContext.setLocales(originalLocales)
-        Log.d(TAG, "Restored original locales: $originalLocales")
-    }
-
-    private fun Context.setLocales(locales: LocaleListCompat) = when {
+    private fun Configuration.setLocales(locales: LocaleListCompat) = when {
         Build.VERSION.SDK_INT >= 24 ->
-            resources.configuration.setLocales(locales.unwrap() as LocaleList)
+            setLocales(locales.unwrap() as LocaleList)
         Build.VERSION.SDK_INT >= 17 ->
-            resources.configuration.setLocale(locales[0])
+            setLocale(locales[0])
         else ->
             @Suppress("DEPRECATION")
-            resources.configuration.locale = locales[0]
+            locale = locales[0]
     }
 
     @Before fun cacheOriginalTimeSetting() {
