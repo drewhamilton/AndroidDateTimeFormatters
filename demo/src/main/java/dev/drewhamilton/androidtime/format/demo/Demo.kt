@@ -1,7 +1,6 @@
 package dev.drewhamilton.androidtime.format.demo
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,67 +60,63 @@ fun Demo(
             )
         },
     ) { contentPadding ->
-        var typedLocale by remember { mutableStateOf("") }
-        val overrideLocale = parseLocaleString(typedLocale)
-        val context = if (overrideLocale == null) {
-            LocalContext.current
-        } else {
-            Log.d("Demo", "Override locale: $overrideLocale")
-            LocalContext.current.copyWithLocale(overrideLocale)
-        }
-        CompositionLocalProvider(
-            LocalContext provides context,
+        var typedLocaleString by remember { mutableStateOf("") }
+        val locale = parseLocaleString(typedLocaleString)
+            ?: LocalContext.current.extractPrimaryLocale()
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentPadding = contentPadding + PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentPadding = contentPadding + PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-            ) {
-                val fillMaxWidthModifier = Modifier.fillMaxWidth()
-                item {
-                    LocaleOverrideField(
-                        value = typedLocale,
-                        onValueChange = { typedLocale = it },
-                        modifier = fillMaxWidthModifier,
-                    )
-                }
+            val fillMaxWidthModifier = Modifier.fillMaxWidth()
+            item {
+                LocaleInputField(
+                    value = typedLocaleString,
+                    onValueChange = { typedLocaleString = it },
+                    currentLocale = locale,
+                    modifier = fillMaxWidthModifier,
+                )
+            }
 
-                item {
-                    FormatComparison(
-                        instant = instant,
-                        dateTimeType = DateTimeType.Time,
-                        formatStyle = FormatStyle.SHORT,
-                        modifier = fillMaxWidthModifier,
-                    )
-                }
+            item {
+                FormatComparison(
+                    locale = locale,
+                    instant = instant,
+                    dateTimeType = DateTimeType.Time,
+                    formatStyle = FormatStyle.SHORT,
+                    modifier = fillMaxWidthModifier,
+                )
+            }
 
-                item {
-                    FormatComparison(
-                        instant = instant,
-                        dateTimeType = DateTimeType.Time,
-                        formatStyle = FormatStyle.MEDIUM,
-                        modifier = fillMaxWidthModifier,
-                    )
-                }
+            item {
+                FormatComparison(
+                    locale = locale,
+                    instant = instant,
+                    dateTimeType = DateTimeType.Time,
+                    formatStyle = FormatStyle.MEDIUM,
+                    modifier = fillMaxWidthModifier,
+                )
+            }
 
-                item {
-                    FormatComparison(
-                        instant = instant,
-                        dateTimeType = DateTimeType.DateTime,
-                        formatStyle = FormatStyle.LONG,
-                        modifier = fillMaxWidthModifier,
-                    )
-                }
+            item {
+                FormatComparison(
+                    locale = locale,
+                    instant = instant,
+                    dateTimeType = DateTimeType.DateTime,
+                    formatStyle = FormatStyle.LONG,
+                    modifier = fillMaxWidthModifier,
+                )
+            }
 
-                item {
-                    FormatComparison(
-                        instant = instant,
-                        dateTimeType = DateTimeType.Date,
-                        formatStyle = FormatStyle.FULL,
-                        modifier = fillMaxWidthModifier,
-                    )
-                }
+            item {
+                FormatComparison(
+                    locale = locale,
+                    instant = instant,
+                    dateTimeType = DateTimeType.Date,
+                    formatStyle = FormatStyle.FULL,
+                    modifier = fillMaxWidthModifier,
+                )
             }
         }
     }
@@ -146,22 +140,22 @@ private fun parseLocaleString(value: String): Locale? {
 }
 
 @Composable
-private fun LocaleOverrideField(
+private fun LocaleInputField(
     value: String,
     onValueChange: (String) -> Unit,
+    currentLocale: Locale,
     modifier: Modifier = Modifier,
 ) {
-    val locale = LocalContext.current.extractPrimaryLocale()
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
         singleLine = true,
         label = {
-            Text(locale.displayName)
+            Text(currentLocale.displayName)
         },
         placeholder = {
-            Text(locale.toString())
+            Text(currentLocale.toString())
         },
         shape = RoundedCornerShape(16.dp),
     )
@@ -169,6 +163,7 @@ private fun LocaleOverrideField(
 
 @Composable
 private fun FormatComparison(
+    locale: Locale,
     instant: Instant,
     dateTimeType: DateTimeType,
     formatStyle: FormatStyle,
@@ -196,13 +191,13 @@ private fun FormatComparison(
 
             val androidFormatter = when (dateTimeType) {
                 DateTimeType.Time ->
-                    AndroidDateTimeFormatter.ofLocalizedTime(context, formatStyle)
+                    AndroidDateTimeFormatter.ofLocalizedTime(context, locale, formatStyle)
 
                 DateTimeType.Date ->
-                    AndroidDateTimeFormatter.ofLocalizedDate(context, formatStyle)
+                    AndroidDateTimeFormatter.ofLocalizedDate(locale, formatStyle)
 
                 DateTimeType.DateTime ->
-                    AndroidDateTimeFormatter.ofLocalizedDateTime(context, formatStyle)
+                    AndroidDateTimeFormatter.ofLocalizedDateTime(context, locale, formatStyle)
             }
             LabeledText(
                 label = "AndroidDateTimeFormatter",
@@ -213,7 +208,7 @@ private fun FormatComparison(
                 DateTimeType.Time -> DateTimeFormatter.ofLocalizedTime(formatStyle)
                 DateTimeType.Date -> DateTimeFormatter.ofLocalizedDate(formatStyle)
                 DateTimeType.DateTime -> DateTimeFormatter.ofLocalizedDateTime(formatStyle)
-            }.withLocale(context.extractPrimaryLocale())
+            }.withLocale(locale)
             LabeledText(
                 label = "DateTimeFormatter",
                 value = standardFormatter.format(zonedDateTime),
