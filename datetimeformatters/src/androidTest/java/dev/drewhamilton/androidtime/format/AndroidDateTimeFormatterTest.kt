@@ -333,6 +333,28 @@ class AndroidDateTimeFormatterTest(
     }
     //endregion
 
+    //region ofLocalizedDate with explicit locale
+    @Test fun ofLocalizedDate_localeAndShortFormat() {
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(locale.value, FormatStyle.SHORT)
+        assertThat(formatter.format(date)).isEqualTo(locale.shortDate)
+    }
+
+    @Test fun ofLocalizedDate_localeAndMediumFormat() {
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(locale.value, FormatStyle.MEDIUM)
+        assertThat(formatter.format(date)).isEqualTo(locale.mediumDate)
+    }
+
+    @Test fun ofLocalizedDate_localeAndLongFormat() {
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(locale.value, FormatStyle.LONG)
+        assertThat(formatter.format(date)).isEqualTo(locale.longDate)
+    }
+
+    @Test fun ofLocalizedDate_localeAndFullFormat() {
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDate(locale.value, FormatStyle.FULL)
+        assertThat(formatter.format(date)).isEqualTo(locale.fullDate)
+    }
+    //endregion
+
     //region ofLocalizedDateTime with dateTimeStyle
     @Test fun ofLocalizedDateTime_nullSystemSettingShortDateTimeFormat_usesShortLocaleFormat() {
         assumeNullableSystemTimeSetting()
