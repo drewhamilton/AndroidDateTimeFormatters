@@ -3,6 +3,7 @@ package dev.drewhamilton.androidtime.format
 import android.content.Context
 import android.content.res.Configuration
 import android.icu.text.DateTimePatternGenerator
+import android.icu.util.ULocale
 import android.os.Build
 import android.provider.Settings
 import android.text.format.DateFormat
@@ -288,22 +289,23 @@ object AndroidDateTimeFormatter {
         context: Context,
         locale: Locale,
     ): String? {
-        val timeSetting = context.timeSetting() ?: if (locale.is24HourLocale()) "24" else "12"
         return when {
             Build.VERSION.SDK_INT >= 24 -> {
+                val timeSetting = context.timeSetting()
+                    ?: if (locale.is24HourLocale()) "24" else "12"
                 val patternGenerator = DateTimePatternGenerator.getInstance(locale)
                 val patternSkeleton = when (timeSetting) {
                     "12" -> "hm"
                     "24" -> "Hm"
                     else -> throw IllegalArgumentException("Unknown time setting: $timeSetting")
                 }
-                patternGenerator.getBestPattern(patternSkeleton)
+                val bestPattern = patternGenerator.getBestPattern(patternSkeleton)
+                locale.getCompatibleEnglishPattern(bestPattern)
             }
 
             Build.VERSION.SDK_INT >= 17 -> {
                 val localeConfiguration = Configuration(context.resources.configuration).apply {
-                    @Suppress("DEPRECATION") // API < 24
-                    this.locale = locale
+                    setLocale(locale)
                 }
                 val localeContext = context.createConfigurationContext(localeConfiguration)
                 getLegacySystemTimeSettingAwareShortTimePattern(context = localeContext)
@@ -342,6 +344,25 @@ object AndroidDateTimeFormatter {
         }
 
         return false
+    }
+
+    /**
+     * Adapted from [android.text.format.DateFormat] internals; a fix for the private bug
+     * http://b/266731719.
+     */
+    @RequiresApi(24)
+    @JvmStatic private fun Locale.getCompatibleEnglishPattern(pattern: String): String {
+        if (language != "en") {
+            return pattern
+        }
+
+        val uLocale = ULocale.forLocale(this)
+        val region = uLocale.country
+        return if (region == null || region.isEmpty() || region == "US") {
+            pattern.replace('\u202f', ' ')
+        } else {
+            pattern
+        }
     }
 
     @JvmStatic private fun getLegacySystemTimeSettingAwareShortTimePattern(
