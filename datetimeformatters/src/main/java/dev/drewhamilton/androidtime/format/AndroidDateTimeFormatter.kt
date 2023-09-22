@@ -76,6 +76,43 @@ object AndroidDateTimeFormatter {
     ): DateTimeFormatter {
         val systemTimeSettingAwarePattern = when (timeStyle) {
             FormatStyle.SHORT -> getSystemTimeSettingAwareShortTimePattern(context, locale)
+            FormatStyle.MEDIUM -> {
+                if (Build.VERSION.SDK_INT < 24) {
+                    null
+                } else {
+                    val timeSetting = context.timeSetting()
+                    if (timeSetting == null) {
+                        null
+                    } else {
+                        val patternGenerator = DateTimePatternGenerator.getInstance(locale)
+                        val patternFor12Setting = locale.getCompatibleEnglishPattern(
+                            pattern = patternGenerator.getBestPattern("hms"),
+                        )
+                        val patternFor24Setting = locale.getCompatibleEnglishPattern(
+                            pattern = patternGenerator.getBestPattern("Hms"),
+                        )
+                        val systemPattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
+                            null,
+                            timeStyle,
+                            IsoChronology.INSTANCE,
+                            locale,
+                        )
+                        if (timeSetting == "12" && systemPattern.contains(patternFor24Setting)) {
+                            systemPattern.replace(
+                                oldValue = patternFor24Setting,
+                                newValue = patternFor12Setting,
+                            )
+                        } else if (timeSetting == "24" && systemPattern.contains(patternFor12Setting)) {
+                            systemPattern.replace(
+                                oldValue = patternFor12Setting,
+                                newValue = patternFor24Setting,
+                            )
+                        } else {
+                            systemPattern
+                        }
+                    }
+                }
+            }
             else -> null
         }
         return if (systemTimeSettingAwarePattern == null) {
