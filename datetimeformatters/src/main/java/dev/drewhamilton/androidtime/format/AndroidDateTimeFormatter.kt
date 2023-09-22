@@ -74,17 +74,20 @@ object AndroidDateTimeFormatter {
         locale: Locale,
         timeStyle: FormatStyle,
     ): DateTimeFormatter {
-        // If format is SHORT, try system 12-/24-hour setting-specific time format:
-        if (timeStyle == FormatStyle.SHORT) {
-            val pattern = getSystemTimeSettingAwareShortTimePattern(context, locale)
-            return DateTimeFormatterBuilder()
-                .appendPattern(pattern)
+        val systemTimeSettingAwarePattern = when (timeStyle) {
+            FormatStyle.SHORT -> getSystemTimeSettingAwareShortTimePattern(context, locale)
+            else -> null
+        }
+        return if (systemTimeSettingAwarePattern == null) {
+            DateTimeFormatter.ofLocalizedTime(timeStyle)
+                .withLocale(locale)
+        } else {
+            DateTimeFormatterBuilder()
+                .appendPattern(systemTimeSettingAwarePattern)
                 .toFormatter(locale)
                 // Match java.time's ofLocalizedTime, which also hard-codes IsoChronology:
                 .withChronology(IsoChronology.INSTANCE)
         }
-        return DateTimeFormatter.ofLocalizedTime(timeStyle)
-            .withLocale(locale)
     }
 
     /**
