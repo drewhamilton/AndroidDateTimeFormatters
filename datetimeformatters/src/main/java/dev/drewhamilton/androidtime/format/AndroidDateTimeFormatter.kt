@@ -7,7 +7,6 @@ import android.icu.util.ULocale
 import android.os.Build
 import android.provider.Settings
 import android.text.format.DateFormat
-import android.util.Log
 import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.chrono.IsoChronology
@@ -80,21 +79,21 @@ object AndroidDateTimeFormatter {
         locale: Locale,
         timeStyle: FormatStyle,
     ): DateTimeFormatter {
-        // If format is SHORT, try system 12-/24-hour setting-specific time format:
-        if (timeStyle == FormatStyle.SHORT) {
-            val pattern = getSystemTimeSettingAwareShortTimePattern(context, locale)
-            if (pattern == null) {
-                Log.w(Tag, "Couldn't determine time pattern based on system 12-/24-hour setting")
-            } else {
-                return DateTimeFormatterBuilder()
-                    .appendPattern(pattern)
-                    .toFormatter(locale)
-                    // Match java.time's ofLocalizedTime, which also hard-codes IsoChronology:
-                    .withChronology(IsoChronology.INSTANCE)
-            }
+        val systemTimeSettingAwarePattern = when (timeStyle) {
+            FormatStyle.SHORT -> getSystemTimeSettingAwareShortTimePattern(context, locale)
+            else -> null
         }
-        return DateTimeFormatter.ofLocalizedTime(timeStyle)
-            .withLocale(locale)
+        return if (systemTimeSettingAwarePattern == null) {
+            // TODO: Log warning?
+            DateTimeFormatter.ofLocalizedTime(timeStyle)
+                .withLocale(locale)
+        } else {
+            DateTimeFormatterBuilder()
+                .appendPattern(systemTimeSettingAwarePattern)
+                .toFormatter(locale)
+                // Match java.time's ofLocalizedTime, which also hard-codes IsoChronology:
+                .withChronology(IsoChronology.INSTANCE)
+        }
     }
 
     /**
