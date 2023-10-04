@@ -7,7 +7,7 @@ kotlin = "1.9.10"
 
 [libraries]
 
-androidx-activity-compose = "androidx.activity:activity-compose:1.8.0-rc01"
+androidx-activity-compose = "androidx.activity:activity-compose:1.8.0"
 androidx-annotation = "androidx.annotation:annotation:1.7.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
