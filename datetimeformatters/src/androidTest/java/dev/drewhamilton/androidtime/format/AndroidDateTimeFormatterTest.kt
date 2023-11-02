@@ -937,7 +937,7 @@ class AndroidDateTimeFormatterTest(
             mediumDate = "7 سپتامبر 2023",
             longDate = "7 سپتامبر 2023",
             fullDate = "پنجشنبه 7 سپتامبر 2023",
-            skeletonMMMMd = "7 9",
+            skeletonMMMMd = "7 سپتامبر",
         ),
         ;
 
