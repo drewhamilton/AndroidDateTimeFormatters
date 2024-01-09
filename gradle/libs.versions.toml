@@ -33,7 +33,7 @@ testParameterInjector = "com.google.testparameterinjector:test-parameter-injecto
 
 threeTen-abp = "com.jakewharton.threetenabp:threetenabp:1.4.6"
 
-truth = "com.google.truth:truth:1.1.5"
+truth = "com.google.truth:truth:1.2.0"
 
 [plugins]
 
