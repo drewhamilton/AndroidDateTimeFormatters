@@ -35,7 +35,7 @@ jobs:
           arguments: build --stacktrace
 
       - name: Set up emulator cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: avd-cache
         with:
           path: |
