@@ -31,7 +31,7 @@ multidex = "com.android.support:multidex:1.0.3"
 
 testParameterInjector = "com.google.testparameterinjector:test-parameter-injector:1.15"
 
-threeTen-abp = "com.jakewharton.threetenabp:threetenabp:1.4.6"
+threeTen-abp = "com.jakewharton.threetenabp:threetenabp:1.4.7"
 
 truth = "com.google.truth:truth:1.4.2"
 
