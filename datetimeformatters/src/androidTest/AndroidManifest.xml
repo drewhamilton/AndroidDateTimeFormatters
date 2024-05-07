@@ -14,6 +14,7 @@
           androidx.lifecycle,
           androidx.lifecycle.runtime,
           androidx.profileinstaller,
+          androidx.startup,
           androidx.test,
           androidx.test.annotation,
           androidx.test.core,
