@@ -13,6 +13,7 @@
           androidx.interpolator,
           androidx.lifecycle,
           androidx.lifecycle.runtime,
+          androidx.profileinstaller,
           androidx.test,
           androidx.test.annotation,
           androidx.test.core,
