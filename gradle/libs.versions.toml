@@ -2,7 +2,6 @@
 
 agp = "8.4.1"
 androidx-compose-bom = "2024.05.00"
-androidx-compose-compiler = "1.5.14"
 kotlin = "2.0.0"
 
 [libraries]
@@ -11,7 +10,6 @@ androidx-activity-compose = "androidx.activity:activity-compose:1.9.0"
 androidx-annotation = "androidx.annotation:annotation:1.8.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
-androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-ui-core = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
@@ -38,5 +36,6 @@ truth = "com.google.truth:truth:1.4.2"
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinx-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.14.0" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.28.0" }
