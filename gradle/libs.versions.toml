@@ -17,7 +17,7 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-coreKtx = "androidx.core:core-ktx:1.13.1"
 androidx-test-junit = "androidx.test.ext:junit:1.2.1"
-androidx-test-rules = "androidx.test:rules:1.6.0"
+androidx-test-rules = "androidx.test:rules:1.6.1"
 
 desugarJdkLibs = "com.android.tools:desugar_jdk_libs:2.0.4"
 
