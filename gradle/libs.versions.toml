@@ -27,7 +27,7 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 
 multidex = "com.android.support:multidex:1.0.3"
 
-testParameterInjector = "com.google.testparameterinjector:test-parameter-injector:1.16"
+testParameterInjector = "com.google.testparameterinjector:test-parameter-injector:1.17"
 
 truth = "com.google.truth:truth:1.4.4"
 
