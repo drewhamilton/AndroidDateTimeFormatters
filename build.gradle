@@ -23,7 +23,7 @@ allprojects { project ->
 }
 
 ext {
-    compileSdk = 34
+    compileSdk = 35
     multidexMinSdk = 4
     androidXMinSdk = 14
 
