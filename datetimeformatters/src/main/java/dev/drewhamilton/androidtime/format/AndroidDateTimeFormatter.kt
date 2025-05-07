@@ -7,7 +7,6 @@ import android.icu.util.ULocale
 import android.os.Build
 import android.provider.Settings
 import android.text.format.DateFormat
-import android.util.Log
 import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.chrono.IsoChronology
@@ -80,21 +79,61 @@ object AndroidDateTimeFormatter {
         locale: Locale,
         timeStyle: FormatStyle,
     ): DateTimeFormatter {
-        // If format is SHORT, try system 12-/24-hour setting-specific time format:
-        if (timeStyle == FormatStyle.SHORT) {
-            val pattern = getSystemTimeSettingAwareShortTimePattern(context, locale)
-            if (pattern == null) {
-                Log.w(Tag, "Couldn't determine time pattern based on system 12-/24-hour setting")
-            } else {
-                return DateTimeFormatterBuilder()
-                    .appendPattern(pattern)
-                    .toFormatter(locale)
-                    // Match java.time's ofLocalizedTime, which also hard-codes IsoChronology:
-                    .withChronology(IsoChronology.INSTANCE)
+        val systemTimeSettingAwarePattern = when (timeStyle) {
+            FormatStyle.SHORT -> getSystemTimeSettingAwareShortTimePattern(context, locale)
+            FormatStyle.MEDIUM -> {
+                if (Build.VERSION.SDK_INT < 24) {
+                    null
+                } else {
+                    val timeSetting = context.timeSetting()
+                    if (timeSetting == null) {
+                        // FIXME: This returns null by default on API 25, and differs from the
+                        //  behavior of the short time pattern (e.g. shows 5:08 PM on medium, but
+                        //  17:08 on short).
+                        null
+                    } else {
+                        val patternGenerator = DateTimePatternGenerator.getInstance(locale)
+                        val patternFor12Setting = locale.getCompatibleEnglishPattern(
+                            pattern = patternGenerator.getBestPattern("hms"),
+                        )
+                        val patternFor24Setting = locale.getCompatibleEnglishPattern(
+                            pattern = patternGenerator.getBestPattern("Hms"),
+                        )
+                        val systemPattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
+                            null,
+                            timeStyle,
+                            IsoChronology.INSTANCE,
+                            locale,
+                        )
+                        if (timeSetting == "12" && systemPattern.contains(patternFor24Setting)) {
+                            systemPattern.replace(
+                                oldValue = patternFor24Setting,
+                                newValue = patternFor12Setting,
+                            )
+                        } else if (timeSetting == "24" && systemPattern.contains(patternFor12Setting)) {
+                            systemPattern.replace(
+                                oldValue = patternFor12Setting,
+                                newValue = patternFor24Setting,
+                            )
+                        } else {
+                            systemPattern
+                        }
+                    }
+                }
             }
+            else -> null
         }
-        return DateTimeFormatter.ofLocalizedTime(timeStyle)
-            .withLocale(locale)
+        return if (systemTimeSettingAwarePattern == null) {
+            // TODO: Log warning?
+            DateTimeFormatter.ofLocalizedTime(timeStyle)
+                .withLocale(locale)
+        } else {
+            DateTimeFormatterBuilder()
+                .appendPattern(systemTimeSettingAwarePattern)
+                .toFormatter(locale)
+                // Match java.time's ofLocalizedTime, which also hard-codes IsoChronology:
+                .withChronology(IsoChronology.INSTANCE)
+        }
     }
 
     /**
