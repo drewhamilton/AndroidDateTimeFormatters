@@ -1,6 +1,6 @@
 [versions]
 
-agp = "8.13.2"
+agp = "9.0.0"
 androidx-compose-bom = "2026.01.00"
 kotlin = "2.3.0"
 
