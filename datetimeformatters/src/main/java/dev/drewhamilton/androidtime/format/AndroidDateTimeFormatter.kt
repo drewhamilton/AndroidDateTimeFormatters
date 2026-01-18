@@ -1,14 +1,10 @@
 package dev.drewhamilton.androidtime.format
 
 import android.content.Context
-import android.content.res.Configuration
 import android.icu.text.DateTimePatternGenerator
 import android.icu.util.ULocale
-import android.os.Build
 import android.provider.Settings
 import android.text.format.DateFormat
-import android.util.Log
-import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.chrono.IsoChronology
 import java.time.format.DateTimeFormatter
@@ -21,8 +17,6 @@ import java.util.Locale
  * the user's 12-/24-hour clock preference.
  */
 object AndroidDateTimeFormatter {
-
-    private val Tag: String = AndroidDateTimeFormatter::class.java.simpleName
 
     //region ofLocalized*
     /**
@@ -74,7 +68,6 @@ object AndroidDateTimeFormatter {
      * [DateTimeFormatter.withLocale] to the returned formatter is not guaranteed to fully localize
      * the result.
      */
-    @RequiresApi(17) // Can only use Context locale on APIs < 17
     @JvmStatic fun ofLocalizedTime(
         context: Context,
         locale: Locale,
@@ -83,15 +76,11 @@ object AndroidDateTimeFormatter {
         // If format is SHORT, try system 12-/24-hour setting-specific time format:
         if (timeStyle == FormatStyle.SHORT) {
             val pattern = getSystemTimeSettingAwareShortTimePattern(context, locale)
-            if (pattern == null) {
-                Log.w(Tag, "Couldn't determine time pattern based on system 12-/24-hour setting")
-            } else {
-                return DateTimeFormatterBuilder()
-                    .appendPattern(pattern)
-                    .toFormatter(locale)
-                    // Match java.time's ofLocalizedTime, which also hard-codes IsoChronology:
-                    .withChronology(IsoChronology.INSTANCE)
-            }
+            return DateTimeFormatterBuilder()
+                .appendPattern(pattern)
+                .toFormatter(locale)
+                // Match java.time's ofLocalizedTime, which also hard-codes IsoChronology:
+                .withChronology(IsoChronology.INSTANCE)
         }
         return DateTimeFormatter.ofLocalizedTime(timeStyle)
             .withLocale(locale)
@@ -163,7 +152,6 @@ object AndroidDateTimeFormatter {
      * [DateTimeFormatter.withLocale] to the returned formatter is not guaranteed to fully localize
      * the result.
      */
-    @RequiresApi(17)
     @JvmStatic fun ofLocalizedDateTime(
         context: Context,
         locale: Locale,
@@ -221,7 +209,6 @@ object AndroidDateTimeFormatter {
      * [DateTimeFormatter.withLocale] to the returned formatter is not guaranteed to fully localize
      * the result.
      */
-    @RequiresApi(17)
     @JvmStatic fun ofLocalizedDateTime(
         context: Context,
         locale: Locale,
@@ -250,7 +237,7 @@ object AndroidDateTimeFormatter {
         dateStyle: FormatStyle,
         timeStyle: FormatStyle,
     ): DateTimeFormatter? {
-        val timePattern = getSystemTimeSettingAwareShortTimePattern(context, locale) ?: return null
+        val timePattern = getSystemTimeSettingAwareShortTimePattern(context, locale)
 
         val defaultDateTimePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
             dateStyle,
@@ -282,39 +269,20 @@ object AndroidDateTimeFormatter {
         return null
     }
 
-    /**
-     * [locale] is ignored on APIs < 17.
-     */
     @JvmStatic private fun getSystemTimeSettingAwareShortTimePattern(
         context: Context,
         locale: Locale,
-    ): String? {
-        return when {
-            Build.VERSION.SDK_INT >= 24 -> {
-                val timeSetting = context.timeSetting()
-                    ?: if (locale.is24HourLocale()) "24" else "12"
-                val patternGenerator = DateTimePatternGenerator.getInstance(locale)
-                val patternSkeleton = when (timeSetting) {
-                    "12" -> "hm"
-                    "24" -> "Hm"
-                    else -> throw IllegalArgumentException("Unknown time setting: $timeSetting")
-                }
-                val bestPattern = patternGenerator.getBestPattern(patternSkeleton)
-                locale.getCompatibleEnglishPattern(bestPattern)
-            }
-
-            Build.VERSION.SDK_INT >= 17 -> {
-                val localeConfiguration = Configuration(context.resources.configuration).apply {
-                    setLocale(locale)
-                }
-                val localeContext = context.createConfigurationContext(localeConfiguration)
-                getLegacySystemTimeSettingAwareShortTimePattern(context = localeContext)
-            }
-
-            else -> {
-                getLegacySystemTimeSettingAwareShortTimePattern(context = context)
-            }
+    ): String {
+        val timeSetting = context.timeSetting()
+            ?: if (locale.is24HourLocale()) "24" else "12"
+        val patternGenerator = DateTimePatternGenerator.getInstance(locale)
+        val patternSkeleton = when (timeSetting) {
+            "12" -> "hm"
+            "24" -> "Hm"
+            else -> throw IllegalArgumentException("Unknown time setting: $timeSetting")
         }
+        val bestPattern = patternGenerator.getBestPattern(patternSkeleton)
+        return locale.getCompatibleEnglishPattern(bestPattern)
     }
 
     @JvmStatic private fun Context.timeSetting(): String? {
@@ -361,7 +329,6 @@ object AndroidDateTimeFormatter {
      * Adapted from [android.text.format.DateFormat] internals; a fix for the private bug
      * http://b/266731719.
      */
-    @RequiresApi(24)
     @JvmStatic private fun Locale.getCompatibleEnglishPattern(pattern: String): String {
         if (language != "en") {
             return pattern
@@ -374,13 +341,6 @@ object AndroidDateTimeFormatter {
         } else {
             pattern
         }
-    }
-
-    @JvmStatic private fun getLegacySystemTimeSettingAwareShortTimePattern(
-        context: Context
-    ): String? {
-        val legacyFormat = DateFormat.getTimeFormat(context) as? SimpleDateFormat
-        return legacyFormat?.toLocalizedPattern()
     }
     //endregion
 
@@ -410,7 +370,6 @@ object AndroidDateTimeFormatter {
      * The formatter's pattern is eagerly determined, so appending [DateTimeFormatter.withLocale] to
      * the returned formatter is not guaranteed to fully localize the result.
      */
-    @RequiresApi(18)
     @JvmStatic fun ofSkeleton(
         skeleton: String,
         context: Context,
@@ -443,7 +402,6 @@ object AndroidDateTimeFormatter {
      * The formatter's pattern is eagerly determined, so appending [DateTimeFormatter.withLocale] to
      * the returned formatter is not guaranteed to fully localize the result.
      */
-    @RequiresApi(18)
     @JvmStatic fun ofSkeleton(
         skeleton: String,
         locale: Locale,
@@ -456,11 +414,9 @@ object AndroidDateTimeFormatter {
     @JvmStatic private fun Context.extractPrimaryLocale(): Locale {
         val configuration = resources.configuration
         var locale: Locale? = null
-        if (Build.VERSION.SDK_INT >= 24) {
-            val localeList = configuration.locales
-            if (!localeList.isEmpty) {
-                locale = localeList[0]
-            }
+        val localeList = configuration.locales
+        if (!localeList.isEmpty) {
+            locale = localeList[0]
         }
         if (locale == null) {
             @Suppress("DEPRECATION") // Fallback for newer API approach
