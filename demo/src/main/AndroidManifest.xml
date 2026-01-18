@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
   <application
-      android:name=".DemoApp"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
