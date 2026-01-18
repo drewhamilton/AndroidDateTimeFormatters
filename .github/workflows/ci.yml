@@ -14,9 +14,6 @@ jobs:
       matrix:
         api-level: [ 29, 30, 32 ]
         arch: [ x86_64 ]
-        include:
-          - api-level: 19
-            arch: x86
 
     steps:
       - name: Check out the repo
