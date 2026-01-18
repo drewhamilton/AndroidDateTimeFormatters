@@ -18,14 +18,13 @@ import java.util.Locale
 import java.util.TimeZone
 import org.junit.Assume.assumeFalse
 import org.junit.Assume.assumeTrue
-import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.Date as JavaUtilDate
 
 @RunWith(TestParameterInjector::class)
 class AndroidDateTimeFormatterTest(
-    @TestParameter val locale: TestLocale,
+    @param:TestParameter val locale: TestLocale,
 ) : TimeSettingTest() {
 
     private val date: LocalDate = LocalDate.of(2023, Month.SEPTEMBER, 7)
@@ -38,7 +37,6 @@ class AndroidDateTimeFormatterTest(
 
     //region ofLocalizedTime with default style
     @Test fun ofLocalizedTime_nullSystemSetting_matchesLegacySystemFormat() {
-        assumeNullableSystemTimeSetting()
         assumeShortTimeShouldMatchLegacySystemFormat()
 
         systemTimeSetting = null
@@ -73,8 +71,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedTime_nullSystemSetting_usesLocaleFormat() {
-        assumeNullableSystemTimeSetting()
-
         systemTimeSetting = null
         testLocale = locale.value
 
@@ -104,7 +100,6 @@ class AndroidDateTimeFormatterTest(
 
     //region ofLocalizedTime with explicit style
     @Test fun ofLocalizedTime_nullSystemSettingShortFormat_matchesLegacySystemFormat() {
-        assumeNullableSystemTimeSetting()
         assumeShortTimeShouldMatchLegacySystemFormat()
 
         systemTimeSetting = null
@@ -139,8 +134,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedTime_nullSystemSettingShortFormat_usesLocaleFormat() {
-        assumeNullableSystemTimeSetting()
-
         systemTimeSetting = null
         testLocale = locale.value
 
@@ -192,7 +185,6 @@ class AndroidDateTimeFormatterTest(
     //region ofLocalizedTime with explicit locale and style
     @Test fun ofLocalizedTime_nullSystemSettingLocaleAndShortFormat_matchesLegacySystemFormat() {
         assumeTrue(Build.VERSION.SDK_INT >= 17)
-        assumeNullableSystemTimeSetting()
         assumeShortTimeShouldMatchLegacySystemFormat()
 
         systemTimeSetting = null
@@ -242,7 +234,6 @@ class AndroidDateTimeFormatterTest(
 
     @Test fun ofLocalizedTime_nullSystemSettingLocaleAndShortFormat_usesLocaleFormat() {
         assumeTrue(Build.VERSION.SDK_INT >= 17)
-        assumeNullableSystemTimeSetting()
 
         systemTimeSetting = null
 
@@ -371,8 +362,6 @@ class AndroidDateTimeFormatterTest(
 
     //region ofLocalizedDateTime with dateTimeStyle
     @Test fun ofLocalizedDateTime_nullSystemSettingShortDateTimeFormat_usesShortLocaleFormat() {
-        assumeNullableSystemTimeSetting()
-
         systemTimeSetting = null
         testLocale = locale.value
 
@@ -445,7 +434,6 @@ class AndroidDateTimeFormatterTest(
     //region ofLocalizedDateTime with explicit locale and dateTimeStyle
     @Test fun ofLocalizedDateTime_nullSystemSettingLocaleAndShortDateTimeFormat_usesShortLocaleFormat() {
         assumeTrue(Build.VERSION.SDK_INT >= 17)
-        assumeNullableSystemTimeSetting()
 
         systemTimeSetting = null
 
@@ -554,8 +542,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_nullSettingLongDateFormatShortTimeFormat_usesLongDateLocaleTimeFormat() {
-        assumeNullableSystemTimeSetting()
-
         systemTimeSetting = null
         testLocale = locale.value
 
@@ -633,7 +619,6 @@ class AndroidDateTimeFormatterTest(
 
     @Test fun ofLocalizedDateTime_nullSettingLocaleAndLongDateFormatShortTimeFormat_usesLongDateLocaleTimeFormat() {
         assumeTrue(Build.VERSION.SDK_INT >= 17)
-        assumeNullableSystemTimeSetting()
 
         systemTimeSetting = null
 
@@ -951,17 +936,5 @@ class AndroidDateTimeFormatterTest(
                 TIME_SETTING_24 -> shortTime24
                 else -> throw AssertionError("Invalid preferred time setting: $preferredTimeSetting")
             }
-    }
-
-    companion object {
-        /**
-         * This class has strange behavior on APIs 22 through 27, inconsistently using the wrong
-         * 12/24 setting on short and/or medium times despite editing the system setting.
-         * Preemptively fail on these APIs to avoid confusion.
-         */
-        @BeforeClass
-        @JvmStatic fun preventApis22Through27() {
-            assertThat(Build.VERSION.SDK_INT).isNotIn(22..27)
-        }
     }
 }
