@@ -24,8 +24,7 @@ allprojects { project ->
 
 ext {
     compileSdk = 36
-    multidexMinSdk = 4
-    androidXMinSdk = 14
+    minSdk = 26
 
     keystore = project.hasProperty('personalKeystore') ? personalKeystore : 'x'
     keystorePassword = project.hasProperty('personalKeystorePassword') ? personalKeystorePassword : 'x'

@@ -10,13 +10,10 @@ android {
     testNamespace = "dev.drewhamilton.androidtime.format.test"
 
     defaultConfig {
-        minSdkVersion rootProject.ext.multidexMinSdk
+        minSdkVersion rootProject.ext.minSdk
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         consumerProguardFiles 'consumer-rules.pro'
-
-        // Support core library desugaring:
-        multiDexEnabled true
     }
 
     signingConfigs {
@@ -39,7 +36,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-        coreLibraryDesugaringEnabled true
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
@@ -47,8 +43,6 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(libs.desugarJdkLibs)
-
     implementation(libs.androidx.annotation)
 
     androidTestImplementation(libs.androidx.coreKtx)
