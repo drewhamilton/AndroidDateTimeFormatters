@@ -318,7 +318,18 @@ object AndroidDateTimeFormatter {
     }
 
     @JvmStatic private fun Context.timeSetting(): String? {
-        return Settings.System.getString(contentResolver, Settings.System.TIME_12_24)
+        // TODO: Support testing without a static field?
+        return when (val testSystemTimeSetting = testSystemTimeSetting) {
+            // Prod code path:
+            is TestSystemTimeSetting.Unset -> {
+                Settings.System.getString(contentResolver, Settings.System.TIME_12_24)
+            }
+
+            // Test code path:
+            is TestSystemTimeSetting.Set -> {
+                testSystemTimeSetting.value
+            }
+        }
     }
 
     private fun Locale.is24HourLocale(): Boolean {
