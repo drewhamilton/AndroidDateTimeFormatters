@@ -740,7 +740,7 @@ class AndroidDateTimeFormatterTest(
             skeletonMMMMd = "9月7日",
         ),
         Russian(
-            value = Locale("ru"),
+            value = localeOf(language = "ru"),
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = when {
                 Build.VERSION.SDK_INT >= 28 -> "6:01 PM"
@@ -772,7 +772,7 @@ class AndroidDateTimeFormatterTest(
             dateTimeJoiner = ", "
         ),
         Persian(
-            value = Locale("fa"),
+            value = localeOf(language = "fa"),
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = "6:01 بعدازظهر",
             shortTime24 = "18:01",
@@ -798,5 +798,14 @@ class AndroidDateTimeFormatterTest(
                 TIME_SETTING_24 -> shortTime24
                 else -> throw AssertionError("Invalid preferred time setting: $preferredTimeSetting")
             }
+    }
+
+    private companion object {
+        fun localeOf(language: String): Locale = if (Build.VERSION.SDK_INT < 36) {
+            @Suppress("DEPRECATION")
+            Locale(language)
+        } else {
+            Locale.of(language)
+        }
     }
 }
