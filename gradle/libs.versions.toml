@@ -19,7 +19,7 @@ androidx-coreKtx = "androidx.core:core-ktx:1.15.0"
 androidx-test-junit = "androidx.test.ext:junit:1.3.0"
 androidx-test-rules = "androidx.test:rules:1.7.0"
 
-desugarJdkLibs = "com.android.tools:desugar_jdk_libs:2.1.3"
+desugarJdkLibs = "com.android.tools:desugar_jdk_libs:2.1.5"
 
 junit = "junit:junit:4.13.2"
 
