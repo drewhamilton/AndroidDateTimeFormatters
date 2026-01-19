@@ -243,7 +243,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$shortDate $shortTimePreferred")
+            assertThat(result).isEqualTo("$shortDate$shortDateTimeJoiner$shortTimePreferred")
         }
     }
 
@@ -255,7 +255,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$shortDate $shortTime12")
+            assertThat(result).isEqualTo("$shortDate$shortDateTimeJoiner$shortTime12")
         }
     }
 
@@ -267,7 +267,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$shortDate $shortTime24")
+            assertThat(result).isEqualTo("$shortDate$shortDateTimeJoiner$shortTime24")
         }
     }
 
@@ -278,7 +278,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate $mediumTime")
+            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$mediumTime")
         }
     }
 
@@ -289,7 +289,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$longDate $longTime")
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$longTime")
         }
     }
 
@@ -300,7 +300,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$fullDate $fullTime")
+            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$fullTime")
         }
     }
     //endregion
@@ -319,7 +319,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$shortDate $shortTimePreferred")
+            assertThat(result).isEqualTo("$shortDate$shortDateTimeJoiner$shortTimePreferred")
         }
     }
 
@@ -336,7 +336,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$shortDate $shortTime12")
+            assertThat(result).isEqualTo("$shortDate$shortDateTimeJoiner$shortTime12")
         }
     }
 
@@ -353,7 +353,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$shortDate $shortTime24")
+            assertThat(result).isEqualTo("$shortDate$shortDateTimeJoiner$shortTime24")
         }
     }
 
@@ -368,7 +368,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate $mediumTime")
+            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$mediumTime")
         }
     }
 
@@ -383,7 +383,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$longDate $longTime")
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$longTime")
         }
     }
 
@@ -398,7 +398,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$fullDate $fullTime")
+            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$fullTime")
         }
     }
     //endregion
@@ -411,7 +411,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$shortDate $longTime")
+            assertThat(result).isEqualTo("$shortDate$shortDateTimeJoiner$longTime")
         }
     }
 
@@ -423,7 +423,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$longDate $shortTimePreferred")
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$shortTimePreferred")
         }
     }
 
@@ -435,7 +435,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate $shortTime12")
+            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$shortTime12")
         }
     }
 
@@ -447,7 +447,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate $shortTime24")
+            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$shortTime24")
         }
     }
 
@@ -458,7 +458,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$longDate $fullTime")
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$fullTime")
         }
     }
 
@@ -469,7 +469,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$fullDate $mediumTime")
+            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$mediumTime")
         }
     }
     //endregion
@@ -487,7 +487,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$shortDate $longTime")
+            assertThat(result).isEqualTo("$shortDate$shortDateTimeJoiner$longTime")
         }
     }
 
@@ -505,7 +505,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$longDate $shortTimePreferred")
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$shortTimePreferred")
         }
     }
 
@@ -523,7 +523,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate $shortTime12")
+            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$shortTime12")
         }
     }
 
@@ -541,7 +541,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate $shortTime24")
+            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$shortTime24")
         }
     }
 
@@ -557,7 +557,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$longDate $fullTime")
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$fullTime")
         }
     }
 
@@ -573,7 +573,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$fullDate $mediumTime")
+            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$mediumTime")
         }
     }
     //endregion
@@ -613,6 +613,9 @@ class AndroidDateTimeFormatterTest(
         val longDate: String,
         val fullDate: String,
         val skeletonMMMMd: String,
+        val dateTimeJoiner: String = " ",
+        val shortDateTimeJoiner: String = dateTimeJoiner,
+        val longDateTimeJoiner: String = dateTimeJoiner,
     ) {
         US(
             value = Locale.US,
@@ -626,7 +629,9 @@ class AndroidDateTimeFormatterTest(
             mediumDate = "Sep 7, 2023",
             longDate = "September 7, 2023",
             fullDate = "Thursday, September 7, 2023",
-            skeletonMMMMd = "September 7"
+            skeletonMMMMd = "September 7",
+            dateTimeJoiner = ", ",
+            longDateTimeJoiner = " at ",
         ),
         Italy(
             value = Locale.ITALY,
@@ -654,6 +659,8 @@ class AndroidDateTimeFormatterTest(
             },
             fullDate = "giovedì 7 settembre 2023",
             skeletonMMMMd = "7 settembre",
+            dateTimeJoiner = ", ",
+            longDateTimeJoiner = " ",
         ),
         France(
             value = Locale.FRANCE,
@@ -674,6 +681,8 @@ class AndroidDateTimeFormatterTest(
             longDate = "7 septembre 2023",
             fullDate = "jeudi 7 septembre 2023",
             skeletonMMMMd = "7 septembre",
+            dateTimeJoiner = " à ",
+            shortDateTimeJoiner = " ",
         ),
         CanadaFrench(
             value = Locale.CANADA_FRENCH,
@@ -711,6 +720,7 @@ class AndroidDateTimeFormatterTest(
             longDate = "7 septembre 2023",
             fullDate = "jeudi 7 septembre 2023",
             skeletonMMMMd = "7 septembre",
+            longDateTimeJoiner = " à ",
         ),
         Japan(
             value = Locale.JAPAN,
@@ -759,6 +769,7 @@ class AndroidDateTimeFormatterTest(
             longDate = "7 сентября 2023 г.",
             fullDate = "четверг, 7 сентября 2023 г.",
             skeletonMMMMd = "7 сентября",
+            dateTimeJoiner = ", "
         ),
         Persian(
             value = Locale("fa"),
@@ -775,7 +786,9 @@ class AndroidDateTimeFormatterTest(
             mediumDate = "7 سپتامبر 2023",
             longDate = "7 سپتامبر 2023",
             fullDate = "پنجشنبه 7 سپتامبر 2023",
-            skeletonMMMMd = "7 سپتامبر"
+            skeletonMMMMd = "7 سپتامبر",
+            dateTimeJoiner = "،\u200F ",
+            longDateTimeJoiner = "، ساعت ",
         ),
         ;
 
