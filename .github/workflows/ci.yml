@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [ 29, 30, 32 ]
+        api-level: [ 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36 ]
         arch: [ x86_64 ]
 
     steps:
