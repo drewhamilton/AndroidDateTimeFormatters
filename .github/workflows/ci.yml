@@ -12,11 +12,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [ 29, 30, 32 ]
+        api-level: [ 26, 30, 33, 36 ]
         arch: [ x86_64 ]
-        include:
-          - api-level: 19
-            arch: x86
 
     steps:
       - name: Check out the repo
@@ -26,7 +23,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: zulu
-          java-version: 20
+          java-version: 25
 
       - name: Enable KVM
         run: |

@@ -10,8 +10,7 @@ android {
 
     defaultConfig {
         applicationId "dev.drewhamilton.androidtime.format.demo"
-        // If 26+, native java.time will be used. If lower, desugaring will be used:
-        minSdkVersion 21
+        minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.compileSdk
         versionCode 1
         versionName rootProject.property("VERSION_NAME")
@@ -20,9 +19,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-
-        // Support core library desugaring:
-        multiDexEnabled true
     }
 
     buildTypes {
@@ -35,7 +31,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-        coreLibraryDesugaringEnabled true
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
@@ -46,8 +41,6 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring(libs.desugarJdkLibs)
-
     implementation(project(":datetimeformatters"))
 
     implementation(platform(libs.androidx.compose.bom))
