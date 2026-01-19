@@ -13,7 +13,6 @@ import java.time.ZonedDateTime
 import java.time.format.FormatStyle
 import java.util.Locale
 import org.junit.Assume.assumeFalse
-import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -107,8 +106,6 @@ class AndroidDateTimeFormatterTest(
 
     //region ofLocalizedTime with explicit locale and style
     @Test fun ofLocalizedTime_nullSystemSettingLocaleAndShortFormat_usesLocaleFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         systemTimeSetting = null
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
@@ -121,8 +118,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedTime_12SystemSettingLocaleAndShortFormat_uses12HourFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         systemTimeSetting = TIME_SETTING_12
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
@@ -135,8 +130,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedTime_24SystemSettingLocaleAndShortFormat_uses24HourFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         systemTimeSetting = TIME_SETTING_24
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
@@ -149,8 +142,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedTime_localeAndMediumFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
             context = testContext,
             locale = locale.value,
@@ -160,8 +151,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedTime_localeAndLongFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
             context = testContext,
             locale = locale.value,
@@ -171,8 +160,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedTime_localeAndFullFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
             context = testContext,
             locale = locale.value,
@@ -278,7 +265,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$mediumTime")
+            assertThat(result).isEqualTo("$mediumDate$mediumDateTimeJoiner$mediumTime")
         }
     }
 
@@ -307,8 +294,6 @@ class AndroidDateTimeFormatterTest(
 
     //region ofLocalizedDateTime with explicit locale and dateTimeStyle
     @Test fun ofLocalizedDateTime_nullSystemSettingLocaleAndShortDateTimeFormat_usesShortLocaleFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         systemTimeSetting = null
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -324,8 +309,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_12SystemSettingLocaleAndShortDateTimeFormat_usesShort12HourFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         systemTimeSetting = TIME_SETTING_12
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -341,8 +324,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_24SystemSettingLocaleAndShortDateTimeFormat_usesShort24HourFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         systemTimeSetting = TIME_SETTING_24
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -358,8 +339,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_localeAndMediumDateTimeFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
             context = testContext,
             locale = locale.value,
@@ -368,13 +347,11 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$mediumTime")
+            assertThat(result).isEqualTo("$mediumDate$mediumDateTimeJoiner$mediumTime")
         }
     }
 
     @Test fun ofLocalizedDateTime_localeAndLongDateTimeFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
             context = testContext,
             locale = locale.value,
@@ -388,8 +365,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_localeAndFullDateTimeFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
             context = testContext,
             locale = locale.value,
@@ -435,7 +410,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$shortTime12")
+            assertThat(result).isEqualTo("$mediumDate$mediumDateTimeJoiner$shortTime12")
         }
     }
 
@@ -447,7 +422,7 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$shortTime24")
+            assertThat(result).isEqualTo("$mediumDate$mediumDateTimeJoiner$shortTime24")
         }
     }
 
@@ -476,8 +451,6 @@ class AndroidDateTimeFormatterTest(
 
     //region ofLocalizedDateTime with explicit locale, dateStyle, and timeStyle
     @Test fun ofLocalizedDateTime_localeAndShortDateFormatLongTimeFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
             context = testContext,
             locale = locale.value,
@@ -492,8 +465,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_nullSettingLocaleAndLongDateFormatShortTimeFormat_usesLongDateLocaleTimeFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         systemTimeSetting = null
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -510,8 +481,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_12SettingLocaleAndMediumDateFormatShortTimeFormat_usesMediumDate12HourTimeFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         systemTimeSetting = TIME_SETTING_12
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -523,13 +492,11 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$shortTime12")
+            assertThat(result).isEqualTo("$mediumDate$mediumDateTimeJoiner$shortTime12")
         }
     }
 
     @Test fun ofLocalizedDateTime_24SettingLocaleAndMediumDateFormatShortTimeFormat_usesMediumDate24HourTimeFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         systemTimeSetting = TIME_SETTING_24
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -541,13 +508,11 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$mediumDate$dateTimeJoiner$shortTime24")
+            assertThat(result).isEqualTo("$mediumDate$mediumDateTimeJoiner$shortTime24")
         }
     }
 
     @Test fun ofLocalizedDateTime_localeAndLongDateFormatFullTimeFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
             context = testContext,
             locale = locale.value,
@@ -562,8 +527,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_localeAndFullDateFormatMediumTimeFormat() {
-        assumeTrue(Build.VERSION.SDK_INT >= 17)
-
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
             context = testContext,
             locale = locale.value,
@@ -580,7 +543,6 @@ class AndroidDateTimeFormatterTest(
 
     //region ofSkeleton
     @Test fun ofSkeleton_MMMMdAndContext() {
-        assumeTrue(Build.VERSION.SDK_INT >= 18)
         // FIXME: API 29 on GH Actions sometimes prints Persian "October" instead of "September"
         assumeFalse(Build.VERSION.SDK_INT == 29 && locale == TestLocale.Persian)
 
@@ -590,7 +552,6 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofSkeleton_MMMMdAndLocale() {
-        assumeTrue(Build.VERSION.SDK_INT >= 18)
         // FIXME: API 29 on GH Actions sometimes prints Persian "October" instead of "September"
         assumeFalse(Build.VERSION.SDK_INT == 29 && locale == TestLocale.Persian)
 
@@ -615,6 +576,7 @@ class AndroidDateTimeFormatterTest(
         val skeletonMMMMd: String,
         val dateTimeJoiner: String = " ",
         val shortDateTimeJoiner: String = dateTimeJoiner,
+        val mediumDateTimeJoiner: String = dateTimeJoiner,
         val longDateTimeJoiner: String = dateTimeJoiner,
     ) {
         US(
@@ -622,9 +584,18 @@ class AndroidDateTimeFormatterTest(
             preferredTimeSetting = TIME_SETTING_12,
             shortTime12 = "6:01 PM",
             shortTime24 = "18:01",
-            mediumTime = "6:01:00 PM",
-            longTime = "6:01:00 PM CDT",
-            fullTime = "6:01:00 PM Central Daylight Time",
+            mediumTime = when {
+                Build.VERSION.SDK_INT >= 34 -> "6:01:00 PM"
+                else -> "6:01:00 PM"
+            },
+            longTime = when {
+                Build.VERSION.SDK_INT >= 34 -> "6:01:00 PM CDT"
+                else -> "6:01:00 PM CDT"
+            },
+            fullTime = when {
+                Build.VERSION.SDK_INT >= 34 -> "6:01:00 PM Central Daylight Time"
+                else -> "6:01:00 PM Central Daylight Time"
+            },
             shortDate = "9/7/23",
             mediumDate = "Sep 7, 2023",
             longDate = "September 7, 2023",
@@ -637,44 +608,41 @@ class AndroidDateTimeFormatterTest(
             value = Locale.ITALY,
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = when {
-                Build.VERSION.SDK_INT>= 23 -> "6:01 PM"
+                Build.VERSION.SDK_INT >= 34 -> "6:01 PM"
+                Build.VERSION.SDK_INT >= 23 -> "6:01 PM"
                 else -> "06:01 PM"
             },
             shortTime24 = "18:01",
             mediumTime = "18:01:00",
-            longTime = when {
-                Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
-                else -> "18:01:00 CDT"
-            },
+            longTime = "18:01:00 GMT-05:00",
             fullTime = "18:01:00 Ora legale centrale USA",
             shortDate = "07/09/23",
             mediumDate = when {
                 Build.VERSION.SDK_INT >= 28 -> "7 set 2023"
-                Build.VERSION.SDK_INT >= 23 -> "07 set 2023"
-                else -> "07/set/2023"
+                else -> "07 set 2023"
             },
-            longDate = when {
-                Build.VERSION.SDK_INT >= 23 -> "7 settembre 2023"
-                else -> "07 settembre 2023"
-            },
+            longDate = "7 settembre 2023",
             fullDate = "giovedì 7 settembre 2023",
             skeletonMMMMd = "7 settembre",
             dateTimeJoiner = ", ",
-            longDateTimeJoiner = " ",
+            longDateTimeJoiner = when {
+                Build.VERSION.SDK_INT >= 34 -> " alle ore "
+                else -> " "
+            },
         ),
         France(
             value = Locale.FRANCE,
             preferredTimeSetting = TIME_SETTING_24,
-            shortTime12 = "6:01 PM",
+            shortTime12 = when {
+                Build.VERSION.SDK_INT >= 34 -> "6:01 PM"
+                else -> "6:01 PM"
+            },
             shortTime24 = "18:01",
             mediumTime = "18:01:00",
-            longTime = when {
-                Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
-                else -> "18:01:00 CDT"
-            },
+            longTime = "18:01:00 GMT-05:00",
             fullTime = when {
-                Build.VERSION.SDK_INT >= 23 -> "18:01:00 heure d’été du Centre"
-                else -> "18:01:00 heure avancée du Centre"
+                Build.VERSION.SDK_INT >= 34 -> "18:01:00 heure d’été du centre nord-américain"
+                else -> "18:01:00 heure d’été du Centre"
             },
             shortDate = "07/09/2023",
             mediumDate = "7 sept. 2023",
@@ -683,19 +651,20 @@ class AndroidDateTimeFormatterTest(
             skeletonMMMMd = "7 septembre",
             dateTimeJoiner = " à ",
             shortDateTimeJoiner = " ",
+            mediumDateTimeJoiner = when {
+                Build.VERSION.SDK_INT >= 31 -> ", "
+                else -> " "
+            },
         ),
         CanadaFrench(
             value = Locale.CANADA_FRENCH,
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = when {
+                Build.VERSION.SDK_INT >= 34 -> "6 h 01 p.m."
                 Build.VERSION.SDK_INT >= 28 -> "6 h 01 p.m."
-                Build.VERSION.SDK_INT >= 26 -> "6:01 p.m."
-                else -> "6:01 PM"
+                else -> "6:01 p.m."
             },
-            shortTime24 = when {
-                Build.VERSION.SDK_INT >= 28 -> "18 h 01"
-                else -> "18:01"
-            },
+            shortTime24 = "18 h 01",
             mediumTime = when {
                 Build.VERSION.SDK_INT >= 28 -> "18 h 01 min 00 s"
                 else -> "18:01:00"
@@ -706,20 +675,20 @@ class AndroidDateTimeFormatterTest(
             },
             fullTime = when {
                 Build.VERSION.SDK_INT >= 28 -> "18 h 01 min 00 s heure avancée du Centre"
-                Build.VERSION.SDK_INT >= 23 -> "18:01:00 heure avancée du Centre"
-                else -> "18 h 01 min 00 s heure avancée du Centre"
+                else -> "18:01:00 heure avancée du Centre"
             },
             shortDate = when {
                 Build.VERSION.SDK_INT >= 30 -> "2023-09-07"
                 else -> "23-09-07"
             },
-            mediumDate = when {
-                Build.VERSION.SDK_INT >= 23 -> "7 sept. 2023"
-                else -> "2023-09-07"
-            },
+            mediumDate = "7 sept. 2023",
             longDate = "7 septembre 2023",
             fullDate = "jeudi 7 septembre 2023",
             skeletonMMMMd = "7 septembre",
+            mediumDateTimeJoiner = when {
+                Build.VERSION.SDK_INT >= 31 -> ", "
+                else -> " "
+            },
             longDateTimeJoiner = " à ",
         ),
         Japan(
@@ -728,10 +697,7 @@ class AndroidDateTimeFormatterTest(
             shortTime12 = "午後6:01",
             shortTime24 = "18:01",
             mediumTime = "18:01:00",
-            longTime = when {
-                Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
-                else -> "18:01:00 CDT"
-            },
+            longTime = "18:01:00 GMT-05:00",
             fullTime = "18時01分00秒 アメリカ中部夏時間",
             shortDate = "2023/09/07",
             mediumDate = "2023/09/07",
@@ -743,33 +709,33 @@ class AndroidDateTimeFormatterTest(
             value = localeOf(language = "ru"),
             preferredTimeSetting = TIME_SETTING_24,
             shortTime12 = when {
+                Build.VERSION.SDK_INT >= 34 -> "6:01 PM"
                 Build.VERSION.SDK_INT >= 28 -> "6:01 PM"
-                Build.VERSION.SDK_INT >= 24 -> "6:01 ПП"
-                Build.VERSION.SDK_INT >= 21 -> "6:01 PM"
-                else -> "6:01 после полудня"
+                else -> "6:01 ПП"
             },
             shortTime24 = "18:01",
             mediumTime = "18:01:00",
-            longTime = when {
-                Build.VERSION.SDK_INT >= 21 -> "18:01:00 GMT-05:00"
-                else -> "18:01:00 CDT"
-            },
-            fullTime = when {
-                Build.VERSION.SDK_INT >= 21 -> "18:01:00 Центральная Америка, летнее время"
-                else -> "18:01:00 Средне-американское летнее время"
-            },
-            shortDate = when {
-                Build.VERSION.SDK_INT >= 26 -> "07.09.2023"
-                else -> "07.09.23"
-            },
+            longTime = "18:01:00 GMT-05:00",
+            fullTime = "18:01:00 Центральная Америка, летнее время",
+            shortDate = "07.09.2023",
             mediumDate = when {
-                Build.VERSION.SDK_INT >= 21 -> "7 сент. 2023 г."
-                else -> "07 сент. 2023 г."
+                Build.VERSION.SDK_INT >= 34 -> "7 сент. 2023 г."
+                else -> "7 сент. 2023 г."
             },
-            longDate = "7 сентября 2023 г.",
-            fullDate = "четверг, 7 сентября 2023 г.",
+            longDate = when {
+                Build.VERSION.SDK_INT >= 34 -> "7 сентября 2023 г."
+                else -> "7 сентября 2023 г."
+            },
+            fullDate = when {
+                Build.VERSION.SDK_INT >= 34 -> "четверг, 7 сентября 2023 г."
+                else -> "четверг, 7 сентября 2023 г."
+            },
             skeletonMMMMd = "7 сентября",
-            dateTimeJoiner = ", "
+            dateTimeJoiner = ", ",
+            longDateTimeJoiner = when {
+                Build.VERSION.SDK_INT >= 34 -> " в "
+                else -> ", "
+            }
         ),
         Persian(
             value = localeOf(language = "fa"),
@@ -777,18 +743,25 @@ class AndroidDateTimeFormatterTest(
             shortTime12 = "6:01 بعدازظهر",
             shortTime24 = "18:01",
             mediumTime = "18:01:00",
-            longTime = when {
-                Build.VERSION.SDK_INT >= 21 -> "18:01:00 (GMT-05:00)"
-                else -> "18:01:00 (CDT)"
-            },
+            longTime = "18:01:00 (GMT-05:00)",
             fullTime = "18:01:00 (وقت تابستانی مرکز امریکا)",
             shortDate = "2023/9/7",
             mediumDate = "7 سپتامبر 2023",
             longDate = "7 سپتامبر 2023",
             fullDate = "پنجشنبه 7 سپتامبر 2023",
             skeletonMMMMd = "7 سپتامبر",
-            dateTimeJoiner = "،\u200F ",
-            longDateTimeJoiner = "، ساعت ",
+            dateTimeJoiner = when {
+                Build.VERSION.SDK_INT >= 34 -> "، "
+                else -> "،\u200F "
+            },
+            shortDateTimeJoiner = when {
+                Build.VERSION.SDK_INT >= 34 -> ", "
+                else -> "، "
+            },
+            longDateTimeJoiner = when {
+                Build.VERSION.SDK_INT >= 34 -> " ساعت "
+                else -> "، ساعت "
+            },
         ),
         ;
 
