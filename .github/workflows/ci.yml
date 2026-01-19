@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: zulu
-          java-version: 20
+          java-version: 25
 
       - name: Enable KVM
         run: |
