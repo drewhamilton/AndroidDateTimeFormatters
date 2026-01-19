@@ -1,6 +1,6 @@
 [versions]
 
-agp = "8.13.2"
+agp = "9.0.0"
 androidx-compose-bom = "2026.01.00"
 kotlin = "2.3.0"
 
@@ -33,7 +33,6 @@ truth = "com.google.truth:truth:1.4.5"
 
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinx-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.18.1" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.36.0" }
