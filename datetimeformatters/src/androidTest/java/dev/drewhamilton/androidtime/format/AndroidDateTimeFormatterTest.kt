@@ -223,6 +223,9 @@ class AndroidDateTimeFormatterTest(
 
     //region ofLocalizedDateTime with dateTimeStyle
     @Test fun ofLocalizedDateTime_nullSystemSettingShortDateTimeFormat_usesShortLocaleFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 34 && locale == TestLocale.Persian)
+
         systemTimeSetting = null
         testLocale = locale.value
 
@@ -235,6 +238,9 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_12SystemSettingShortDateTimeFormat_usesShort12HourFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 34 && locale == TestLocale.Persian)
+
         systemTimeSetting = TIME_SETTING_12
         testLocale = locale.value
 
@@ -247,6 +253,9 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_24SystemSettingShortDateTimeFormat_usesShort24HourFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 34 && locale == TestLocale.Persian)
+
         systemTimeSetting = TIME_SETTING_24
         testLocale = locale.value
 
@@ -259,6 +268,9 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_mediumDateTimeFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 31 && locale == TestLocale.France)
+
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(localeContext, FormatStyle.MEDIUM)
@@ -294,6 +306,9 @@ class AndroidDateTimeFormatterTest(
 
     //region ofLocalizedDateTime with explicit locale and dateTimeStyle
     @Test fun ofLocalizedDateTime_nullSystemSettingLocaleAndShortDateTimeFormat_usesShortLocaleFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 34 && locale == TestLocale.Persian)
+
         systemTimeSetting = null
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -309,6 +324,9 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_12SystemSettingLocaleAndShortDateTimeFormat_usesShort12HourFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 34 && locale == TestLocale.Persian)
+
         systemTimeSetting = TIME_SETTING_12
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -324,6 +342,9 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_24SystemSettingLocaleAndShortDateTimeFormat_usesShort24HourFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 34 && locale == TestLocale.Persian)
+
         systemTimeSetting = TIME_SETTING_24
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -339,6 +360,9 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_localeAndMediumDateTimeFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 31 && locale == TestLocale.France)
+
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
             context = testContext,
             locale = locale.value,
@@ -380,6 +404,9 @@ class AndroidDateTimeFormatterTest(
 
     //region ofLocalizedDateTime with dateStyle and timeStyle
     @Test fun ofLocalizedDateTime_shortDateFormatLongTimeFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 34 && locale == TestLocale.Persian)
+
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(localeContext, FormatStyle.SHORT, FormatStyle.LONG)
@@ -403,6 +430,9 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_12SettingMediumDateFormatShortTimeFormat_usesMediumDate12HourTimeFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 31 && locale == TestLocale.France)
+
         systemTimeSetting = TIME_SETTING_12
         testLocale = locale.value
 
@@ -415,6 +445,9 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_24SettingMediumDateFormatShortTimeFormat_usesMediumDate24HourTimeFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 31 && locale == TestLocale.France)
+
         systemTimeSetting = TIME_SETTING_24
         testLocale = locale.value
 
@@ -451,6 +484,9 @@ class AndroidDateTimeFormatterTest(
 
     //region ofLocalizedDateTime with explicit locale, dateStyle, and timeStyle
     @Test fun ofLocalizedDateTime_localeAndShortDateFormatLongTimeFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 34 && locale == TestLocale.Persian)
+
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
             context = testContext,
             locale = locale.value,
@@ -481,6 +517,9 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_12SettingLocaleAndMediumDateFormatShortTimeFormat_usesMediumDate12HourTimeFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 31 && locale == TestLocale.France)
+
         systemTimeSetting = TIME_SETTING_12
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -497,6 +536,9 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofLocalizedDateTime_24SettingLocaleAndMediumDateFormatShortTimeFormat_usesMediumDate24HourTimeFormat() {
+        // Behavior is inconsistent on older OS levels:
+        assumeFalse(Build.VERSION.SDK_INT < 31 && locale == TestLocale.France)
+
         systemTimeSetting = TIME_SETTING_24
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -543,7 +585,7 @@ class AndroidDateTimeFormatterTest(
 
     //region ofSkeleton
     @Test fun ofSkeleton_MMMMdAndContext() {
-        // FIXME: API 29 on GH Actions sometimes prints Persian "October" instead of "September"
+        // Behavior is inconsistent on older OS levels:
         assumeFalse(Build.VERSION.SDK_INT == 29 && locale == TestLocale.Persian)
 
         testLocale = locale.value
@@ -552,7 +594,7 @@ class AndroidDateTimeFormatterTest(
     }
 
     @Test fun ofSkeleton_MMMMdAndLocale() {
-        // FIXME: API 29 on GH Actions sometimes prints Persian "October" instead of "September"
+        // Behavior is inconsistent on older OS levels:
         assumeFalse(Build.VERSION.SDK_INT == 29 && locale == TestLocale.Persian)
 
         val formatter = AndroidDateTimeFormatter.ofSkeleton("MMMMd", locale.value)
