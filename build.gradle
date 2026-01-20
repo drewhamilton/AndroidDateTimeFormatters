@@ -1,3 +1,6 @@
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.MavenPublishBaseExtension
+
 plugins {
     alias(libs.plugins.android.app) apply false
     alias(libs.plugins.android.library) apply false
@@ -21,6 +24,13 @@ allprojects { project ->
     }
 }
 
+subprojects {
+    plugins.withId("com.vanniktech.maven.publish") {
+        extensions.getByType(MavenPublishBaseExtension.class)
+            .configureBasedOnAppliedPlugins(new JavadocJar.None())
+    }
+}
+
 ext {
     compileSdk = 36
     minSdk = 26
@@ -29,8 +39,4 @@ ext {
     keystorePassword = project.hasProperty('personalKeystorePassword') ? personalKeystorePassword : 'x'
     keyAlias = project.hasProperty('personalKeyAlias') ? personalKeyAlias : 'x'
     keyPassword = project.hasProperty('personalKeyPassword') ? personalKeyPassword : 'x'
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }
