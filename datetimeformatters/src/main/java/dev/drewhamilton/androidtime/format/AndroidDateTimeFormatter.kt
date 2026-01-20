@@ -86,8 +86,6 @@ object AndroidDateTimeFormatter {
                     context = context,
                     locale = locale,
                     style = timeStyle,
-                    skeletonFor12Setting = "hms",
-                    skeletonFor24Setting = "Hms",
                 )
             }
 
@@ -305,29 +303,46 @@ object AndroidDateTimeFormatter {
         return locale.getCompatibleEnglishPattern(bestPattern)
     }
 
+    /**
+     * Currently only supports [FormatStyle.SHORT] and [FormatStyle.MEDIUM] formats.
+     */
     @JvmStatic private fun getSystemTimeSettingAwareTimePattern(
         context: Context,
         locale: Locale,
         style: FormatStyle,
-        skeletonFor12Setting: String,
-        skeletonFor24Setting: String,
     ): String {
-        val timeSetting = context.timeSetting()
-            ?: if (locale.is24HourLocale()) "24" else "12"
+        val unsupportedFormatMessage =
+            "getSystemTimeSettingAwareTimePattern only supports SHORT and MEDIUM formats"
 
         val patternGenerator = DateTimePatternGenerator.getInstance(locale)
+
+        val skeletonFor12Setting = when (style) {
+            FormatStyle.MEDIUM -> "hms"
+            FormatStyle.SHORT -> "hm"
+            else -> throw IllegalArgumentException(unsupportedFormatMessage)
+        }
         val patternFor12Setting = locale.getCompatibleEnglishPattern(
             pattern = patternGenerator.getBestPattern(skeletonFor12Setting),
         )
+
+        val skeletonFor24Setting = when (style) {
+            FormatStyle.MEDIUM -> "Hms"
+            FormatStyle.SHORT -> "Hm"
+            else -> throw IllegalArgumentException(unsupportedFormatMessage)
+        }
         val patternFor24Setting = locale.getCompatibleEnglishPattern(
             pattern = patternGenerator.getBestPattern(skeletonFor24Setting),
         )
+
         val systemPattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
             null,
             style,
             IsoChronology.INSTANCE,
             locale,
         )
+
+        val timeSetting = context.timeSetting()
+            ?: if (locale.is24HourLocale()) "24" else "12"
         return when (timeSetting) {
             "12" if systemPattern.contains(patternFor24Setting) -> {
                 systemPattern.replace(
