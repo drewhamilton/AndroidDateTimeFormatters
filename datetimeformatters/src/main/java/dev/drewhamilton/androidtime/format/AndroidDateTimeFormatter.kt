@@ -20,6 +20,7 @@ import java.util.Locale
 object AndroidDateTimeFormatter {
 
     //region ofLocalized*
+    //region ofLocalizedTime
     /**
      * Returns a [DateTimeFormatter] that can format the time for the ISO chronology according to
      * the [context]'s locale and the user's 12-/24-hour clock preference. Overload which uses
@@ -97,7 +98,9 @@ object AndroidDateTimeFormatter {
                 .withChronology(IsoChronology.INSTANCE)
         }
     }
+    //endregion
 
+    //region ofLocalizedDate
     /**
      * Creates a [DateTimeFormatter] that can format the date for the ISO chronology according to
      * the [context]'s primary locale and the given [dateStyle].
@@ -128,7 +131,9 @@ object AndroidDateTimeFormatter {
         return DateTimeFormatter.ofLocalizedDate(dateStyle)
             .withLocale(locale)
     }
+    //endregion
 
+    //region ofLocalizedDateTime
     /**
      * Creates a [DateTimeFormatter] that can format the date-time for the ISO chronology according
      * to the [context]'s primary locale and the given [dateTimeStyle]. If [dateTimeStyle] is
@@ -278,6 +283,7 @@ object AndroidDateTimeFormatter {
 
         return null
     }
+    //endregion
 
     /**
      * Currently only supports [FormatStyle.SHORT] and [FormatStyle.MEDIUM] formats.
