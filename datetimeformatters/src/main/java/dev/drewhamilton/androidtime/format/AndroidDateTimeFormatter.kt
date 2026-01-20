@@ -77,11 +77,7 @@ object AndroidDateTimeFormatter {
         timeStyle: FormatStyle,
     ): DateTimeFormatter {
         val systemTimeSettingAwarePattern = when (timeStyle) {
-            FormatStyle.SHORT -> {
-                getSystemTimeSettingAwareShortTimePattern(context, locale)
-            }
-
-            FormatStyle.MEDIUM -> {
+            FormatStyle.SHORT, FormatStyle.MEDIUM -> {
                 getSystemTimeSettingAwareTimePattern(
                     context = context,
                     locale = locale,
@@ -254,7 +250,7 @@ object AndroidDateTimeFormatter {
         dateStyle: FormatStyle,
         timeStyle: FormatStyle,
     ): DateTimeFormatter? {
-        val timePattern = getSystemTimeSettingAwareShortTimePattern(context, locale)
+        val timePattern = getSystemTimeSettingAwareTimePattern(context, locale, FormatStyle.SHORT)
 
         val defaultDateTimePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
             dateStyle,
@@ -284,23 +280,6 @@ object AndroidDateTimeFormatter {
         }
 
         return null
-    }
-
-    // TODO? Combine with non-SHORT-specific version of function
-    @JvmStatic private fun getSystemTimeSettingAwareShortTimePattern(
-        context: Context,
-        locale: Locale,
-    ): String {
-        val timeSetting = context.timeSetting()
-            ?: if (locale.is24HourLocale()) "24" else "12"
-        val patternGenerator = DateTimePatternGenerator.getInstance(locale)
-        val patternSkeleton = when (timeSetting) {
-            "12" -> "hm"
-            "24" -> "Hm"
-            else -> throw IllegalArgumentException("Unknown time setting: $timeSetting")
-        }
-        val bestPattern = patternGenerator.getBestPattern(patternSkeleton)
-        return locale.getCompatibleEnglishPattern(bestPattern)
     }
 
     /**
