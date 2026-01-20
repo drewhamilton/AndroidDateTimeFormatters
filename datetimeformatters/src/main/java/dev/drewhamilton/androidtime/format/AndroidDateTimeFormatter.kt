@@ -53,7 +53,6 @@ object AndroidDateTimeFormatter {
         context: Context,
         timeStyle: FormatStyle,
     ): DateTimeFormatter {
-        @Suppress("NewApi") // Safely using Context locale
         return ofLocalizedTime(context, context.extractPrimaryLocale(), timeStyle)
     }
 
@@ -147,7 +146,6 @@ object AndroidDateTimeFormatter {
         context: Context,
         dateTimeStyle: FormatStyle,
     ): DateTimeFormatter {
-        @Suppress("NewApi") // Safely using Context locale
         return ofLocalizedDateTime(context, context.extractPrimaryLocale(), dateTimeStyle)
     }
 
@@ -204,7 +202,6 @@ object AndroidDateTimeFormatter {
         dateStyle: FormatStyle,
         timeStyle: FormatStyle,
     ): DateTimeFormatter {
-        @Suppress("NewApi") // Safely using Context locale
         return ofLocalizedDateTime(context, context.extractPrimaryLocale(), dateStyle, timeStyle)
     }
 
