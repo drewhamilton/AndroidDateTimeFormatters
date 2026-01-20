@@ -311,43 +311,40 @@ object AndroidDateTimeFormatter {
         style: FormatStyle,
         skeletonFor12Setting: String,
         skeletonFor24Setting: String,
-    ): String? {
+    ): String {
         val timeSetting = context.timeSetting()
-        return if (timeSetting == null) {
-            // FIXME: Add same fallback as short version after tests are written
-            null
-        } else {
-            val patternGenerator = DateTimePatternGenerator.getInstance(locale)
-            val patternFor12Setting = locale.getCompatibleEnglishPattern(
-                pattern = patternGenerator.getBestPattern(skeletonFor12Setting),
-            )
-            val patternFor24Setting = locale.getCompatibleEnglishPattern(
-                pattern = patternGenerator.getBestPattern(skeletonFor24Setting),
-            )
-            val systemPattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
-                null,
-                style,
-                IsoChronology.INSTANCE,
-                locale,
-            )
-            when (timeSetting) {
-                "12" if systemPattern.contains(patternFor24Setting) -> {
-                    systemPattern.replace(
-                        oldValue = patternFor24Setting,
-                        newValue = patternFor12Setting,
-                    )
-                }
+            ?: if (locale.is24HourLocale()) "24" else "12"
 
-                "24" if systemPattern.contains(patternFor12Setting) -> {
-                    systemPattern.replace(
-                        oldValue = patternFor12Setting,
-                        newValue = patternFor24Setting,
-                    )
-                }
+        val patternGenerator = DateTimePatternGenerator.getInstance(locale)
+        val patternFor12Setting = locale.getCompatibleEnglishPattern(
+            pattern = patternGenerator.getBestPattern(skeletonFor12Setting),
+        )
+        val patternFor24Setting = locale.getCompatibleEnglishPattern(
+            pattern = patternGenerator.getBestPattern(skeletonFor24Setting),
+        )
+        val systemPattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
+            null,
+            style,
+            IsoChronology.INSTANCE,
+            locale,
+        )
+        return when (timeSetting) {
+            "12" if systemPattern.contains(patternFor24Setting) -> {
+                systemPattern.replace(
+                    oldValue = patternFor24Setting,
+                    newValue = patternFor12Setting,
+                )
+            }
 
-                else -> {
-                    systemPattern
-                }
+            "24" if systemPattern.contains(patternFor12Setting) -> {
+                systemPattern.replace(
+                    oldValue = patternFor12Setting,
+                    newValue = patternFor24Setting,
+                )
+            }
+
+            else -> {
+                systemPattern
             }
         }
     }
