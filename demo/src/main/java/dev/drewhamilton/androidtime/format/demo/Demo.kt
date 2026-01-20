@@ -1,6 +1,7 @@
 package dev.drewhamilton.androidtime.format.demo
 
 import android.content.res.Configuration
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -126,9 +127,9 @@ private fun parseLocaleString(value: String): Locale? {
     val parts = value.split('_')
     return when (parts.size) {
         0 -> null
-        1 -> Locale(parts.single())
-        2 -> Locale(parts[0], parts[1])
-        3 -> Locale(parts[0], parts[1], parts[2])
+        1 -> localeOf(language = parts.single())
+        2 -> localeOf(language = parts[0], country = parts[1])
+        3 -> localeOf(language = parts[0], country = parts[1], variant = parts[2])
         else -> null
     }?.let {
         if (it.toLanguageTag() == "und") {
@@ -136,6 +137,33 @@ private fun parseLocaleString(value: String): Locale? {
         } else {
             it
         }
+    }
+}
+
+private fun localeOf(language: String): Locale {
+    return if (Build.VERSION.SDK_INT >= 36) {
+        Locale.of(language)
+    } else {
+        @Suppress("DEPRECATION")
+        Locale(language)
+    }
+}
+
+private fun localeOf(language: String, country: String): Locale {
+    return if (Build.VERSION.SDK_INT >= 36) {
+        Locale.of(language, country)
+    } else {
+        @Suppress("DEPRECATION")
+        Locale(language, country)
+    }
+}
+
+private fun localeOf(language: String, country: String, variant: String): Locale {
+    return if (Build.VERSION.SDK_INT >= 36) {
+        Locale.of(language, country, variant)
+    } else {
+        @Suppress("DEPRECATION")
+        Locale(language, country, variant)
     }
 }
 
