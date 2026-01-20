@@ -75,47 +75,53 @@ object AndroidDateTimeFormatter {
         timeStyle: FormatStyle,
     ): DateTimeFormatter {
         val systemTimeSettingAwarePattern = when (timeStyle) {
-            FormatStyle.SHORT -> getSystemTimeSettingAwareShortTimePattern(context, locale)
+            FormatStyle.SHORT -> {
+                getSystemTimeSettingAwareShortTimePattern(context, locale)
+            }
+
             FormatStyle.MEDIUM -> {
-                if (Build.VERSION.SDK_INT < 24) {
+                val timeSetting = context.timeSetting()
+                if (timeSetting == null) {
+                    // FIXME: This returns null by default on API 25, and differs from the
+                    //  behavior of the short time pattern (e.g. shows 5:08 PM on medium, but
+                    //  17:08 on short).
                     null
                 } else {
-                    val timeSetting = context.timeSetting()
-                    if (timeSetting == null) {
-                        // FIXME: This returns null by default on API 25, and differs from the
-                        //  behavior of the short time pattern (e.g. shows 5:08 PM on medium, but
-                        //  17:08 on short).
-                        null
-                    } else {
-                        val patternGenerator = DateTimePatternGenerator.getInstance(locale)
-                        val patternFor12Setting = locale.getCompatibleEnglishPattern(
-                            pattern = patternGenerator.getBestPattern("hms"),
-                        )
-                        val patternFor24Setting = locale.getCompatibleEnglishPattern(
-                            pattern = patternGenerator.getBestPattern("Hms"),
-                        )
-                        val systemPattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
-                            null,
-                            timeStyle,
-                            IsoChronology.INSTANCE,
-                            locale,
-                        )
-                        if (timeSetting == "12" && systemPattern.contains(patternFor24Setting)) {
+                    val patternGenerator = DateTimePatternGenerator.getInstance(locale)
+                    val patternFor12Setting = locale.getCompatibleEnglishPattern(
+                        pattern = patternGenerator.getBestPattern("hms"),
+                    )
+                    val patternFor24Setting = locale.getCompatibleEnglishPattern(
+                        pattern = patternGenerator.getBestPattern("Hms"),
+                    )
+                    val systemPattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
+                        null,
+                        timeStyle,
+                        IsoChronology.INSTANCE,
+                        locale,
+                    )
+                    when (timeSetting) {
+                        "12" if systemPattern.contains(patternFor24Setting) -> {
                             systemPattern.replace(
                                 oldValue = patternFor24Setting,
                                 newValue = patternFor12Setting,
                             )
-                        } else if (timeSetting == "24" && systemPattern.contains(patternFor12Setting)) {
+                        }
+
+                        "24" if systemPattern.contains(patternFor12Setting) -> {
                             systemPattern.replace(
                                 oldValue = patternFor12Setting,
                                 newValue = patternFor24Setting,
                             )
-                        } else {
+                        }
+
+                        else -> {
                             systemPattern
                         }
                     }
                 }
             }
+
             else -> null
         }
         return if (systemTimeSettingAwarePattern == null) {
