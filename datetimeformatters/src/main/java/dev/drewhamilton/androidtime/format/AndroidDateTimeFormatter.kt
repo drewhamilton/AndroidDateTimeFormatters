@@ -80,43 +80,13 @@ object AndroidDateTimeFormatter {
             }
 
             FormatStyle.MEDIUM -> {
-                val timeSetting = context.timeSetting()
-                if (timeSetting == null) {
-                    null
-                } else {
-                    val patternGenerator = DateTimePatternGenerator.getInstance(locale)
-                    val patternFor12Setting = locale.getCompatibleEnglishPattern(
-                        pattern = patternGenerator.getBestPattern("hms"),
-                    )
-                    val patternFor24Setting = locale.getCompatibleEnglishPattern(
-                        pattern = patternGenerator.getBestPattern("Hms"),
-                    )
-                    val systemPattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
-                        null,
-                        timeStyle,
-                        IsoChronology.INSTANCE,
-                        locale,
-                    )
-                    when (timeSetting) {
-                        "12" if systemPattern.contains(patternFor24Setting) -> {
-                            systemPattern.replace(
-                                oldValue = patternFor24Setting,
-                                newValue = patternFor12Setting,
-                            )
-                        }
-
-                        "24" if systemPattern.contains(patternFor12Setting) -> {
-                            systemPattern.replace(
-                                oldValue = patternFor12Setting,
-                                newValue = patternFor24Setting,
-                            )
-                        }
-
-                        else -> {
-                            systemPattern
-                        }
-                    }
-                }
+                getSystemTimeSettingAwareTimePattern(
+                    context = context,
+                    locale = locale,
+                    style = timeStyle,
+                    skeletonFor12Setting = "hms",
+                    skeletonFor24Setting = "Hms",
+                )
             }
 
             else -> null
@@ -316,6 +286,7 @@ object AndroidDateTimeFormatter {
         return null
     }
 
+    // TODO? Combine with non-SHORT-specific version of function
     @JvmStatic private fun getSystemTimeSettingAwareShortTimePattern(
         context: Context,
         locale: Locale,
@@ -330,6 +301,53 @@ object AndroidDateTimeFormatter {
         }
         val bestPattern = patternGenerator.getBestPattern(patternSkeleton)
         return locale.getCompatibleEnglishPattern(bestPattern)
+    }
+
+    @JvmStatic private fun getSystemTimeSettingAwareTimePattern(
+        context: Context,
+        locale: Locale,
+        style: FormatStyle,
+        skeletonFor12Setting: String,
+        skeletonFor24Setting: String,
+    ): String? {
+        val timeSetting = context.timeSetting()
+        return if (timeSetting == null) {
+            // FIXME: Add same fallback as short version after tests are written
+            null
+        } else {
+            val patternGenerator = DateTimePatternGenerator.getInstance(locale)
+            val patternFor12Setting = locale.getCompatibleEnglishPattern(
+                pattern = patternGenerator.getBestPattern(skeletonFor12Setting),
+            )
+            val patternFor24Setting = locale.getCompatibleEnglishPattern(
+                pattern = patternGenerator.getBestPattern(skeletonFor24Setting),
+            )
+            val systemPattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
+                null,
+                style,
+                IsoChronology.INSTANCE,
+                locale,
+            )
+            when (timeSetting) {
+                "12" if systemPattern.contains(patternFor24Setting) -> {
+                    systemPattern.replace(
+                        oldValue = patternFor24Setting,
+                        newValue = patternFor12Setting,
+                    )
+                }
+
+                "24" if systemPattern.contains(patternFor12Setting) -> {
+                    systemPattern.replace(
+                        oldValue = patternFor12Setting,
+                        newValue = patternFor24Setting,
+                    )
+                }
+
+                else -> {
+                    systemPattern
+                }
+            }
+        }
     }
 
     @JvmStatic private fun Context.timeSetting(): String? {
