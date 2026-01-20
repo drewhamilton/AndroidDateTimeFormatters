@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -243,11 +244,14 @@ private fun FormatComparison(
             )
 
             if (formatStyle == FormatStyle.SHORT) {
+                val usingSpecifiedLocale = locale == context.extractPrimaryLocale()
+
                 val legacyDateFormat = AndroidTextDateFormat.getTimeFormat(context)
                 val legacyDate = JavaUtilDate(instant.toEpochMilli())
                 LabeledText(
                     label = "android.text.format.DateFormat",
                     value = legacyDateFormat.format(legacyDate),
+                    modifier = Modifier.alpha(if (usingSpecifiedLocale) 1f else 0.5f),
                 )
             }
         }
