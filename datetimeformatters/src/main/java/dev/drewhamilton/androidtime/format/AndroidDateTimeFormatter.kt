@@ -82,9 +82,6 @@ object AndroidDateTimeFormatter {
             FormatStyle.MEDIUM -> {
                 val timeSetting = context.timeSetting()
                 if (timeSetting == null) {
-                    // FIXME: This returns null by default on API 25, and differs from the
-                    //  behavior of the short time pattern (e.g. shows 5:08 PM on medium, but
-                    //  17:08 on short).
                     null
                 } else {
                     val patternGenerator = DateTimePatternGenerator.getInstance(locale)
