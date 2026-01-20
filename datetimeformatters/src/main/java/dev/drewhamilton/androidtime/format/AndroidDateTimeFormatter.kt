@@ -23,8 +23,7 @@ object AndroidDateTimeFormatter {
     //region ofLocalizedTime
     /**
      * Returns a [DateTimeFormatter] that can format the time for the ISO chronology according to
-     * the [context]'s locale and the user's 12-/24-hour clock preference. Overload which uses
-     * [FormatStyle.SHORT].
+     * the [context]'s locale and the user's 12-/24-hour clock preference. Uses [FormatStyle.SHORT].
      *
      * The formatter's pattern may be eagerly determined, so appending
      * [DateTimeFormatter.withLocale] to the returned formatter is not guaranteed to fully localize
@@ -137,7 +136,8 @@ object AndroidDateTimeFormatter {
     /**
      * Creates a [DateTimeFormatter] that can format the date-time for the ISO chronology according
      * to the [context]'s primary locale and the given [dateTimeStyle]. If [dateTimeStyle] is
-     * [FormatStyle.SHORT], the formatter also respects the user's 12-/24-hour clock preference.
+     * [FormatStyle.SHORT] or [FormatStyle.MEDIUM], the formatter also respects the user's
+     * 12-/24-hour clock preference, determined via [context].
      *
      * The [FormatStyle.FULL] and [FormatStyle.LONG] styles typically require a time zone. When
      * formatting using these styles, a [java.time.ZoneId] must be available, either by using
@@ -157,8 +157,8 @@ object AndroidDateTimeFormatter {
     /**
      * Creates a [DateTimeFormatter] that can format the date-time for the ISO chronology according
      * to the given [locale] and the given [dateTimeStyle]. If [dateTimeStyle] is
-     * [FormatStyle.SHORT], the formatter also respects the user's 12-/24-hour clock preference,
-     * determined via [context].
+     * [FormatStyle.SHORT] or [FormatStyle.MEDIUM], the formatter also respects the user's
+     * 12-/24-hour clock preference, determined via [context].
      *
      * The [FormatStyle.FULL] and [FormatStyle.LONG] styles typically require a time zone. When
      * formatting using these styles, a [java.time.ZoneId] must be available, either by using
@@ -184,7 +184,8 @@ object AndroidDateTimeFormatter {
     /**
      * Creates a [DateTimeFormatter] that can format the date-time for the ISO chronology according
      * to the [context]'s primary locale and the given [dateStyle] and [timeStyle]. If [timeStyle]
-     * is [FormatStyle.SHORT], the formatter also respects the user's 12-/24-hour clock preference.
+     * is [FormatStyle.SHORT] or [FormatStyle.MEDIUM], the formatter also respects the user's
+     * 12-/24-hour clock preference, determined via [context].
      *
      * The [FormatStyle.FULL] and [FormatStyle.LONG] time styles typically require a time zone. When
      * formatting using these styles, a [java.time.ZoneId] must be available, either by using
@@ -205,8 +206,8 @@ object AndroidDateTimeFormatter {
     /**
      * Creates a [DateTimeFormatter] that can format the date-time for the ISO chronology according
      * to the given [locale] and the given [dateStyle] and [timeStyle]. If [timeStyle] is
-     * [FormatStyle.SHORT], the formatter also respects the user's 12-/24-hour clock preference,
-     * determined via [context].
+     * [FormatStyle.SHORT] or [FormatStyle.MEDIUM], the formatter also respects the user's
+     * 12-/24-hour clock preference, determined via [context].
      *
      * The [FormatStyle.FULL] and [FormatStyle.LONG] time styles typically require a time zone. When
      * formatting using these styles, a [java.time.ZoneId] must be available, either by using
