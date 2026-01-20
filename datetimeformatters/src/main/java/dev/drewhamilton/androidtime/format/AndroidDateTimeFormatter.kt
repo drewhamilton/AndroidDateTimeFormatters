@@ -3,6 +3,7 @@ package dev.drewhamilton.androidtime.format
 import android.content.Context
 import android.icu.text.DateTimePatternGenerator
 import android.icu.util.ULocale
+import android.os.Build
 import android.provider.Settings
 import android.text.format.DateFormat
 import java.text.SimpleDateFormat
@@ -327,9 +328,17 @@ object AndroidDateTimeFormatter {
 
     /**
      * Adapted from [android.text.format.DateFormat] internals; a fix for the private bug
-     * http://b/266731719.
+     * http://b/266731719. Replaces '\u202f' (NNBSP) with a normal space if the locale's language is
+     * English and if the locale's region is empty or "US".
+     *
+     * No-op on API 34+. At this API level, NNBSP is used commonly throughout date/time format
+     * strings, so the private bug is presumed fixed.
      */
     @JvmStatic private fun Locale.getCompatibleEnglishPattern(pattern: String): String {
+        if (Build.VERSION.SDK_INT >= 34) {
+            return pattern
+        }
+
         if (language != "en") {
             return pattern
         }
