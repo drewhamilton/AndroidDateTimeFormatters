@@ -30,7 +30,7 @@ class AndroidDateTimeFormatterTest(
         systemTimeSetting = null
         testLocale = locale.value
 
-        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(localeContext, FormatStyle.SHORT)
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(localeContext)
         val formattedTime = formatter.format(time)
         assertThat(formattedTime).isEqualTo(locale.shortTimePreferred)
     }
@@ -39,7 +39,7 @@ class AndroidDateTimeFormatterTest(
         systemTimeSetting = TIME_SETTING_12
         testLocale = locale.value
 
-        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(localeContext, FormatStyle.SHORT)
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(localeContext)
         val formattedTime = formatter.format(time)
         assertThat(formattedTime).isEqualTo(locale.shortTime12)
     }
@@ -48,7 +48,7 @@ class AndroidDateTimeFormatterTest(
         systemTimeSetting = TIME_SETTING_24
         testLocale = locale.value
 
-        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(localeContext, FormatStyle.SHORT)
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(localeContext)
         val formattedTime = formatter.format(time)
         assertThat(formattedTime).isEqualTo(locale.shortTime24)
     }
