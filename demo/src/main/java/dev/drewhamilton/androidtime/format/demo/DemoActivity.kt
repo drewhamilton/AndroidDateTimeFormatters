@@ -1,7 +1,12 @@
 package dev.drewhamilton.androidtime.format.demo
 
+import android.content.Context
+import android.content.res.Configuration
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +22,7 @@ class DemoActivity : ComponentActivity() {
     private val latestInstant = MutableStateFlow(Instant.now())
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
+        enableEdgeToEdge(navigationBarStyle = ScrimlessNavigationBarStyle())
         super.onCreate(savedInstanceState)
         setContent {
             DemoTheme {
@@ -34,4 +39,28 @@ class DemoActivity : ComponentActivity() {
         super.onResume()
         latestInstant.value = Instant.now()
     }
+
+    /**
+     * Using [SystemBarStyle.auto] automatically adds a scrim in API 29+. This avoids that default
+     * by using [SystemBarStyle.light] or [SystemBarStyle.dark] to avoid that.
+     */
+    @Suppress("FunctionName") // Factory
+    private fun ScrimlessNavigationBarStyle(): SystemBarStyle {
+        return when {
+            Build.VERSION.SDK_INT < 29 -> SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT)
+            isNightModeActive -> SystemBarStyle.dark(Color.TRANSPARENT)
+            else -> SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+        }
+    }
+
+    private val Context.isNightModeActive: Boolean
+        get() {
+            return with(resources.configuration) {
+                if (Build.VERSION.SDK_INT >= 30) {
+                    isNightModeActive
+                } else {
+                    (uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+                }
+            }
+        }
 }
