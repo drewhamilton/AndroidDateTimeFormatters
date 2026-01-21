@@ -8,10 +8,9 @@ import android.provider.Settings
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
 import androidx.test.platform.app.InstrumentationRegistry
-import dev.drewhamilton.androidtime.format.TestSystemTimeSetting
-import dev.drewhamilton.androidtime.format.testSystemTimeSetting
+import dev.drewhamilton.androidtime.format.AndroidDateTimeFormatter
 import java.util.Locale
-import org.junit.After
+import org.junit.Before
 
 /**
  * A base test class that facilitates using and changing [testSystemTimeSetting], which mimics the
@@ -31,12 +30,9 @@ abstract class TimeSettingTest {
         }
 
     protected var systemTimeSetting: String?
-        get() = when (val testSystemTimeSetting = testSystemTimeSetting) {
-            is TestSystemTimeSetting.Set -> testSystemTimeSetting.value
-            is TestSystemTimeSetting.Unset -> null
-        }
+        get() = AndroidDateTimeFormatter.testSystemTimeSetting
         set(value) {
-            testSystemTimeSetting = TestSystemTimeSetting.Set(value)
+            AndroidDateTimeFormatter.testSystemTimeSetting = value
         }
 
     private fun Context.copyWithLocale(locale: Locale): Context {
@@ -55,9 +51,33 @@ abstract class TimeSettingTest {
             locale = locales[0]
     }
 
-    @After fun restoreTimeSetting() {
-        testSystemTimeSetting = TestSystemTimeSetting.Unset
+    @Before fun enableTestSystemTimeSetting() {
+        AndroidDateTimeFormatter.useTestSystemTimeSetting = true
     }
+
+    private var AndroidDateTimeFormatter.useTestSystemTimeSetting: Boolean
+        get() = javaClass.declaredFields
+            .single { it.name == "useTestSystemTimeSetting" }
+            .apply { isAccessible = true }
+            .get(this) as Boolean
+        set(value) {
+            javaClass.declaredFields
+                .single { it.name == "useTestSystemTimeSetting" }
+                .apply { isAccessible = true }
+                .set(this, value)
+        }
+
+    private var AndroidDateTimeFormatter.testSystemTimeSetting: String?
+        get() = javaClass.declaredFields
+            .single { it.name == "testSystemTimeSetting" }
+            .apply { isAccessible = true }
+            .get(this) as String?
+        set(value) {
+            javaClass.declaredFields
+                .single { it.name == "testSystemTimeSetting" }
+                .apply { isAccessible = true }
+                .set(this, value)
+        }
 
     protected companion object {
         const val TIME_SETTING_12 = "12"

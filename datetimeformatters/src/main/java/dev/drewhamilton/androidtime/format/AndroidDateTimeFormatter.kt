@@ -349,17 +349,11 @@ object AndroidDateTimeFormatter {
     }
 
     @JvmStatic private fun Context.timeSetting(): String? {
-        // TODO: Support testing without a static field?
-        return when (val testSystemTimeSetting = testSystemTimeSetting) {
+        return if (useTestSystemTimeSetting) {
+            testSystemTimeSetting
+        } else {
             // Prod code path:
-            is TestSystemTimeSetting.Unset -> {
-                Settings.System.getString(contentResolver, Settings.System.TIME_12_24)
-            }
-
-            // Test code path:
-            is TestSystemTimeSetting.Set -> {
-                testSystemTimeSetting.value
-            }
+            Settings.System.getString(contentResolver, Settings.System.TIME_12_24)
         }
     }
 
@@ -498,4 +492,9 @@ object AndroidDateTimeFormatter {
         }
         return locale!!
     }
+
+    //region Test
+    private var useTestSystemTimeSetting: Boolean = false
+    private var testSystemTimeSetting: String? = null
+    //endregion
 }
