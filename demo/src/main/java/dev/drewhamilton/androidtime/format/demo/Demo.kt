@@ -2,6 +2,7 @@ package dev.drewhamilton.androidtime.format.demo
 
 import android.content.res.Configuration
 import android.icu.text.NumberFormat
+import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
@@ -106,6 +107,19 @@ fun Demo(
                     modifier = Modifier.weight(1f),
                 )
             }
+
+            OutlinedTextField(
+                value = Settings.System.getString(
+                    LocalContext.current.contentResolver,
+                    Settings.System.TIME_12_24,
+                ) ?: "null",
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("System time setting") },
+                singleLine = true,
+                shape = textFieldShape,
+                modifier = Modifier.fillMaxWidth(),
+            )
 
             FormatComparison(
                 locale = locale,
