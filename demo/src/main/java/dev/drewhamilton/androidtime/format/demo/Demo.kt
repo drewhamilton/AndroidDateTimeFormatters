@@ -2,18 +2,19 @@ package dev.drewhamilton.androidtime.format.demo
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,16 +27,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -149,83 +147,56 @@ private fun FormatStyleSelector(
     label: String,
     modifier: Modifier = Modifier,
 ) {
-    var popupWidthPx by remember { mutableIntStateOf(0) }
-    Layout(
+    Box(
         modifier = modifier,
-        content = {
-            var showingSelectionPopup by remember { mutableStateOf(false) }
-            OutlinedTextField(
-                value = selectedFormatStyle?.toString() ?: "NONE",
-                onValueChange = { /* No-op, value change is handled by dropdown menu */ },
-                readOnly = true,
-                label = { Text(label) },
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(R.drawable.arrow_drop_down_24dp),
-                        contentDescription = null,
-                    )
-                },
-                singleLine = true,
-                interactionSource = remember { MutableInteractionSource() }
-                    .also { interactionSource ->
-                        LaunchedEffect(interactionSource) {
-                            interactionSource.interactions.collect { interaction ->
-                                if (interaction is PressInteraction.Release) {
-                                    showingSelectionPopup = true
-                                }
+    ) {
+        var showingSelectionPopup by remember { mutableStateOf(false) }
+        OutlinedTextField(
+            value = selectedFormatStyle?.toString() ?: "NONE",
+            onValueChange = { /* No-op, value change is handled by dropdown menu */ },
+            readOnly = true,
+            label = { Text(label) },
+            trailingIcon = {
+                Icon(
+                    painter = painterResource(R.drawable.arrow_drop_down_24dp),
+                    contentDescription = null,
+                )
+            },
+            singleLine = true,
+            interactionSource = remember { MutableInteractionSource() }
+                .also { interactionSource ->
+                    LaunchedEffect(interactionSource) {
+                        interactionSource.interactions.collect { interaction ->
+                            if (interaction is PressInteraction.Release) {
+                                showingSelectionPopup = true
                             }
                         }
-                    },
-                shape = textFieldShape,
-            )
+                    }
+                },
+            shape = textFieldShape,
+        )
 
-            DropdownMenu(
-                expanded = showingSelectionPopup,
-                onDismissRequest = { showingSelectionPopup = false },
-                shape = textFieldShape,
-            ) {
-                val nullableFormatStyles = buildList {
-                    addAll(FormatStyle.entries)
-                    add(null)
-                }
-                val popupWidth = with(LocalDensity.current) { popupWidthPx.toDp() }
-                nullableFormatStyles.forEach { formatStyle ->
-                    Text(
-                        text = formatStyle?.toString() ?: "NONE",
-                        modifier = Modifier
-                            .clickable {
-                                onFormatStyleSelected(formatStyle)
-                                showingSelectionPopup = false
-                            }
-                            .width(popupWidth)
-                            .padding(16.dp),
-                    )
-                }
+        DropdownMenu(
+            expanded = showingSelectionPopup,
+            onDismissRequest = { showingSelectionPopup = false },
+            shape = textFieldShape,
+            tonalElevation = 3.dp,
+            shadowElevation = 0.dp,
+        ) {
+            val nullableFormatStyles = buildList {
+                addAll(FormatStyle.entries)
+                add(null)
             }
-        },
-    ) { measurables, constraints ->
-        val includesPopup = measurables.size > 1
-        val placeables = measurables.mapIndexed { i, measurable ->
-            val isPopup = includesPopup && i == measurables.lastIndex
-            val childConstraints = if (isPopup) {
-                constraints.copy(minWidth = constraints.maxWidth)
-            } else {
-                constraints
-            }
-            measurable.measure(childConstraints)
-        }
-        val placeablesWithoutPopup = if (includesPopup) placeables.dropLast(1) else placeables
-        val height = placeablesWithoutPopup.maxOf { it.height }
-        layout(width = constraints.maxWidth, height = height) {
-            popupWidthPx = constraints.maxWidth
-            placeables.forEachIndexed { i, placeable ->
-                val isPopup = includesPopup && i == placeables.lastIndex
-                val yOffset = if (isPopup) {
-                    constraints.minHeight
-                } else {
-                    0
-                }
-                placeable.placeRelative(x = 0, y = yOffset)
+            nullableFormatStyles.forEach { formatStyle ->
+                DropdownMenuItem(
+                    text = { Text(formatStyle?.toString() ?: "NONE") },
+                    onClick = {
+                        onFormatStyleSelected(formatStyle)
+                        showingSelectionPopup = false
+                    },
+                    contentPadding = PaddingValues(16.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         }
     }
