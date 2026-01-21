@@ -1,5 +1,5 @@
 # AndroidDateTimeFormatters
-[![](https://github.com/drewhamilton/AndroidDateTimeFormatters/workflows/CI/badge.svg?branch=main)](https://github.com/drewhamilton/AndroidDateTimeFormatters/actions?query=workflow%3ACI+branch%3Amain)
+[![](https://github.com/drewhamilton/AndroidDateTimeFormatters/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/drewhamilton/AndroidDateTimeFormatters/actions/workflows/ci.yml?query=branch%3Amain)
 
 This library provides `DateTimeFormatter`s that make use of Android-specific features. Localized
 time formatters respect Android's 12-/24-hour clock system setting. And "skeleton" formatters take a
@@ -16,7 +16,7 @@ However, "datetimeformatters-threetenbp" can be used in apps that still use Thre
 Android SDK version 15.
 
 ## Download
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.drewhamilton.androidtime/datetimeformatters/badge.svg)](https://maven-badges.herokuapp.com/maven-central/dev.drewhamilton.androidtime/datetimeformatters)
+[![Maven Central](https://img.shields.io/maven-metadata/v.svg?label=maven%20central&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fdrewhamilton%2Fandroidtime%2Fdatetimeformatters%2Fmaven-metadata.xml&color=blue)](https://central.sonatype.com/namespace/dev.drewhamilton.androidtime)
 
 AndroidDateTimeFormatters is available on Maven Central.
 
@@ -30,7 +30,7 @@ implementation "dev.drewhamilton.androidtime:datetimeformatters-threetenbp:$vers
 
 ## License
 ```
-Copyright 2019 Drew Hamilton
+Copyright 2019–2026 Drew Hamilton
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
