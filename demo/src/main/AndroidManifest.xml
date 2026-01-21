@@ -6,7 +6,7 @@
   <application
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
-      android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+      android:theme="@style/Theme.AndroidDateTimeFormatters.Demo"
       android:allowBackup="false"
       android:supportsRtl="true"
       tools:ignore="AllowBackup,DataExtractionRules,GoogleAppIndexingWarning">

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+  <!-- Define the bare minimum to make the splash screen look decent. -->
+  <style name="Theme.AndroidDateTimeFormatters.Demo" parent="Theme.Material3.DayNight.NoActionBar">
+    <item name="colorPrimary">@color/demo_colorPrimary</item>
+    <item name="android:colorBackground">@color/demo_background</item>
+
+    <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
+    <item name="android:enforceStatusBarContrast" tools:targetApi="29">false</item>
+    <item name="android:navigationBarColor">?android:windowBackground</item>
+    <item name="android:statusBarColor">?android:windowBackground</item>
+
+    <item name="android:windowLightNavigationBar" tools:targetApi="27">
+      @bool/demo_light_system_bars
+    </item>
+    <item name="android:windowLightStatusBar">@bool/demo_light_system_bars</item>
+  </style>
+</resources>
