@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="demo_colorPrimary">#C00000</color>
+  <color name="demo_background">#FFFBFF</color>
+
+  <bool name="demo_light_system_bars">true</bool>
+</resources>
