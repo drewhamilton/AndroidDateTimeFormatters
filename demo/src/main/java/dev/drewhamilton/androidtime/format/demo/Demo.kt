@@ -15,6 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -78,8 +82,12 @@ fun Demo(
             )
         },
     ) { contentPadding ->
-        var typedLocaleString by remember { mutableStateOf("") }
-        val locale = parseLocaleString(typedLocaleString)
+        val typedLocaleState by rememberSaveable(
+            stateSaver = TextFieldState.Saver,
+        ) {
+            mutableStateOf(TextFieldState())
+        }
+        val locale = parseLocaleString(typedLocaleState.text)
             ?: LocalContext.current.extractPrimaryLocale()
 
         Column(
@@ -89,8 +97,7 @@ fun Demo(
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             LocaleInputField(
-                value = typedLocaleString,
-                onValueChange = { typedLocaleString = it },
+                state = typedLocaleState,
                 currentLocale = locale,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -143,13 +150,12 @@ fun Demo(
 @ExperimentalMaterial3Api
 @Composable
 private fun LocaleInputField(
-    value: String,
-    onValueChange: (String) -> Unit,
+    state: TextFieldState,
     currentLocale: Locale,
     modifier: Modifier = Modifier,
 ) {
     var dismissedDropdown by remember { mutableStateOf(false) }
-    LaunchedEffect(value) {
+    LaunchedEffect(state.text) {
         dismissedDropdown = false
     }
 
@@ -162,23 +168,22 @@ private fun LocaleInputField(
     }
 
     val filteredLocales = Locale.getAvailableLocales()
-        .filter { it.toString().startsWith(value) }
-    val expanded = !dismissedDropdown && filteredLocales.isNotEmpty() && value.length >= 2
+        .filter { it.toString().startsWith(state.text) }
+    val expanded = !dismissedDropdown && filteredLocales.isNotEmpty() && state.text.length >= 2
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = {},
         modifier = modifier,
     ) {
         OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            singleLine = true,
+            state = state,
             label = {
                 Text(currentLocale.displayName)
             },
             placeholder = {
                 Text(currentLocale.toString())
             },
+            lineLimits = TextFieldLineLimits.SingleLine,
             shape = textFieldShape,
             modifier = Modifier
                 .fillMaxWidth()
@@ -210,7 +215,7 @@ private fun LocaleInputField(
                         }
                     },
                     onClick = {
-                        onValueChange(locale.toString())
+                        state.setTextAndPlaceCursorAtEnd(locale.toString())
                         ++delayedDismissedDropdownTrigger
                     },
                     contentPadding = PaddingValues(16.dp),
