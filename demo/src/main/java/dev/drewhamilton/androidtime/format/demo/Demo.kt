@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,7 +17,6 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -243,6 +241,7 @@ private fun LocaleInputField(
     }
 }
 
+@ExperimentalMaterial3Api
 @Composable
 private fun FormatStyleSelector(
     selectedFormatStyle: FormatStyle?,
@@ -250,10 +249,12 @@ private fun FormatStyleSelector(
     label: String,
     modifier: Modifier = Modifier,
 ) {
-    Box(
+    var showingSelectionPopup by remember { mutableStateOf(false) }
+    ExposedDropdownMenuBox(
+        expanded = showingSelectionPopup,
+        onExpandedChange = {},
         modifier = modifier,
     ) {
-        var showingSelectionPopup by remember { mutableStateOf(false) }
         OutlinedTextField(
             value = selectedFormatStyle?.toString() ?: "NONE",
             onValueChange = { /* No-op, value change is handled by dropdown menu */ },
@@ -279,7 +280,7 @@ private fun FormatStyleSelector(
             shape = textFieldShape,
         )
 
-        DropdownMenu(
+        ExposedDropdownMenu(
             expanded = showingSelectionPopup,
             onDismissRequest = { showingSelectionPopup = false },
             shape = textFieldShape,
