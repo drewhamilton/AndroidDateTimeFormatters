@@ -21,7 +21,7 @@ internal fun Context.extractPrimaryLocale(): Locale {
     return locale!!
 }
 
-internal fun parseLocaleString(value: String): Locale? {
+internal fun parseLocaleString(value: CharSequence): Locale? {
     val parts = value.split('_')
     return when (parts.size) {
         0 -> null

@@ -15,10 +15,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -30,8 +36,10 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -40,6 +48,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,6 +60,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class) // Top app bar
 @Composable
@@ -72,8 +82,12 @@ fun Demo(
             )
         },
     ) { contentPadding ->
-        var typedLocaleString by remember { mutableStateOf("") }
-        val locale = parseLocaleString(typedLocaleString)
+        val typedLocaleState by rememberSaveable(
+            stateSaver = TextFieldState.Saver,
+        ) {
+            mutableStateOf(TextFieldState())
+        }
+        val locale = parseLocaleString(typedLocaleState.text)
             ?: LocalContext.current.extractPrimaryLocale()
 
         Column(
@@ -83,8 +97,7 @@ fun Demo(
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             LocaleInputField(
-                value = typedLocaleString,
-                onValueChange = { typedLocaleString = it },
+                state = typedLocaleState,
                 currentLocale = locale,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -134,26 +147,100 @@ fun Demo(
     }
 }
 
+@ExperimentalMaterial3Api
 @Composable
 private fun LocaleInputField(
-    value: String,
-    onValueChange: (String) -> Unit,
+    state: TextFieldState,
     currentLocale: Locale,
     modifier: Modifier = Modifier,
 ) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
+    var dismissedDropdown by remember { mutableStateOf(false) }
+    LaunchedEffect(state.text) {
+        dismissedDropdown = false
+    }
+
+    var delayedDismissedDropdownTrigger by remember { mutableIntStateOf(0) }
+    if (delayedDismissedDropdownTrigger > 0) {
+        LaunchedEffect(delayedDismissedDropdownTrigger) {
+            delay(100)
+            dismissedDropdown = true
+        }
+    }
+
+    val allLocales = Locale.getAvailableLocales()
+    val groupedLocales = allLocales
+        .groupBy { locale ->
+            val localeString = locale.toString()
+            when {
+                localeString.startsWith(state.text) -> 0
+                localeString.contains(state.text, ignoreCase = true) -> 1
+                locale.displayName.contains(state.text, ignoreCase = true) -> 2
+                else -> -1
+            }
+        }
+    val filteredLocales = buildList {
+        groupedLocales.keys
+            .filter { it >= 0 }
+            .sorted()
+            .forEach { key ->
+                groupedLocales[key]?.let { addAll(it) }
+            }
+    }
+    val expanded = !dismissedDropdown && filteredLocales.isNotEmpty() && state.text.length >= 2
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = {},
         modifier = modifier,
-        singleLine = true,
-        label = {
-            Text(currentLocale.displayName)
-        },
-        placeholder = {
-            Text(currentLocale.toString())
-        },
-        shape = textFieldShape,
-    )
+    ) {
+        OutlinedTextField(
+            state = state,
+            label = {
+                Text(currentLocale.displayName)
+            },
+            placeholder = {
+                Text(currentLocale.toString())
+            },
+            lineLimits = TextFieldLineLimits.SingleLine,
+            shape = textFieldShape,
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { dismissedDropdown = true },
+            shape = textFieldShape,
+            tonalElevation = 3.dp,
+            shadowElevation = 0.dp,
+        ) {
+            filteredLocales.forEach { locale ->
+                DropdownMenuItem(
+                    text = {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            Text(
+                                text = locale.toString(),
+                            )
+                            Text(
+                                text = locale.displayName,
+                                color = LocalContentColor.current.copy(alpha = 0.7f),
+                                textAlign = TextAlign.End,
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                    },
+                    onClick = {
+                        state.setTextAndPlaceCursorAtEnd(locale.toString())
+                        ++delayedDismissedDropdownTrigger
+                    },
+                    contentPadding = PaddingValues(16.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        }
+    }
 }
 
 @Composable
