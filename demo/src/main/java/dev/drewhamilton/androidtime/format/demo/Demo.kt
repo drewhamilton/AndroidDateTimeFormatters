@@ -94,14 +94,19 @@ fun Demo(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            LocaleInputField(
-                state = typedLocaleState,
-                currentLocale = locale,
-                modifier = Modifier.fillMaxWidth(),
-            )
-
             var selectedDateFormat: FormatStyle? by remember { mutableStateOf(FormatStyle.LONG) }
             var selectedTimeFormat: FormatStyle? by remember { mutableStateOf(FormatStyle.SHORT) }
+
+            FormatComparison(
+                locale = locale,
+                instant = instant,
+                dateFormatStyle = selectedDateFormat,
+                timeFormatStyle = selectedTimeFormat,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+            )
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -119,6 +124,12 @@ fun Demo(
                 )
             }
 
+            LocaleInputField(
+                state = typedLocaleState,
+                currentLocale = locale,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
             OutlinedTextField(
                 value = Settings.System.getString(
                     LocalContext.current.contentResolver,
@@ -130,16 +141,6 @@ fun Demo(
                 singleLine = true,
                 shape = textFieldShape,
                 modifier = Modifier.fillMaxWidth(),
-            )
-
-            FormatComparison(
-                locale = locale,
-                instant = instant,
-                dateFormatStyle = selectedDateFormat,
-                timeFormatStyle = selectedTimeFormat,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
             )
         }
     }
