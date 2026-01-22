@@ -18,6 +18,8 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -30,6 +32,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -51,6 +54,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class) // Top app bar
 @Composable
@@ -134,6 +138,7 @@ fun Demo(
     }
 }
 
+@ExperimentalMaterial3Api
 @Composable
 private fun LocaleInputField(
     value: String,
@@ -141,19 +146,63 @@ private fun LocaleInputField(
     currentLocale: Locale,
     modifier: Modifier = Modifier,
 ) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
+    var dismissedDropdown by remember { mutableStateOf(false) }
+    LaunchedEffect(value) {
+        dismissedDropdown = false
+    }
+
+    var delayedDismissedDropdownTrigger by remember { mutableIntStateOf(0) }
+    if (delayedDismissedDropdownTrigger > 0) {
+        LaunchedEffect(delayedDismissedDropdownTrigger) {
+            delay(100)
+            dismissedDropdown = true
+        }
+    }
+
+    val filteredLocales = Locale.getAvailableLocales()
+        .filter { it.toString().startsWith(value) }
+    val expanded = !dismissedDropdown && filteredLocales.isNotEmpty() && value.length >= 2
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = {},
         modifier = modifier,
-        singleLine = true,
-        label = {
-            Text(currentLocale.displayName)
-        },
-        placeholder = {
-            Text(currentLocale.toString())
-        },
-        shape = textFieldShape,
-    )
+    ) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            singleLine = true,
+            label = {
+                Text(currentLocale.displayName)
+            },
+            placeholder = {
+                Text(currentLocale.toString())
+            },
+            shape = textFieldShape,
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { dismissedDropdown = true },
+            shape = textFieldShape,
+            tonalElevation = 3.dp,
+            shadowElevation = 0.dp,
+        ) {
+            filteredLocales.forEach { locale ->
+                DropdownMenuItem(
+                    text = { Text("$locale: ${locale.displayName}") },
+                    onClick = {
+                        onValueChange(locale.toString())
+                        ++delayedDismissedDropdownTrigger
+                    },
+                    contentPadding = PaddingValues(16.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        }
+    }
 }
 
 @Composable
