@@ -167,8 +167,25 @@ private fun LocaleInputField(
         }
     }
 
-    val filteredLocales = Locale.getAvailableLocales()
-        .filter { it.toString().startsWith(state.text) }
+    val allLocales = Locale.getAvailableLocales()
+    val groupedLocales = allLocales
+        .groupBy { locale ->
+            val localeString = locale.toString()
+            when {
+                localeString.startsWith(state.text) -> 0
+                localeString.contains(state.text, ignoreCase = true) -> 1
+                locale.displayName.contains(state.text, ignoreCase = true) -> 2
+                else -> -1
+            }
+        }
+    val filteredLocales = buildList {
+        groupedLocales.keys
+            .filter { it >= 0 }
+            .sorted()
+            .forEach { key ->
+                groupedLocales[key]?.let { addAll(it) }
+            }
+    }
     val expanded = !dismissedDropdown && filteredLocales.isNotEmpty() && state.text.length >= 2
     ExposedDropdownMenuBox(
         expanded = expanded,
