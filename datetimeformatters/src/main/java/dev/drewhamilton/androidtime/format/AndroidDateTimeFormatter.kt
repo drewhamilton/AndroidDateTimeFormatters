@@ -312,6 +312,14 @@ object AndroidDateTimeFormatter {
         val timeSetting = context.timeSetting()
             ?: if (locale.is24HourLocale()) "24" else "12"
         return when (timeSetting) {
+            "12" if systemPattern.contains(patternFor12Setting) -> {
+                systemPattern
+            }
+
+            "24" if systemPattern.contains(patternFor24Setting) -> {
+                systemPattern
+            }
+
             "12" if systemPattern.contains(patternFor24Setting) -> {
                 systemPattern.replace(
                     oldValue = patternFor24Setting,
@@ -327,6 +335,9 @@ object AndroidDateTimeFormatter {
             }
 
             else -> {
+                // Sometimes, for longer formats, the "best" pattern doesn't match the default
+                // pattern. In these cases the default pattern often includes a match for a shorter
+                // time format, so we recursively try substituting a shorter time format:
                 val shorterStyle = when (style) {
                     FormatStyle.FULL -> FormatStyle.LONG
                     FormatStyle.LONG -> FormatStyle.MEDIUM
