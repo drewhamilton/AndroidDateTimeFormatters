@@ -299,30 +299,9 @@ object AndroidDateTimeFormatter {
         locale: Locale,
         style: FormatStyle,
     ): String {
-        val unsupportedFormatMessage =
-            "getSystemTimeSettingAwareTimePattern only supports SHORT, MEDIUM, and LONG formats"
-
         val patternGenerator = DateTimePatternGenerator.getInstance(locale)
-
-        val skeletonFor12Setting = when (style) {
-            FormatStyle.LONG -> "hmsz"
-            FormatStyle.MEDIUM -> "hms"
-            FormatStyle.SHORT -> "hm"
-            else -> throw IllegalArgumentException(unsupportedFormatMessage)
-        }
-        val patternFor12Setting = locale.getCompatibleEnglishPattern(
-            pattern = patternGenerator.getBestPattern(skeletonFor12Setting),
-        )
-
-        val skeletonFor24Setting = when (style) {
-            FormatStyle.LONG -> "Hmsz"
-            FormatStyle.MEDIUM -> "Hms"
-            FormatStyle.SHORT -> "Hm"
-            else -> throw IllegalArgumentException(unsupportedFormatMessage)
-        }
-        val patternFor24Setting = locale.getCompatibleEnglishPattern(
-            pattern = patternGenerator.getBestPattern(skeletonFor24Setting),
-        )
+        val patternFor12Setting = patternGenerator.getBestPatternFor12Setting(locale, style)
+        val patternFor24Setting = patternGenerator.getBestPatternFor24Setting(locale, style)
 
         val systemPattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
             null,
@@ -349,7 +328,38 @@ object AndroidDateTimeFormatter {
             }
 
             else -> {
-                systemPattern
+                if (style == FormatStyle.LONG) {
+                    // TODO: Refactor to make this recursive?
+                    // Fallback for Japanese (and possibly others) where the above substitution
+                    // doesn't happen because the "best" pattern and the `systemPattern` don't
+                    // match. In this case, see if we can find a medium-style substring to insert.
+                    val mediumPatternFor12Setting =
+                        patternGenerator.getBestPatternFor12Setting(locale, FormatStyle.MEDIUM)
+                    val mediumPatternFor24Setting =
+                        patternGenerator.getBestPatternFor24Setting(locale, FormatStyle.MEDIUM)
+
+                    when (timeSetting) {
+                        "12" if systemPattern.contains(mediumPatternFor24Setting) -> {
+                            systemPattern.replace(
+                                oldValue = mediumPatternFor24Setting,
+                                newValue = mediumPatternFor12Setting,
+                            )
+                        }
+
+                        "24" if systemPattern.contains(mediumPatternFor12Setting) -> {
+                            systemPattern.replace(
+                                oldValue = mediumPatternFor12Setting,
+                                newValue = mediumPatternFor24Setting,
+                            )
+                        }
+
+                        else -> {
+                            systemPattern
+                        }
+                    }
+                } else {
+                    systemPattern
+                }
             }
         }
     }
@@ -361,6 +371,39 @@ object AndroidDateTimeFormatter {
             // Prod code path:
             Settings.System.getString(contentResolver, Settings.System.TIME_12_24)
         }
+    }
+
+    @JvmStatic private val unsupportedFormatMessage =
+        "getSystemTimeSettingAwareTimePattern only supports SHORT, MEDIUM, and LONG formats"
+
+    @JvmStatic private fun DateTimePatternGenerator.getBestPatternFor12Setting(
+        locale: Locale,
+        style: FormatStyle,
+    ): String {
+        val skeletonFor12Setting = when (style) {
+            FormatStyle.LONG -> "hmsz"
+            FormatStyle.MEDIUM -> "hms"
+            FormatStyle.SHORT -> "hm"
+            else -> throw IllegalArgumentException(unsupportedFormatMessage)
+        }
+        return locale.getCompatibleEnglishPattern(
+            pattern = getBestPattern(skeletonFor12Setting),
+        )
+    }
+
+    @JvmStatic private fun DateTimePatternGenerator.getBestPatternFor24Setting(
+        locale: Locale,
+        style: FormatStyle,
+    ): String {
+        val skeletonFor12Setting = when (style) {
+            FormatStyle.LONG -> "Hmsz"
+            FormatStyle.MEDIUM -> "Hms"
+            FormatStyle.SHORT -> "Hm"
+            else -> throw IllegalArgumentException(unsupportedFormatMessage)
+        }
+        return locale.getCompatibleEnglishPattern(
+            pattern = getBestPattern(skeletonFor12Setting),
+        )
     }
 
     private fun Locale.is24HourLocale(): Boolean {
