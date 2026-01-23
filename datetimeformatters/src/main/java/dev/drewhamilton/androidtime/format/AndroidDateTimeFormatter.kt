@@ -298,17 +298,16 @@ object AndroidDateTimeFormatter {
         context: Context,
         locale: Locale,
         style: FormatStyle,
-    ): String {
-        val patternGenerator = DateTimePatternGenerator.getInstance(locale)
-        val patternFor12Setting = patternGenerator.getBestPatternFor12Setting(locale, style)
-        val patternFor24Setting = patternGenerator.getBestPatternFor24Setting(locale, style)
-
-        val systemPattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
+        systemPattern: String = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
             null,
             style,
             IsoChronology.INSTANCE,
             locale,
-        )
+        ),
+    ): String {
+        val patternGenerator = DateTimePatternGenerator.getInstance(locale)
+        val patternFor12Setting = patternGenerator.getBestPatternFor12Setting(locale, style)
+        val patternFor24Setting = patternGenerator.getBestPatternFor24Setting(locale, style)
 
         val timeSetting = context.timeSetting()
             ?: if (locale.is24HourLocale()) "24" else "12"
@@ -328,37 +327,21 @@ object AndroidDateTimeFormatter {
             }
 
             else -> {
-                if (style == FormatStyle.LONG) {
-                    // TODO: Refactor to make this recursive?
-                    // Fallback for Japanese (and possibly others) where the above substitution
-                    // doesn't happen because the "best" pattern and the `systemPattern` don't
-                    // match. In this case, see if we can find a medium-style substring to insert.
-                    val mediumPatternFor12Setting =
-                        patternGenerator.getBestPatternFor12Setting(locale, FormatStyle.MEDIUM)
-                    val mediumPatternFor24Setting =
-                        patternGenerator.getBestPatternFor24Setting(locale, FormatStyle.MEDIUM)
-
-                    when (timeSetting) {
-                        "12" if systemPattern.contains(mediumPatternFor24Setting) -> {
-                            systemPattern.replace(
-                                oldValue = mediumPatternFor24Setting,
-                                newValue = mediumPatternFor12Setting,
-                            )
-                        }
-
-                        "24" if systemPattern.contains(mediumPatternFor12Setting) -> {
-                            systemPattern.replace(
-                                oldValue = mediumPatternFor12Setting,
-                                newValue = mediumPatternFor24Setting,
-                            )
-                        }
-
-                        else -> {
-                            systemPattern
-                        }
-                    }
-                } else {
+                val shorterStyle = when (style) {
+                    FormatStyle.FULL -> FormatStyle.LONG
+                    FormatStyle.LONG -> FormatStyle.MEDIUM
+                    FormatStyle.MEDIUM -> FormatStyle.SHORT
+                    FormatStyle.SHORT -> null
+                }
+                if (shorterStyle == null) {
                     systemPattern
+                } else {
+                    getSystemTimeSettingAwareTimePattern(
+                        context = context,
+                        locale = locale,
+                        style = shorterStyle,
+                        systemPattern = systemPattern,
+                    )
                 }
             }
         }
