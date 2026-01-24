@@ -400,7 +400,7 @@ object AndroidDateTimeFormatter {
         )
     }
 
-    private fun Locale.is24HourLocale(): Boolean {
+    @JvmStatic private fun Locale.is24HourLocale(): Boolean {
         val natural = java.text.DateFormat.getTimeInstance(java.text.DateFormat.LONG, this)
         return if (natural is SimpleDateFormat)
             natural.toPattern().hasDesignator('H')
@@ -408,7 +408,7 @@ object AndroidDateTimeFormatter {
             false
     }
 
-    private fun CharSequence?.hasDesignator(designator: Char): Boolean {
+    @JvmStatic private fun CharSequence?.hasDesignator(designator: Char): Boolean {
         if (this == null)
             return false
 
@@ -537,7 +537,7 @@ object AndroidDateTimeFormatter {
     }
 
     //region Test
-    private var useTestSystemTimeSetting: Boolean = false
-    private var testSystemTimeSetting: String? = null
+    @JvmStatic private var useTestSystemTimeSetting: Boolean = false
+    @JvmStatic private var testSystemTimeSetting: String? = null
     //endregion
 }
