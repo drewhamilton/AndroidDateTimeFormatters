@@ -157,14 +157,37 @@ class AndroidDateTimeFormatterTest(
         assertThat(formatter.format(dateTime)).isEqualTo(locale.longTime24)
     }
 
-    @Test fun ofLocalizedTime_fullFormat() {
+    @Test fun ofLocalizedTime_fullFormat_nullSystemSetting() {
+        systemTimeSetting = null
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
             context = localeContext,
             timeStyle = FormatStyle.FULL,
         )
-        assertThat(formatter.format(dateTime)).isEqualTo(locale.fullTime)
+        assertThat(formatter.format(dateTime)).isEqualTo(locale.fullTimePreferred)
+    }
+
+    @Test fun ofLocalizedTime_fullFormat_12SystemSetting() {
+        systemTimeSetting = TIME_SETTING_12
+        testLocale = locale.value
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
+            context = localeContext,
+            timeStyle = FormatStyle.FULL,
+        )
+        assertThat(formatter.format(dateTime)).isEqualTo(locale.fullTime12)
+    }
+
+    @Test fun ofLocalizedTime_fullFormat_24SystemSetting() {
+        systemTimeSetting = TIME_SETTING_24
+        testLocale = locale.value
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
+            context = localeContext,
+            timeStyle = FormatStyle.FULL,
+        )
+        assertThat(formatter.format(dateTime)).isEqualTo(locale.fullTime24)
     }
     //endregion
 
@@ -271,13 +294,37 @@ class AndroidDateTimeFormatterTest(
         assertThat(formatter.format(dateTime)).isEqualTo(locale.longTime24)
     }
 
-    @Test fun ofLocalizedTime_locale_fullFormat() {
+    @Test fun ofLocalizedTime_locale_fullFormat_nullSystemSetting() {
+        systemTimeSetting = null
+
         val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
             context = testContext,
             locale = locale.value,
             timeStyle = FormatStyle.FULL,
         )
-        assertThat(formatter.format(dateTime)).isEqualTo(locale.fullTime)
+        assertThat(formatter.format(dateTime)).isEqualTo(locale.fullTimePreferred)
+    }
+
+    @Test fun ofLocalizedTime_locale_fullFormat_12SystemSetting() {
+        systemTimeSetting = TIME_SETTING_12
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
+            context = testContext,
+            locale = locale.value,
+            timeStyle = FormatStyle.FULL,
+        )
+        assertThat(formatter.format(dateTime)).isEqualTo(locale.fullTime12)
+    }
+
+    @Test fun ofLocalizedTime_locale_fullFormat_24SystemSetting() {
+        systemTimeSetting = TIME_SETTING_24
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedTime(
+            context = testContext,
+            locale = locale.value,
+            timeStyle = FormatStyle.FULL,
+        )
+        assertThat(formatter.format(dateTime)).isEqualTo(locale.fullTime24)
     }
     //endregion
 
@@ -511,7 +558,8 @@ class AndroidDateTimeFormatterTest(
         }
     }
 
-    @Test fun ofLocalizedDateTime_fullDateTimeFormat() {
+    @Test fun ofLocalizedDateTime_fullDateTimeFormat_nullSystemSetting() {
+        systemTimeSetting = null
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -521,7 +569,37 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$fullTime")
+            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$fullTimePreferred")
+        }
+    }
+
+    @Test fun ofLocalizedDateTime_fullDateTimeFormat_12SystemSetting() {
+        systemTimeSetting = TIME_SETTING_12
+        testLocale = locale.value
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
+            context = localeContext,
+            dateTimeStyle = FormatStyle.FULL,
+        )
+
+        val result = formatter.format(dateTime)
+        with(locale) {
+            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$fullTime12")
+        }
+    }
+
+    @Test fun ofLocalizedDateTime_fullDateTimeFormat_24SystemSetting() {
+        systemTimeSetting = TIME_SETTING_24
+        testLocale = locale.value
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
+            context = localeContext,
+            dateTimeStyle = FormatStyle.FULL,
+        )
+
+        val result = formatter.format(dateTime)
+        with(locale) {
+            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$fullTime24")
         }
     }
     //endregion
@@ -680,7 +758,9 @@ class AndroidDateTimeFormatterTest(
         }
     }
 
-    @Test fun ofLocalizedDateTime_locale_fullDateTimeFormat() {
+    @Test fun ofLocalizedDateTime_locale_fullDateTimeFormat_nullSystemSetting() {
+        systemTimeSetting = null
+
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
             context = testContext,
             locale = locale.value,
@@ -689,7 +769,37 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$fullTime")
+            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$fullTimePreferred")
+        }
+    }
+
+    @Test fun ofLocalizedDateTime_locale_fullDateTimeFormat_12SystemSetting() {
+        systemTimeSetting = TIME_SETTING_12
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
+            context = testContext,
+            locale = locale.value,
+            dateTimeStyle = FormatStyle.FULL,
+        )
+
+        val result = formatter.format(dateTime)
+        with(locale) {
+            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$fullTime12")
+        }
+    }
+
+    @Test fun ofLocalizedDateTime_locale_fullDateTimeFormat_24SystemSetting() {
+        systemTimeSetting = TIME_SETTING_24
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
+            context = testContext,
+            locale = locale.value,
+            dateTimeStyle = FormatStyle.FULL,
+        )
+
+        val result = formatter.format(dateTime)
+        with(locale) {
+            assertThat(result).isEqualTo("$fullDate$longDateTimeJoiner$fullTime24")
         }
     }
     //endregion
@@ -806,7 +916,8 @@ class AndroidDateTimeFormatterTest(
         }
     }
 
-    @Test fun ofLocalizedDateTime_longDateFormat_fullTimeFormat() {
+    @Test fun ofLocalizedDateTime_longDateFormat_fullTimeFormat_nullSystemSetting() {
+        systemTimeSetting = null
         testLocale = locale.value
 
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
@@ -817,7 +928,39 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$fullTime")
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$fullTimePreferred")
+        }
+    }
+
+    @Test fun ofLocalizedDateTime_longDateFormat_fullTimeFormat_12SystemSetting() {
+        systemTimeSetting = TIME_SETTING_12
+        testLocale = locale.value
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
+            context = localeContext,
+            dateStyle = FormatStyle.LONG,
+            timeStyle = FormatStyle.FULL,
+        )
+
+        val result = formatter.format(dateTime)
+        with(locale) {
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$fullTime12")
+        }
+    }
+
+    @Test fun ofLocalizedDateTime_longDateFormat_fullTimeFormat_24SystemSetting() {
+        systemTimeSetting = TIME_SETTING_24
+        testLocale = locale.value
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
+            context = localeContext,
+            dateStyle = FormatStyle.LONG,
+            timeStyle = FormatStyle.FULL,
+        )
+
+        val result = formatter.format(dateTime)
+        with(locale) {
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$fullTime24")
         }
     }
 
@@ -982,7 +1125,9 @@ class AndroidDateTimeFormatterTest(
         }
     }
 
-    @Test fun ofLocalizedDateTime_locale_longDateFormat_fullTimeFormat() {
+    @Test fun ofLocalizedDateTime_locale_longDateFormat_fullTimeFormat_nullSystemSetting() {
+        systemTimeSetting = null
+
         val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
             context = testContext,
             locale = locale.value,
@@ -992,7 +1137,39 @@ class AndroidDateTimeFormatterTest(
 
         val result = formatter.format(dateTime)
         with(locale) {
-            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$fullTime")
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$fullTimePreferred")
+        }
+    }
+
+    @Test fun ofLocalizedDateTime_locale_longDateFormat_fullTimeFormat_12SystemSetting() {
+        systemTimeSetting = TIME_SETTING_12
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
+            context = testContext,
+            locale = locale.value,
+            dateStyle = FormatStyle.LONG,
+            timeStyle = FormatStyle.FULL,
+        )
+
+        val result = formatter.format(dateTime)
+        with(locale) {
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$fullTime12")
+        }
+    }
+
+    @Test fun ofLocalizedDateTime_locale_longDateFormat_fullTimeFormat_24SystemSetting() {
+        systemTimeSetting = TIME_SETTING_24
+
+        val formatter = AndroidDateTimeFormatter.ofLocalizedDateTime(
+            context = testContext,
+            locale = locale.value,
+            dateStyle = FormatStyle.LONG,
+            timeStyle = FormatStyle.FULL,
+        )
+
+        val result = formatter.format(dateTime)
+        with(locale) {
+            assertThat(result).isEqualTo("$longDate$longDateTimeJoiner$fullTime24")
         }
     }
 
@@ -1080,7 +1257,8 @@ class AndroidDateTimeFormatterTest(
         val mediumTime24: String,
         val longTime12: String,
         val longTime24: String,
-        val fullTime: String,
+        val fullTime12: String,
+        val fullTime24: String,
         val shortDate: String,
         val mediumDate: String,
         val longDate: String,
@@ -1109,10 +1287,11 @@ class AndroidDateTimeFormatterTest(
                 else -> "6:01:00 PM CDT"
             },
             longTime24 = "18:01:00 CDT",
-            fullTime = when {
+            fullTime12 = when {
                 Build.VERSION.SDK_INT >= 34 -> "6:01:00\u202fPM Central Daylight Time"
                 else -> "6:01:00 PM Central Daylight Time"
             },
+            fullTime24 = "18:01:00 Central Daylight Time",
             shortDate = "9/7/23",
             mediumDate = "Sep 7, 2023",
             longDate = "September 7, 2023",
@@ -1140,7 +1319,11 @@ class AndroidDateTimeFormatterTest(
                 else -> "6:01:00 PM GMT-05:00"
             },
             longTime24 = "18:01:00 GMT-05:00",
-            fullTime = "18:01:00 Ora legale centrale USA",
+            fullTime12 = when {
+                Build.VERSION.SDK_INT >= 34 -> "6:01:00\u202fPM Ora legale centrale USA"
+                else -> "6:01:00 PM Ora legale centrale USA"
+            },
+            fullTime24 = "18:01:00 Ora legale centrale USA",
             shortDate = "07/09/23",
             mediumDate = when {
                 Build.VERSION.SDK_INT >= 28 -> "7 set 2023"
@@ -1173,7 +1356,11 @@ class AndroidDateTimeFormatterTest(
                 else -> "6:01:00 PM GMT-05:00"
             },
             longTime24 = "18:01:00 GMT-05:00",
-            fullTime = when {
+            fullTime12 = when {
+                Build.VERSION.SDK_INT >= 34 -> "6:01:00\u202fPM heure d’été du centre nord-américain"
+                else -> "6:01:00 PM heure d’été du Centre"
+            },
+            fullTime24 = when {
                 Build.VERSION.SDK_INT >= 34 -> "18:01:00 heure d’été du centre nord-américain"
                 else -> "18:01:00 heure d’été du Centre"
             },
@@ -1214,7 +1401,11 @@ class AndroidDateTimeFormatterTest(
                 Build.VERSION.SDK_INT >= 28 -> "18 h 01 min 00 s HAC"
                 else -> "18:01:00 HAC"
             },
-            fullTime = when {
+            fullTime12 = when {
+                Build.VERSION.SDK_INT >= 28 -> "6 h 01 min 00 s p.m. heure avancée du Centre"
+                else -> "6:01:00 p.m. heure avancée du Centre"
+            },
+            fullTime24 = when {
                 Build.VERSION.SDK_INT >= 28 -> "18 h 01 min 00 s heure avancée du Centre"
                 else -> "18:01:00 heure avancée du Centre"
             },
@@ -1241,7 +1432,8 @@ class AndroidDateTimeFormatterTest(
             mediumTime24 = "18:01:00",
             longTime12 = "午後6:01:00 GMT-05:00",
             longTime24 = "18:01:00 GMT-05:00",
-            fullTime = "18時01分00秒 アメリカ中部夏時間",
+            fullTime12 = "午後6:01:00 アメリカ中部夏時間",
+            fullTime24 = "18時01分00秒 アメリカ中部夏時間",
             shortDate = "2023/09/07",
             mediumDate = "2023/09/07",
             longDate = "2023年9月7日",
@@ -1269,7 +1461,12 @@ class AndroidDateTimeFormatterTest(
                 else -> "6:01:00 ПП GMT-05:00"
             },
             longTime24 = "18:01:00 GMT-05:00",
-            fullTime = "18:01:00 Центральная Америка, летнее время",
+            fullTime12 = when {
+                Build.VERSION.SDK_INT >= 34 -> "6:01:00\u202fPM Центральная Америка, летнее время"
+                Build.VERSION.SDK_INT >= 28 -> "6:01:00 PM Центральная Америка, летнее время"
+                else -> "6:01:00 ПП Центральная Америка, летнее время"
+            },
+            fullTime24 = "18:01:00 Центральная Америка, летнее время",
             shortDate = "07.09.2023",
             mediumDate = when {
                 Build.VERSION.SDK_INT >= 34 -> "7 сент. 2023\u202fг."
@@ -1299,7 +1496,8 @@ class AndroidDateTimeFormatterTest(
             mediumTime24 = "18:01:00",
             longTime12 = "6:01:00 بعدازظهر GMT-05:00",
             longTime24 = "18:01:00 (GMT-05:00)",
-            fullTime = "18:01:00 (وقت تابستانی مرکز امریکا)",
+            fullTime12 = "6:01:00 بعدازظهر وقت تابستانی مرکز امریکا",
+            fullTime24 = "18:01:00 (وقت تابستانی مرکز امریکا)",
             shortDate = "2023/9/7",
             mediumDate = "7 سپتامبر 2023",
             longDate = "7 سپتامبر 2023",
@@ -1338,6 +1536,13 @@ class AndroidDateTimeFormatterTest(
             get() = when (preferredTimeSetting) {
                 TIME_SETTING_12 -> longTime12
                 TIME_SETTING_24 -> longTime24
+                else -> throw AssertionError("Invalid preferred time setting: $preferredTimeSetting")
+            }
+
+        val fullTimePreferred: String
+            get() = when (preferredTimeSetting) {
+                TIME_SETTING_12 -> fullTime12
+                TIME_SETTING_24 -> fullTime24
                 else -> throw AssertionError("Invalid preferred time setting: $preferredTimeSetting")
             }
     }
