@@ -60,8 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.drewhamilton.androidtime.format.AndroidDateTimeFormatter
 import dev.drewhamilton.androidtime.format.demo.ui.theme.DemoTheme
-import java.time.Instant
-import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -70,7 +69,7 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class) // Top app bar
 @Composable
 fun Demo(
-    instant: Instant,
+    zonedDateTime: ZonedDateTime,
     modifier: Modifier = Modifier,
     initialSelectedTabIndex: Int = 0,
 ) {
@@ -140,12 +139,12 @@ fun Demo(
                     when (page) {
                         0 -> StandardFormatDemo(
                             locale = locale,
-                            instant = instant,
+                            zonedDateTime = zonedDateTime,
                         )
 
                         1 -> SkeletonFormatDemo(
                             locale = locale,
-                            instant = instant,
+                            zonedDateTime = zonedDateTime,
                         )
                     }
                 }
@@ -199,7 +198,7 @@ fun Demo(
 @Composable
 private fun StandardFormatDemo(
     locale: Locale,
-    instant: Instant,
+    zonedDateTime: ZonedDateTime,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -211,7 +210,7 @@ private fun StandardFormatDemo(
 
         FormatComparison(
             locale = locale,
-            instant = instant,
+            zonedDateTime = zonedDateTime,
             dateFormatStyle = selectedDateFormat,
             timeFormatStyle = selectedTimeFormat,
             modifier = Modifier
@@ -241,7 +240,7 @@ private fun StandardFormatDemo(
 @Composable
 private fun SkeletonFormatDemo(
     locale: Locale,
-    instant: Instant,
+    zonedDateTime: ZonedDateTime,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -274,9 +273,6 @@ private fun SkeletonFormatDemo(
                         }
                     }
                 }
-                // TODO: Deduplicate?
-                val zone = ZoneId.systemDefault()
-                val zonedDateTime = remember(instant, zone) { instant.atZone(zone) }
                 val formattedDateTime = try {
                     formatter?.format(zonedDateTime) ?: "Invalid format skeleton"
                 } catch (_ : Exception) {
@@ -486,7 +482,7 @@ private val textFieldShape = RoundedCornerShape(16.dp)
 @Composable
 private fun FormatComparison(
     locale: Locale,
-    instant: Instant,
+    zonedDateTime: ZonedDateTime,
     dateFormatStyle: FormatStyle?,
     timeFormatStyle: FormatStyle?,
     modifier: Modifier = Modifier,
@@ -520,7 +516,7 @@ private fun FormatComparison(
             if (dateTimeType == null) {
                 val numberFormat = NumberFormat.getInstance(locale)
                 Text(
-                    text = numberFormat.format(instant.toEpochMilli()),
+                    text = numberFormat.format(zonedDateTime.toInstant().toEpochMilli()),
                     style = dateTimeTextStyle,
                     modifier = Modifier.padding(vertical = 8.dp),
                 )
@@ -528,9 +524,6 @@ private fun FormatComparison(
             }
 
             val context = LocalContext.current
-
-            val zone = ZoneId.systemDefault()
-            val zonedDateTime = remember(instant, zone) { instant.atZone(zone) }
 
             val androidFormatter = when (dateTimeType) {
                 DateTimeType.Time -> AndroidDateTimeFormatter.ofLocalizedTime(
@@ -638,7 +631,7 @@ private fun Typography.dateTimeTextStyle(
 private fun StandardFormatDemoPreview() {
     DemoTheme {
         Demo(
-            instant = Instant.now(),
+            zonedDateTime = ZonedDateTime.now(),
             modifier = Modifier
                 .fillMaxWidth(),
         )
@@ -651,7 +644,7 @@ private fun StandardFormatDemoPreview() {
 private fun SkeletonFormatDemoPreview() {
     DemoTheme {
         Demo(
-            instant = Instant.now(),
+            zonedDateTime = ZonedDateTime.now(),
             initialSelectedTabIndex = 1,
             modifier = Modifier
                 .fillMaxWidth(),
