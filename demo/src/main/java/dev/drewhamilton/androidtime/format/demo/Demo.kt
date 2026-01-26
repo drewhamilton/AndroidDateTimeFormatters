@@ -94,35 +94,12 @@ fun Demo(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            var selectedDateFormat: FormatStyle? by remember { mutableStateOf(FormatStyle.LONG) }
-            var selectedTimeFormat: FormatStyle? by remember { mutableStateOf(FormatStyle.SHORT) }
-
-            FormatComparison(
+            // TODO: Tab for standard vs. skeletons
+            StandardFormatDemo(
                 locale = locale,
                 instant = instant,
-                dateFormatStyle = selectedDateFormat,
-                timeFormatStyle = selectedTimeFormat,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                modifier = Modifier.weight(1f),
             )
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                FormatStyleSelector(
-                    selectedFormatStyle = selectedDateFormat,
-                    onFormatStyleSelected = { selectedDateFormat = it },
-                    label = "Date format style",
-                    modifier = Modifier.weight(1f),
-                )
-                FormatStyleSelector(
-                    selectedFormatStyle = selectedTimeFormat,
-                    onFormatStyleSelected = { selectedTimeFormat = it },
-                    label = "Time format style",
-                    modifier = Modifier.weight(1f),
-                )
-            }
 
             LocaleInputField(
                 state = typedLocaleState,
@@ -141,6 +118,48 @@ fun Demo(
                 singleLine = true,
                 shape = textFieldShape,
                 modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
+}
+
+@Composable
+private fun StandardFormatDemo(
+    locale: Locale,
+    instant: Instant,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        modifier = modifier,
+    ) {
+        var selectedDateFormat: FormatStyle? by remember { mutableStateOf(FormatStyle.LONG) }
+        var selectedTimeFormat: FormatStyle? by remember { mutableStateOf(FormatStyle.SHORT) }
+
+        FormatComparison(
+            locale = locale,
+            instant = instant,
+            dateFormatStyle = selectedDateFormat,
+            timeFormatStyle = selectedTimeFormat,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+        )
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            FormatStyleSelector(
+                selectedFormatStyle = selectedDateFormat,
+                onFormatStyleSelected = { selectedDateFormat = it },
+                label = "Date format style",
+                modifier = Modifier.weight(1f),
+            )
+            FormatStyleSelector(
+                selectedFormatStyle = selectedTimeFormat,
+                onFormatStyleSelected = { selectedTimeFormat = it },
+                label = "Time format style",
+                modifier = Modifier.weight(1f),
             )
         }
     }
@@ -242,7 +261,7 @@ private fun LocaleInputField(
     }
 }
 
-@ExperimentalMaterial3Api
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FormatStyleSelector(
     selectedFormatStyle: FormatStyle?,
