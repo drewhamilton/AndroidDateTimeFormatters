@@ -7,15 +7,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +30,9 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -39,6 +45,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -65,6 +72,7 @@ import kotlinx.coroutines.delay
 fun Demo(
     instant: Instant,
     modifier: Modifier = Modifier,
+    initialSelectedTabIndex: Int = 0,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -91,20 +99,64 @@ fun Demo(
         Column(
             modifier = Modifier
                 .padding(contentPadding)
-                .padding(16.dp),
+                .padding(bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            // TODO: Tab for standard vs. skeletons
-            StandardFormatDemo(
-                locale = locale,
-                instant = instant,
-                modifier = Modifier.weight(1f),
+            val pagerState = rememberPagerState(
+                initialPage = initialSelectedTabIndex,
+                pageCount = { 2 },
             )
+            var requestedPage by remember { mutableIntStateOf(-1) }
+            if (requestedPage != -1) {
+                LaunchedEffect(requestedPage) {
+                    pagerState.animateScrollToPage(page = requestedPage)
+                    requestedPage = -1
+                }
+            }
+
+            SecondaryTabRow(
+                selectedTabIndex = pagerState.currentPage,
+            ) {
+                TextTab(
+                    text = "Standard formats",
+                    selected = pagerState.currentPage == 0,
+                    onClick = { requestedPage = 0 },
+                )
+
+                TextTab(
+                    text = "Skeleton formats",
+                    selected = pagerState.currentPage == 1,
+                    onClick = { requestedPage = 1 },
+                )
+            }
+
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.weight(1f),
+            ) { page ->
+                Box(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                ) {
+                    when (page) {
+                        0 -> StandardFormatDemo(
+                            locale = locale,
+                            instant = instant,
+                        )
+
+                        1 -> SkeletonFormatDemo(
+                            locale = locale,
+                            instant = instant,
+                        )
+                    }
+                }
+            }
 
             LocaleInputField(
                 state = typedLocaleState,
                 currentLocale = locale,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
 
             OutlinedTextField(
@@ -117,9 +169,30 @@ fun Demo(
                 label = { Text("System time setting") },
                 singleLine = true,
                 shape = textFieldShape,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
         }
+    }
+}
+
+@Composable private fun TextTab(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Tab(
+        selected = selected,
+        onClick = onClick,
+        modifier = modifier,
+        unselectedContentColor = MaterialTheme.colorScheme.onBackground,
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
     }
 }
 
@@ -162,6 +235,88 @@ private fun StandardFormatDemo(
                 modifier = Modifier.weight(1f),
             )
         }
+    }
+}
+
+@Composable
+private fun SkeletonFormatDemo(
+    locale: Locale,
+    instant: Instant,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        modifier = modifier,
+    ) {
+        val skeletonInputState = rememberTextFieldState(initialText = "MMMMd")
+
+        Surface(
+            shape = RoundedCornerShape(32.dp),
+            tonalElevation = 1.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.padding(16.dp),
+            ) {
+                var formattingFailure = false
+                val formatter = remember(skeletonInputState.text, locale) {
+                    try {
+                        AndroidDateTimeFormatter.ofSkeleton(
+                            skeleton = skeletonInputState.text.toString(),
+                            locale = locale,
+                        )
+                    } catch (_: Exception) {
+                        null.also {
+                            formattingFailure = true
+                        }
+                    }
+                }
+                // TODO: Deduplicate?
+                val zone = ZoneId.systemDefault()
+                val zonedDateTime = remember(instant, zone) { instant.atZone(zone) }
+                val formattedDateTime = try {
+                    formatter?.format(zonedDateTime) ?: "Invalid format skeleton"
+                } catch (_ : Exception) {
+                    "Formatting failed".also {
+                        formattingFailure = true
+                    }
+                }
+
+                val dateTimeStyle = MaterialTheme.typography.displayLarge
+                Text(
+                    text = formattedDateTime,
+                    color = LocalContentColor.current.copy(
+                        alpha = if (formattingFailure) 0.7f else 1f,
+                    ),
+                    autoSize = if (formattingFailure) {
+                        null
+                    } else {
+                        TextAutoSize.StepBased(
+                            minFontSize = 16.sp,
+                            maxFontSize = dateTimeStyle.fontSize,
+                            stepSize = 1.sp,
+                        )
+                    },
+                    style = if (formattingFailure) {
+                        MaterialTheme.typography.headlineSmall
+                    } else {
+                        dateTimeStyle
+                    },
+                )
+            }
+        }
+
+        OutlinedTextField(
+            state = skeletonInputState,
+            label = { Text("Date/time format skeleton") },
+            placeholder = { Text("Hms") },
+            lineLimits = TextFieldLineLimits.SingleLine,
+            shape = textFieldShape,
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 
@@ -480,10 +635,24 @@ private fun Typography.dateTimeTextStyle(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun GreetingPreview() {
+private fun StandardFormatDemoPreview() {
     DemoTheme {
         Demo(
             instant = Instant.now(),
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun SkeletonFormatDemoPreview() {
+    DemoTheme {
+        Demo(
+            instant = Instant.now(),
+            initialSelectedTabIndex = 1,
             modifier = Modifier
                 .fillMaxWidth(),
         )
