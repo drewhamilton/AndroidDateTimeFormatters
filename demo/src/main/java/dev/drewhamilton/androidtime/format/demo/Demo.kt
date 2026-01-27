@@ -63,7 +63,6 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
-import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class) // Top app bar
 @Composable
@@ -543,18 +542,7 @@ private fun LocaleInputField(
     currentLocale: Locale,
     modifier: Modifier = Modifier,
 ) {
-    var dismissedDropdown by rememberSaveable { mutableStateOf(false) }
-    LaunchedEffect(state.text) {
-        dismissedDropdown = false
-    }
-
-    var delayedDismissedDropdownTrigger by remember { mutableIntStateOf(0) }
-    if (delayedDismissedDropdownTrigger > 0) {
-        LaunchedEffect(delayedDismissedDropdownTrigger) {
-            delay(100)
-            dismissedDropdown = true
-        }
-    }
+    var dismissedDropdownText by rememberSaveable { mutableStateOf(state.text) }
 
     val allLocales = Locale.getAvailableLocales()
     val groupedLocales = allLocales
@@ -575,7 +563,8 @@ private fun LocaleInputField(
                 groupedLocales[key]?.let { addAll(it) }
             }
     }
-    val expanded = !dismissedDropdown && filteredLocales.isNotEmpty() && state.text.length >= 2
+    val expanded = dismissedDropdownText != state.text &&
+        filteredLocales.isNotEmpty() && state.text.length >= 2
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = {},
@@ -598,7 +587,7 @@ private fun LocaleInputField(
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { dismissedDropdown = true },
+            onDismissRequest = { dismissedDropdownText = state.text },
             shape = textFieldShape,
             tonalElevation = 3.dp,
             shadowElevation = 0.dp,
@@ -621,8 +610,9 @@ private fun LocaleInputField(
                         }
                     },
                     onClick = {
-                        state.setTextAndPlaceCursorAtEnd(locale.toString())
-                        ++delayedDismissedDropdownTrigger
+                        val newText = locale.toString()
+                        state.setTextAndPlaceCursorAtEnd(newText)
+                        dismissedDropdownText = newText
                     },
                     contentPadding = PaddingValues(16.dp),
                     modifier = Modifier.fillMaxWidth(),
