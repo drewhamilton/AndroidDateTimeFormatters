@@ -564,7 +564,8 @@ private fun LocaleInputField(
             }
     }
     val expanded = dismissedDropdownText != state.text &&
-        filteredLocales.isNotEmpty() && state.text.length >= 2
+        (filteredLocales.size > 1 || filteredLocales.singleOrNull().toString() != state.text) &&
+        state.text.length >= 2
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = {},
