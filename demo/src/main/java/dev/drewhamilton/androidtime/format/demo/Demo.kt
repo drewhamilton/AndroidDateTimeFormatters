@@ -278,24 +278,32 @@ private fun FormatComparison(
 
             val context = LocalContext.current
 
-            val androidFormatter = when (dateTimeType) {
-                DateTimeType.Time -> AndroidDateTimeFormatter.ofLocalizedTime(
-                    context = context,
-                    locale = locale,
-                    timeStyle = timeFormatStyle!!,
-                )
+            val androidFormatter = remember(
+                dateFormatStyle,
+                timeFormatStyle,
+                dateTimeType,
+                locale,
+                context,
+            ) {
+                when (dateTimeType) {
+                    DateTimeType.Time -> AndroidDateTimeFormatter.ofLocalizedTime(
+                        context = context,
+                        locale = locale,
+                        timeStyle = timeFormatStyle!!,
+                    )
 
-                DateTimeType.Date -> AndroidDateTimeFormatter.ofLocalizedDate(
-                    locale = locale,
-                    dateStyle = dateFormatStyle!!,
-                )
+                    DateTimeType.Date -> AndroidDateTimeFormatter.ofLocalizedDate(
+                        locale = locale,
+                        dateStyle = dateFormatStyle!!,
+                    )
 
-                DateTimeType.DateTime -> AndroidDateTimeFormatter.ofLocalizedDateTime(
-                    context = context,
-                    locale = locale,
-                    dateStyle = dateFormatStyle!!,
-                    timeStyle = timeFormatStyle!!,
-                )
+                    DateTimeType.DateTime -> AndroidDateTimeFormatter.ofLocalizedDateTime(
+                        context = context,
+                        locale = locale,
+                        dateStyle = dateFormatStyle!!,
+                        timeStyle = timeFormatStyle!!,
+                    )
+                }
             }
             LabeledText(
                 label = "AndroidDateTimeFormatter",
@@ -305,12 +313,19 @@ private fun FormatComparison(
                 modifier = Modifier.weight(1f),
             )
 
-            val standardFormatter = when (dateTimeType) {
-                DateTimeType.Time -> DateTimeFormatter.ofLocalizedTime(timeFormatStyle)
-                DateTimeType.Date -> DateTimeFormatter.ofLocalizedDate(dateFormatStyle)
-                DateTimeType.DateTime ->
-                    DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle)
-            }.withLocale(locale)
+            val standardFormatter = remember(
+                dateFormatStyle,
+                timeFormatStyle,
+                dateTimeType,
+                locale,
+            ) {
+                when (dateTimeType) {
+                    DateTimeType.Time -> DateTimeFormatter.ofLocalizedTime(timeFormatStyle)
+                    DateTimeType.Date -> DateTimeFormatter.ofLocalizedDate(dateFormatStyle)
+                    DateTimeType.DateTime ->
+                        DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle)
+                }.withLocale(locale)
+            }
             LabeledText(
                 label = "DateTimeFormatter",
                 value = standardFormatter.format(zonedDateTime),
