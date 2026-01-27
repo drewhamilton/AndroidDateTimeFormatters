@@ -223,6 +223,227 @@ private fun StandardFormatDemo(
 }
 
 @Composable
+private fun FormatComparison(
+    locale: Locale,
+    zonedDateTime: ZonedDateTime,
+    dateFormatStyle: FormatStyle?,
+    timeFormatStyle: FormatStyle?,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(32.dp),
+        tonalElevation = 1.dp,
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            val dateTimeType = when {
+                dateFormatStyle != null && timeFormatStyle != null -> DateTimeType.DateTime
+                dateFormatStyle != null -> DateTimeType.Date
+                timeFormatStyle != null -> DateTimeType.Time
+                else -> null
+            }
+
+            Column {
+                Text(
+                    text = dateTimeType?.toString() ?: "Epoch millisecond",
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                val systemTimeSetting = Settings.System.getString(
+                    LocalContext.current.contentResolver,
+                    Settings.System.TIME_12_24,
+                )
+                Text(
+                    text = "System time setting: $systemTimeSetting",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
+
+            val dateTimeTextStyle = MaterialTheme.typography.dateTimeTextStyle(
+                dateFormatStyle = dateFormatStyle,
+                timeFormatStyle = timeFormatStyle,
+            )
+            if (dateTimeType == null) {
+                val numberFormat = NumberFormat.getInstance(locale)
+                Text(
+                    text = numberFormat.format(zonedDateTime.toInstant().toEpochMilli()),
+                    style = dateTimeTextStyle,
+                    modifier = Modifier.padding(vertical = 8.dp),
+                )
+                return@Column
+            }
+
+            val context = LocalContext.current
+
+            val androidFormatter = when (dateTimeType) {
+                DateTimeType.Time -> AndroidDateTimeFormatter.ofLocalizedTime(
+                    context = context,
+                    locale = locale,
+                    timeStyle = timeFormatStyle!!,
+                )
+
+                DateTimeType.Date -> AndroidDateTimeFormatter.ofLocalizedDate(
+                    locale = locale,
+                    dateStyle = dateFormatStyle!!,
+                )
+
+                DateTimeType.DateTime -> AndroidDateTimeFormatter.ofLocalizedDateTime(
+                    context = context,
+                    locale = locale,
+                    dateStyle = dateFormatStyle!!,
+                    timeStyle = timeFormatStyle!!,
+                )
+            }
+            LabeledText(
+                label = "AndroidDateTimeFormatter",
+                value = androidFormatter.format(zonedDateTime),
+                labelStyle = MaterialTheme.typography.labelLarge,
+                valueStyle = dateTimeTextStyle,
+                modifier = Modifier.weight(1f),
+            )
+
+            val standardFormatter = when (dateTimeType) {
+                DateTimeType.Time -> DateTimeFormatter.ofLocalizedTime(timeFormatStyle)
+                DateTimeType.Date -> DateTimeFormatter.ofLocalizedDate(dateFormatStyle)
+                DateTimeType.DateTime ->
+                    DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle)
+            }.withLocale(locale)
+            LabeledText(
+                label = "DateTimeFormatter",
+                value = standardFormatter.format(zonedDateTime),
+                labelStyle = MaterialTheme.typography.labelLarge,
+                valueStyle = dateTimeTextStyle,
+                modifier = Modifier.weight(1f),
+            )
+        }
+    }
+}
+
+private enum class DateTimeType {
+    Time,
+    Date,
+    DateTime {
+        override fun toString() = "Date-time"
+    },
+}
+
+/**
+ * Auto-size is constraining values to a single line, so we manually choose a text style instead.
+ */
+private fun Typography.dateTimeTextStyle(
+    dateFormatStyle: FormatStyle?,
+    timeFormatStyle: FormatStyle?,
+): TextStyle = when (timeFormatStyle) {
+    FormatStyle.FULL -> bodyLarge
+    FormatStyle.LONG if dateFormatStyle != null -> headlineSmall
+    null if dateFormatStyle == null -> headlineLarge
+    else -> displayMedium
+}
+
+@Composable
+private fun LabeledText(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+    labelStyle: TextStyle = MaterialTheme.typography.labelMedium,
+    valueStyle: TextStyle = MaterialTheme.typography.bodyLarge,
+) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier
+            .padding(vertical = 8.dp),
+    ) {
+        Text(
+            text = label,
+            style = labelStyle,
+            fontFamily = FontFamily.Monospace,
+        )
+        Text(
+            text = value,
+            autoSize = if (valueStyle == MaterialTheme.typography.displayMedium) {
+                TextAutoSize.StepBased(
+                    minFontSize = 16.sp,
+                    maxFontSize = valueStyle.fontSize,
+                    stepSize = 1.sp,
+                )
+            } else {
+                null
+            },
+            style = valueStyle,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FormatStyleSelector(
+    selectedFormatStyle: FormatStyle?,
+    onFormatStyleSelected: (FormatStyle?) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier,
+) {
+    var showingSelectionPopup by remember { mutableStateOf(false) }
+    ExposedDropdownMenuBox(
+        expanded = showingSelectionPopup,
+        onExpandedChange = {},
+        modifier = modifier,
+    ) {
+        OutlinedTextField(
+            value = selectedFormatStyle?.toString() ?: "NONE",
+            onValueChange = { /* No-op, value change is handled by dropdown menu */ },
+            readOnly = true,
+            label = { Text(label) },
+            trailingIcon = {
+                Icon(
+                    painter = painterResource(R.drawable.arrow_drop_down_24dp),
+                    contentDescription = null,
+                )
+            },
+            singleLine = true,
+            interactionSource = remember { MutableInteractionSource() }
+                .also { interactionSource ->
+                    LaunchedEffect(interactionSource) {
+                        interactionSource.interactions.collect { interaction ->
+                            if (interaction is PressInteraction.Release) {
+                                showingSelectionPopup = true
+                            }
+                        }
+                    }
+                },
+            shape = textFieldShape,
+        )
+
+        ExposedDropdownMenu(
+            expanded = showingSelectionPopup,
+            onDismissRequest = { showingSelectionPopup = false },
+            shape = textFieldShape,
+            tonalElevation = 3.dp,
+            shadowElevation = 0.dp,
+        ) {
+            val nullableFormatStyles = buildList {
+                addAll(FormatStyle.entries)
+                add(null)
+            }
+            nullableFormatStyles.forEach { formatStyle ->
+                DropdownMenuItem(
+                    text = { Text(formatStyle?.toString() ?: "NONE") },
+                    onClick = {
+                        onFormatStyleSelected(formatStyle)
+                        showingSelectionPopup = false
+                    },
+                    contentPadding = PaddingValues(16.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun SkeletonFormatDemo(
     locale: Locale,
     zonedDateTime: ZonedDateTime,
@@ -397,228 +618,7 @@ private fun LocaleInputField(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun FormatStyleSelector(
-    selectedFormatStyle: FormatStyle?,
-    onFormatStyleSelected: (FormatStyle?) -> Unit,
-    label: String,
-    modifier: Modifier = Modifier,
-) {
-    var showingSelectionPopup by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(
-        expanded = showingSelectionPopup,
-        onExpandedChange = {},
-        modifier = modifier,
-    ) {
-        OutlinedTextField(
-            value = selectedFormatStyle?.toString() ?: "NONE",
-            onValueChange = { /* No-op, value change is handled by dropdown menu */ },
-            readOnly = true,
-            label = { Text(label) },
-            trailingIcon = {
-                Icon(
-                    painter = painterResource(R.drawable.arrow_drop_down_24dp),
-                    contentDescription = null,
-                )
-            },
-            singleLine = true,
-            interactionSource = remember { MutableInteractionSource() }
-                .also { interactionSource ->
-                    LaunchedEffect(interactionSource) {
-                        interactionSource.interactions.collect { interaction ->
-                            if (interaction is PressInteraction.Release) {
-                                showingSelectionPopup = true
-                            }
-                        }
-                    }
-                },
-            shape = textFieldShape,
-        )
-
-        ExposedDropdownMenu(
-            expanded = showingSelectionPopup,
-            onDismissRequest = { showingSelectionPopup = false },
-            shape = textFieldShape,
-            tonalElevation = 3.dp,
-            shadowElevation = 0.dp,
-        ) {
-            val nullableFormatStyles = buildList {
-                addAll(FormatStyle.entries)
-                add(null)
-            }
-            nullableFormatStyles.forEach { formatStyle ->
-                DropdownMenuItem(
-                    text = { Text(formatStyle?.toString() ?: "NONE") },
-                    onClick = {
-                        onFormatStyleSelected(formatStyle)
-                        showingSelectionPopup = false
-                    },
-                    contentPadding = PaddingValues(16.dp),
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
-        }
-    }
-}
-
 private val textFieldShape = RoundedCornerShape(16.dp)
-
-@Composable
-private fun FormatComparison(
-    locale: Locale,
-    zonedDateTime: ZonedDateTime,
-    dateFormatStyle: FormatStyle?,
-    timeFormatStyle: FormatStyle?,
-    modifier: Modifier = Modifier,
-) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(32.dp),
-        tonalElevation = 1.dp,
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            val dateTimeType = when {
-                dateFormatStyle != null && timeFormatStyle != null -> DateTimeType.DateTime
-                dateFormatStyle != null -> DateTimeType.Date
-                timeFormatStyle != null -> DateTimeType.Time
-                else -> null
-            }
-
-            Column {
-                Text(
-                    text = dateTimeType?.toString() ?: "Epoch millisecond",
-                    style = MaterialTheme.typography.titleMedium,
-                )
-                val systemTimeSetting = Settings.System.getString(
-                    LocalContext.current.contentResolver,
-                    Settings.System.TIME_12_24,
-                )
-                Text(
-                    text = "System time setting: $systemTimeSetting",
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            }
-
-            val dateTimeTextStyle = MaterialTheme.typography.dateTimeTextStyle(
-                dateFormatStyle = dateFormatStyle,
-                timeFormatStyle = timeFormatStyle,
-            )
-            if (dateTimeType == null) {
-                val numberFormat = NumberFormat.getInstance(locale)
-                Text(
-                    text = numberFormat.format(zonedDateTime.toInstant().toEpochMilli()),
-                    style = dateTimeTextStyle,
-                    modifier = Modifier.padding(vertical = 8.dp),
-                )
-                return@Column
-            }
-
-            val context = LocalContext.current
-
-            val androidFormatter = when (dateTimeType) {
-                DateTimeType.Time -> AndroidDateTimeFormatter.ofLocalizedTime(
-                    context = context,
-                    locale = locale,
-                    timeStyle = timeFormatStyle!!,
-                )
-
-                DateTimeType.Date -> AndroidDateTimeFormatter.ofLocalizedDate(
-                    locale = locale,
-                    dateStyle = dateFormatStyle!!,
-                )
-
-                DateTimeType.DateTime -> AndroidDateTimeFormatter.ofLocalizedDateTime(
-                    context = context,
-                    locale = locale,
-                    dateStyle = dateFormatStyle!!,
-                    timeStyle = timeFormatStyle!!,
-                )
-            }
-            LabeledText(
-                label = "AndroidDateTimeFormatter",
-                value = androidFormatter.format(zonedDateTime),
-                labelStyle = MaterialTheme.typography.labelLarge,
-                valueStyle = dateTimeTextStyle,
-                modifier = Modifier.weight(1f),
-            )
-
-            val standardFormatter = when (dateTimeType) {
-                DateTimeType.Time -> DateTimeFormatter.ofLocalizedTime(timeFormatStyle)
-                DateTimeType.Date -> DateTimeFormatter.ofLocalizedDate(dateFormatStyle)
-                DateTimeType.DateTime ->
-                    DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle)
-            }.withLocale(locale)
-            LabeledText(
-                label = "DateTimeFormatter",
-                value = standardFormatter.format(zonedDateTime),
-                labelStyle = MaterialTheme.typography.labelLarge,
-                valueStyle = dateTimeTextStyle,
-                modifier = Modifier.weight(1f),
-            )
-        }
-    }
-}
-
-private enum class DateTimeType {
-    Time,
-    Date,
-    DateTime {
-        override fun toString() = "Date-time"
-    },
-}
-
-@Composable
-private fun LabeledText(
-    label: String,
-    value: String,
-    modifier: Modifier = Modifier,
-    labelStyle: TextStyle = MaterialTheme.typography.labelMedium,
-    valueStyle: TextStyle = MaterialTheme.typography.bodyLarge,
-) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier
-            .padding(vertical = 8.dp),
-    ) {
-        Text(
-            text = label,
-            style = labelStyle,
-            fontFamily = FontFamily.Monospace,
-        )
-        Text(
-            text = value,
-            autoSize = if (valueStyle == MaterialTheme.typography.displayMedium) {
-                TextAutoSize.StepBased(
-                    minFontSize = 16.sp,
-                    maxFontSize = valueStyle.fontSize,
-                    stepSize = 1.sp,
-                )
-            } else {
-                null
-            },
-            style = valueStyle,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
-}
-
-/**
- * Auto-size is constraining values to a single line, so we manually choose a text style instead.
- */
-private fun Typography.dateTimeTextStyle(
-    dateFormatStyle: FormatStyle?,
-    timeFormatStyle: FormatStyle?,
-): TextStyle = when (timeFormatStyle) {
-    FormatStyle.FULL -> bodyLarge
-    FormatStyle.LONG if dateFormatStyle != null -> headlineSmall
-    null if dateFormatStyle == null -> headlineLarge
-    else -> displayMedium
-}
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
