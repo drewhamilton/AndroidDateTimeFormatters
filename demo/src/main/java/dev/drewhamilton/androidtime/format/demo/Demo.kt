@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -87,10 +86,8 @@ fun Demo(
             )
         },
     ) { contentPadding ->
-        val typedLocaleState by rememberSaveable(
-            stateSaver = TextFieldState.Saver,
-        ) {
-            mutableStateOf(TextFieldState())
+        val typedLocaleState = rememberSaveable(saver = TextFieldState.Saver) {
+            TextFieldState()
         }
         val locale = parseLocaleString(typedLocaleState.text)
             ?: LocalContext.current.extractPrimaryLocale()
@@ -190,8 +187,8 @@ private fun StandardFormatDemo(
         verticalArrangement = Arrangement.spacedBy(24.dp),
         modifier = modifier,
     ) {
-        var selectedDateFormat: FormatStyle? by remember { mutableStateOf(FormatStyle.LONG) }
-        var selectedTimeFormat: FormatStyle? by remember { mutableStateOf(FormatStyle.SHORT) }
+        var selectedDateFormat: FormatStyle? by rememberSaveable { mutableStateOf(FormatStyle.LONG) }
+        var selectedTimeFormat: FormatStyle? by rememberSaveable { mutableStateOf(FormatStyle.SHORT) }
 
         FormatComparison(
             locale = locale,
@@ -401,7 +398,7 @@ private fun FormatStyleSelector(
     label: String,
     modifier: Modifier = Modifier,
 ) {
-    var showingSelectionPopup by remember { mutableStateOf(false) }
+    var showingSelectionPopup by rememberSaveable { mutableStateOf(false) }
     ExposedDropdownMenuBox(
         expanded = showingSelectionPopup,
         onExpandedChange = {},
@@ -468,7 +465,9 @@ private fun SkeletonFormatDemo(
         verticalArrangement = Arrangement.spacedBy(24.dp),
         modifier = modifier,
     ) {
-        val skeletonInputState = rememberTextFieldState(initialText = "MMMMd")
+        val skeletonInputState = rememberSaveable(saver = TextFieldState.Saver)  {
+            TextFieldState(initialText = "MMMMd")
+        }
 
         Surface(
             shape = RoundedCornerShape(32.dp),
@@ -544,7 +543,7 @@ private fun LocaleInputField(
     currentLocale: Locale,
     modifier: Modifier = Modifier,
 ) {
-    var dismissedDropdown by remember { mutableStateOf(false) }
+    var dismissedDropdown by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(state.text) {
         dismissedDropdown = false
     }
