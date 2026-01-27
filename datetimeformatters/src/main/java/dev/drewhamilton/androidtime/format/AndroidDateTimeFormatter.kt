@@ -431,8 +431,7 @@ object AndroidDateTimeFormatter {
      *
      * This function will automatically correct for grammatical necessity. Given the same "MMMMd"
      * input, the formatter will use "d LLLL" in the `fa_IR` locale, where stand-alone months are
-     * necessary. **Warning: core library desugaring does not currently support formatting with
-     * 'L'.**
+     * necessary.
      *
      * Lengths are preserved where meaningful, so "Md" would give a different result to "MMMd", say,
      * except in a locale such as `ja_JP` where there is only one length of month.
@@ -463,8 +462,7 @@ object AndroidDateTimeFormatter {
      *
      * This function will automatically correct for grammatical necessity. Given the same "MMMMd"
      * input, the formatter will use "d LLLL" in the `fa_IR` locale, where stand-alone months are
-     * necessary. **Warning: core library desugaring does not currently support formatting with
-     * 'L'.**
+     * necessary.
      *
      * Lengths are preserved where meaningful, so "Md" would give a different result to "MMMd", say,
      * except in a locale such as `ja_JP` where there is only one length of month.

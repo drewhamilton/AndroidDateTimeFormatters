@@ -14,21 +14,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import dev.drewhamilton.androidtime.format.demo.ui.theme.DemoTheme
-import java.time.Instant
+import java.time.ZonedDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class DemoActivity : ComponentActivity() {
 
-    private val latestInstant = MutableStateFlow(Instant.now())
+    private val latestZonedDateTime = MutableStateFlow(ZonedDateTime.now())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(navigationBarStyle = ScrimlessNavigationBarStyle())
         super.onCreate(savedInstanceState)
         setContent {
             DemoTheme {
-                val instant by latestInstant.collectAsState()
+                val zonedDateTime by latestZonedDateTime.collectAsState()
                 Demo(
-                    instant = instant,
+                    zonedDateTime = zonedDateTime,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -37,7 +37,7 @@ class DemoActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        latestInstant.value = Instant.now()
+        latestZonedDateTime.value = ZonedDateTime.now()
     }
 
     /**
