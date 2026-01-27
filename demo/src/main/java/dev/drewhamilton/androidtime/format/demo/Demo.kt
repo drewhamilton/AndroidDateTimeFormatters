@@ -157,21 +157,6 @@ fun Demo(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-
-            OutlinedTextField(
-                value = Settings.System.getString(
-                    LocalContext.current.contentResolver,
-                    Settings.System.TIME_12_24,
-                ) ?: "null",
-                onValueChange = {},
-                readOnly = true,
-                label = { Text("System time setting") },
-                singleLine = true,
-                shape = textFieldShape,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
         }
     }
 }
@@ -504,10 +489,20 @@ private fun FormatComparison(
                 else -> null
             }
 
-            Text(
-                text = dateTimeType?.toString() ?: "Epoch millisecond",
-                style = MaterialTheme.typography.titleMedium,
-            )
+            Column {
+                Text(
+                    text = dateTimeType?.toString() ?: "Epoch millisecond",
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                val systemTimeSetting = Settings.System.getString(
+                    LocalContext.current.contentResolver,
+                    Settings.System.TIME_12_24,
+                )
+                Text(
+                    text = "System time setting: $systemTimeSetting",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
 
             val dateTimeTextStyle = MaterialTheme.typography.dateTimeTextStyle(
                 dateFormatStyle = dateFormatStyle,
