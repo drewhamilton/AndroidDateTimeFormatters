@@ -20,7 +20,7 @@ androidx-test-rules = "androidx.test:rules:1.7.0"
 material = "com.google.android.material:material:1.13.0"
 material3 = { group = "androidx.compose.material3", name = "material3" }
 
-testParameterInjector = "com.google.testparameterinjector:test-parameter-injector:1.20"
+testParameterInjector = "com.google.testparameterinjector:test-parameter-injector:1.21"
 
 truth = "com.google.truth:truth:1.4.5"
 
