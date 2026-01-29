@@ -22,6 +22,7 @@ abstract class TimeSettingTest {
         get() = InstrumentationRegistry.getInstrumentation().context
 
     protected var localeContext: Context = testContext
+        private set
 
     protected var testLocale: Locale
         get() = ConfigurationCompat.getLocales(localeContext.resources.configuration)[0]!!
@@ -36,8 +37,9 @@ abstract class TimeSettingTest {
         }
 
     private fun Context.copyWithLocale(locale: Locale): Context {
-        val configuration = Configuration(resources.configuration)
-        configuration.setLocales(LocaleListCompat.create(locale))
+        val configuration = Configuration(resources.configuration).apply {
+            setLocales(LocaleListCompat.create(locale))
+        }
         return createConfigurationContext(configuration)
     }
 
