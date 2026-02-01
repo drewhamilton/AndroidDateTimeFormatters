@@ -1,19 +1,13 @@
 # AndroidDateTimeFormatters
 [![](https://github.com/drewhamilton/AndroidDateTimeFormatters/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/drewhamilton/AndroidDateTimeFormatters/actions/workflows/ci.yml?query=branch%3Amain)
 
-This library provides `DateTimeFormatter`s that make use of Android-specific features. Localized
-time formatters respect Android's 12-/24-hour clock system setting. And "skeleton" formatters take a
-format string skeleton and localize it based on the given Context.
+This library provides `java.time.DateTimeFormatter`s that make use of Android-specific features.
+Localized time formatters respect Android's 12-/24-hour clock system setting. And "skeleton"
+formatters take a format string skeleton and localize it based on the given `Context`.
 
-Two versions of the library exist: one for `java.time` types and another for
-[ThreeTenBP](https://github.com/ThreeTen/threetenbp) types.
-
-With [core library
-desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) supported
-in Android Gradle Plugin 4+, the "datetimeformatters" artifact, using `java.time` types, is
-considered the primary and preferred artifact and can be used down to Android SDK version 4.
-However, "datetimeformatters-threetenbp" can be used in apps that still use ThreeTenBP, down to
-Android SDK version 15.
+This library has a `minSdk` of 26, because `java.time` is not desugared on Android API 26+. On lower
+`minSdk`s, `java.time` is desugared, and takes this system setting into account for short-format
+times by default.
 
 ## Download
 [![Maven Central](https://img.shields.io/maven-metadata/v.svg?label=maven%20central&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fdrewhamilton%2Fandroidtime%2Fdatetimeformatters%2Fmaven-metadata.xml&color=blue)](https://central.sonatype.com/namespace/dev.drewhamilton.androidtime)
@@ -21,11 +15,20 @@ Android SDK version 15.
 AndroidDateTimeFormatters is available on Maven Central.
 
 ```groovy
-// java.time formatters:
 implementation "dev.drewhamilton.androidtime:datetimeformatters:$version"
+```
+
+## Legacy versions
+
+For a lower `minSdk`, or for use with [ThreeTenBP](https://github.com/ThreeTen/threetenbp), use
+`AndroidDateTimeFormatters` version 2.2.0.
+
+```groovy
+// java.time formatters:
+implementation "dev.drewhamilton.androidtime:datetimeformatters:2.2.0"
 
 // ThreeTenBP formatters:
-implementation "dev.drewhamilton.androidtime:datetimeformatters-threetenbp:$version"
+implementation "dev.drewhamilton.androidtime:datetimeformatters-threetenbp:2.2.0"
 ```
 
 ## License

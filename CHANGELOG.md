@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.0.0
+_2026-02-01_
+
+Implement system preference-aware formatting for `MEDIUM`, `LONG`, and `FULL` times. Add APIs that
+accept an explicit `Locale` instead of reading the `Context`'s primary locale.
+
+Increase `minSdk` to 26. Rewrite in Kotlin. Discontinue the `-threetenbp` version of the
+library.
+
+This major version maintains binary compatibility with version 2.2.0.
+
 ## 2.2.0
 _2021-01-31_
 
