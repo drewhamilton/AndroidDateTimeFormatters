@@ -2,7 +2,7 @@
 
 agp = "9.1.0"
 androidx-compose-bom = "2026.03.00"
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 
 [libraries]
 
