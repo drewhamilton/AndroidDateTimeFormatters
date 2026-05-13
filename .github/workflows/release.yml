@@ -21,9 +21,12 @@ jobs:
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
 
       - name: Assemble for release
         run: ./gradlew assembleRelease --stacktrace --no-configuration-cache
+
       - name: Publish
         run: ./gradlew publish --stacktrace --no-configuration-cache
         env:

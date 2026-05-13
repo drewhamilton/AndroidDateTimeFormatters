@@ -33,6 +33,8 @@ jobs:
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
 
       - name: Build
         run: ./gradlew build --stacktrace
