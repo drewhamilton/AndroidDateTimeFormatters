@@ -7,7 +7,7 @@ kotlin = "2.3.21"
 [libraries]
 
 androidx-activity-compose = "androidx.activity:activity-compose:1.13.0"
-androidx-appcompat = "androidx.appcompat:appcompat:1.7.1"
+androidx-appcompat = "androidx.appcompat:appcompat:1.8.0"
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-ui-core = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
