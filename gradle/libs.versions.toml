@@ -1,7 +1,7 @@
 [versions]
 
 agp = "9.5.1"
-androidx-compose-bom = "2026.09.00"
+androidx-compose-bom = "2026.11.01"
 kotlin = "2.3.21"
 
 [libraries]
